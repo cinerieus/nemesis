@@ -14,7 +14,7 @@ encryption="Y"
 secureboot="N"
 
 echo "Running Arch install script..."
-read -p "Are you sure? [Y/N]" continue
+read -p "Do you want to continue? [Y/N]" continue
 if echo $continue | grep -iqF n; then
 	exit 0
 fi
