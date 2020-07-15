@@ -111,14 +111,14 @@ ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 hwclock --systohc
 
 # Localization
-printf "\n\nConfiguring locale...\n"
+printf "\nConfiguring locale...\n"
 echo en_GB.UTF-8 UTF-8 > /etc/locale.gen
 locale-gen
 echo LANG=en_GB.UTF-8 > /etc/locale.conf
 echo KEYMAP=uk > /etc/vconsole.conf
 
 # Network Config
-printf "\n\nConfiguring networks...\n"
+printf "\nConfiguring networks...\n"
 echo $hostname > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
 if echo $server | grep -iqF y; then
@@ -187,7 +187,7 @@ else
 	banner refind-theme-regular/icons/128-48/bg_dark.png
 	selection_big refind-theme-regular/icons/128-48/selection_dark-big.png
 	selection_small refind-theme-regular/icons/128-48/selection_dark-small.png
-	font refind-theme-regular/fonts/source-code-pro-extralight-14.png" > /boot/EFI/refind-theme-regular/theme.conf
+	font refind-theme-regular/fonts/source-code-pro-extralight-14.png" > /boot/EFI/refind/refind-theme-regular/theme.conf
 	if echo $encryption | grep -iqF y; then
 		cryptdevice=$(lsblk -dno UUID ${disk}2)
 		echo "\"Arch Linux\"	\"root=/dev/mapper/lvgroup-root cryptdevice=UUID=$cryptdevice:cryptlvm rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img\"" > /boot/refind_linux.conf
