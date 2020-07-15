@@ -15,7 +15,7 @@ secureboot="N"
 
 echo "Running Arch install script..."
 read -p "Do you want to continue? [Y/N]" continue
-if echo $continue | grep -iqF n; then
+if echo $continue | grep -iqFv y; then
 	exit 0
 fi
 
@@ -142,7 +142,6 @@ if echo $server | grep -iqF y; then
 	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 	if echo $encryption | grep -iqF y; then
 		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo "resume=/dev/lvgroup/swap" > /etc/default/grub
 		echo "cryptdevice=UUID=$cryptdevice:cryptlvm root=/dev/lvgroup/root" > /etc/default/grub
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
