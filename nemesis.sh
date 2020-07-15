@@ -121,7 +121,8 @@ if echo $server | grep -iqF y; then
 	[DHCP]
 	RouteMetric=10" > /etc/systemd/network/20-wired.network
 	if echo $wifi| grep -iqF y; then
-		pacman -S wpa_supplicant --noconfim >/dev/null
+		pacman -S iwd --noconfim >/dev/null
+		systemctl enable iwd
 		echo "
 		[Match]
 		Name=wlp*
@@ -135,7 +136,8 @@ if echo $server | grep -iqF y; then
 		RouteMetric=20" > /etc/systemd/network/25-wireless.network
 		read -p "SSID: " ssid
 		read -sp "WiFi Password: " wifipass
-		device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\'\\n\'' -f 1)
+		# Connect with iwd on reboot...
+		#device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\'\\n\'' -f 1)
 		#iwctl --passphrase $wifipass station $device connect $ssid
 	fi
 else
