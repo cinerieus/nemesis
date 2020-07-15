@@ -100,7 +100,8 @@ username=$username
 server=$server
 wifi=$wifi
 encryption=$encryption
-secureboot=$secureboot" > /mnt/nemesis.sh
+secureboot=$secureboot
+disk=$disk" > /mnt/nemesis.sh
 
 echo '
 # Time Zone
@@ -170,7 +171,8 @@ if echo $server | grep -iqF y; then
 	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 	if echo $encryption | grep -iqF y; then
 		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo cryptdevice=UUID=$cryptdevice:cryptlvm root=/dev/lvgroup/root > /etc/default/grub
+		echo cryptdevice=UUID=$cryptdevice:cryptlvm > /etc/default/grub
+		#echo cryptdevice=UUID=$cryptdevice:cryptlvm root=/dev/lvgroup/root > /etc/default/grub
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
 fi' >> /mnt/nemesis.sh
@@ -181,7 +183,7 @@ printf "\n\nChrooting and running stage 2...\n"
 chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up...\n"
-rm /mnt/nemesis/sh
+rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting...\n"
 #reboot
 #################
