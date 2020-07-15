@@ -136,7 +136,7 @@ if echo $server | grep -iqF y; then
 	[DHCP]
 	RouteMetric=10" > /etc/systemd/network/20-wired.network
 	if echo $wifi| grep -iqF y; then
-		pacman -S iwd --noconfim
+		pacman --noconfirm -S iwd
 		systemctl enable iwd
 		echo "
 		[Match]
@@ -176,7 +176,7 @@ if echo $server | grep -iqF y; then
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
 else
-	pacman -S git --noconfim
+	pacman --noconfirm -S git
 	refind-install
 	git clone https://github.com/bobafetthotmail/refind-theme-regular.git /boot/EFI/refind/
 	rm -rf /boot/EFI/refind/refind-theme-regular/{src,.git} /boot/EFI/refind/refind-theme-regular/install.sh
