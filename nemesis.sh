@@ -1,9 +1,8 @@
 #!/bin/bash
 
-### Options ####
+#### Options ####
 hostname=""
 username=""
-password=""
 # Server Install? [Y/N]
 server="Y"
 # Use WiFi? [Y/N]
@@ -83,20 +82,30 @@ fi
 #### Config ####
 # Fstab
 genfstab -U /mnt >> /mnt/etc/fstab
-# Chroot
-arch-chroot /mnt
+
+#### Create stage 2 script ####
+echo "
+hostname = $hostname
+username = $username
+server = $server
+wifi = $wifi
+encryption = $encryption
+secureboot = $secureboot" > /mnt/nemesis.sh
+
+echo '
 # Time Zone
 ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 hwclock --systohc
+
 # Localization
-echo "en_GB.UTF-8 UTF-8" > /etc/locale.gen
+echo en_GB.UTF-8 UTF-8 > /etc/locale.gen
 locale-gen
-echo "LANG=en_GB.UTF-8" > /etc/locale.conf
-echo "KEYMAP=uk" > /etc/vconsole.conf
+echo LANG=en_GB.UTF-8 > /etc/locale.conf
+echo KEYMAP=uk > /etc/vconsole.conf
+
 # Network Config
 echo $hostname > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
-
 if echo $server | grep -iqF y; then
 	systemctl enable systemd-networkd
 	systemctl enable systemd-resolved
@@ -124,7 +133,9 @@ if echo $server | grep -iqF y; then
 
 		[DHCP]
 		RouteMetric=20" > /etc/systemd/network/25-wireless.network
-		device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\n' -f 1)
+		read -p "SSID: " ssid
+		read -sp "WiFi Password: " wifipass
+		device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\'\\n\'' -f 1)
 		#iwctl --passphrase $wifipass station $device connect $ssid
 	fi
 else
@@ -133,7 +144,7 @@ fi
 
 #### Initramfs ####
 if echo $encryption | grep -iqF y; then
-	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
+	echo HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck) > /etc/mkinitcpio.conf
 	mkinitcpio -P
 fi
 
@@ -142,7 +153,12 @@ if echo $server | grep -iqF y; then
 	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 	if echo $encryption | grep -iqF y; then
 		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo "cryptdevice=UUID=$cryptdevice:cryptlvm root=/dev/lvgroup/root" > /etc/default/grub
+		echo cryptdevice=UUID=$cryptdevice:cryptlvm root=/dev/lvgroup/root > /etc/default/grub
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
-fi
+fi' >> /mnt/nemesis.sh
+
+# Chroot and run
+#################
+arch-chroot /mnt ./nemesis.sh
+#################
