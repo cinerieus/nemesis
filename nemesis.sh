@@ -171,7 +171,7 @@ if echo $server | grep -iqF y; then
 	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 	if echo $encryption | grep -iqF y; then
 		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo "GRUB_CMDLINE_LINUX=cryptdevice=UUID=$cryptdevice:cryptlvm root:/dev/lvgroup/root" > /etc/default/grub
+		echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm root:/dev/lvgroup/root" > /etc/default/grub
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
 fi' >> /mnt/nemesis.sh
