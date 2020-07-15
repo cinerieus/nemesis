@@ -84,7 +84,7 @@ printf "\n\nPackstrap packages...\n"
 if echo $server | grep -iqF y; then
 	pacstrap /mnt base linux lvm2 grub efibootmgr vim
 else
-	pacstrap /mnt base linux linux-firmware lvm2 refind networkmanager intel-ucode vim git
+	pacstrap /mnt base linux linux-firmware lvm2 refind networkmanager intel-ucode vim
 fi
 
 #### Config ####
@@ -136,7 +136,7 @@ if echo $server | grep -iqF y; then
 	[DHCP]
 	RouteMetric=10" > /etc/systemd/network/20-wired.network
 	if echo $wifi| grep -iqF y; then
-		pacman -S iwd --noconfim >/dev/null
+		pacman -S iwd --noconfim
 		systemctl enable iwd
 		echo "
 		[Match]
@@ -176,6 +176,7 @@ if echo $server | grep -iqF y; then
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
 else
+	pacman -S git --noconfim
 	refind-install
 	git clone https://github.com/bobafetthotmail/refind-theme-regular.git /boot/EFI/refind/
 	rm -rf /boot/EFI/refind/refind-theme-regular/{src,.git} /boot/EFI/refind/refind-theme-regular/install.sh
