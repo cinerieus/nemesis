@@ -178,7 +178,7 @@ if echo $server | grep -iqF y; then
 else
 	pacman --noconfirm -S git
 	refind-install
-	git clone https://github.com/bobafetthotmail/refind-theme-regular.git /boot/EFI/refind/
+	git clone https://github.com/bobafetthotmail/refind-theme-regular.git /boot/EFI/refind/refind-theme-regular
 	rm -rf /boot/EFI/refind/refind-theme-regular/{src,.git} /boot/EFI/refind/refind-theme-regular/install.sh
 	echo "
 	icons_dir refind-theme-regular/icons/128-48
