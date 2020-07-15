@@ -1,36 +1,39 @@
 #!/bin/bash
 
-#### Options ####
-hostname=""
-username=""
-# Server Install? [Y/N]
-server="Y"
-# Use WiFi? [Y/N]
-wifi="N"
-# Use Encryption? [Y/N]
-encryption="Y"
-#Use Secure Boot? [Y/N]
-secureboot="N"
-
-echo "Running Arch install script..."
+printf "Running Nemesis Arch install script..."
 read -p "Do you want to continue? [Y/N]" continue
 if echo $continue | grep -iqFv y; then
 	exit 0
 fi
 
+#### Options ####
+# read -p "Hostname: " hostname
+hostname="ikaros"
+# read -p "Username: " username
+username="cinereus"
+# read -p "Server Install? [Y/N] " server
+server="Y"
+# read -p "Use WiFi? [Y/N] " wifi
+wifi="N"
+# read -p "Use Encryption? [Y/N] " encryption
+encryption="Y"
+#read -p "Secure Boot? [Y/N] " secureboot
+secureboot="N"
+
 #### Keyboard ####
 loadkeys uk
 
 #### Internet Check  ####
+printf "\n\nChecking connectivity..."
 if echo $wifi | grep -iqF y; then
 	device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\n' -f 1)
-	echo "Using WiFi..."
+	printf "\nInstall using WiFi..."
 	read -p "SSID: " ssid
 	read -sp "WiFi Password: " wifipass
 	iwctl --passphrase $wifipass station $device connect $ssid
 fi
 if [[ $(ping -W 3 -c 2 archlinux.org) != *" 0%"* ]]; then
-	echo "Network Error, Exiting..."
+	printf "\nNetwork error, Exiting..."
 	exit 0
 fi
 
@@ -38,6 +41,7 @@ fi
 timedatectl set-ntp true
 
 #### Partitioning (LVM on LUKS) ####
+printf "\n\nPartitioning disk(s)..."
 disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
 wipefs -af $disk
 echo "label: gpt" | sfdisk --force $disk
@@ -48,6 +52,7 @@ EOF
 
 #### Encryption ####
 if echo $encryption | grep -iqF y; then
+	printf "\n\nEncrpting primary partition..."
 	read -sp 'LUKS Encryption Passphrase: ' encpass
 	echo $encpass | cryptsetup -q luksFormat "${disk}2"
 	echo $encpass | cryptsetup open "${disk}2" cryptlvm -
@@ -59,6 +64,7 @@ else
 fi
 
 #### LVM/Format /root /swap ####
+printf "\n\nConfiguring LVM and formating partitions..."
 lvcreate -L 4G lvgroup -n swap
 lvcreate -l 100%FREE lvgroup -n root
 mkfs.ext4 /dev/lvgroup/root
@@ -72,6 +78,7 @@ mkdir /mnt/boot
 mount "${disk}1" /mnt/boot
 
 #### Installation ####
+printf "\n\nPackstrap packages..."
 # More packages can be added here
 if echo $server | grep -iqF y; then
 	pacstrap /mnt base linux lvm2 grub efibootmgr
@@ -81,29 +88,35 @@ fi
 
 #### Config ####
 # Fstab
+printf "\n\nGenerating fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
 
 #### Create stage 2 script ####
+printf "\n\nCreating stage 2 script..."
 echo "
-hostname = $hostname
-username = $username
-server = $server
-wifi = $wifi
-encryption = $encryption
-secureboot = $secureboot" > /mnt/nemesis.sh
+#!/bin/bash
+hostname=$hostname
+username=$username
+server=$server
+wifi=$wifi
+encryption=$encryption
+secureboot=$secureboot" > /mnt/nemesis.sh
 
 echo '
 # Time Zone
+printf "\n\nSetting timezone..."
 ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 hwclock --systohc
 
 # Localization
+printf "\n\nConfiguring locale..."
 echo en_GB.UTF-8 UTF-8 > /etc/locale.gen
 locale-gen
 echo LANG=en_GB.UTF-8 > /etc/locale.conf
 echo KEYMAP=uk > /etc/vconsole.conf
 
 # Network Config
+printf "\n\nConfiguring networks..."
 echo $hostname > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
 if echo $server | grep -iqF y; then
@@ -146,11 +159,13 @@ fi
 
 #### Initramfs ####
 if echo $encryption | grep -iqF y; then
-	echo HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck) > /etc/mkinitcpio.conf
+	printf "n\nSetting up initramfs for decryption...
+	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
 	mkinitcpio -P
 fi
 
 #### Bootloader ####
+printf "\n\nConfiguring bootloader..."
 if echo $server | grep -iqF y; then
 	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 	if echo $encryption | grep -iqF y; then
@@ -162,5 +177,11 @@ fi' >> /mnt/nemesis.sh
 
 # Chroot and run
 #################
+printf "\n\nChrooting and running stage 2..."
+chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
+printf "\n\nCleaning up..."
+rm /mnt/nemesis/sh
+printf "\n\nDone! - Rebooting..."
+#reboot
 #################
