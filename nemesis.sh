@@ -17,6 +17,7 @@ server="Y"
 wifi="N"
 # read -p "Use Encryption? [Y/N] " encryption
 encryption="Y"
+# Non-server only!
 #read -p "Secure Boot? [Y/N] " secureboot
 secureboot="N"
 
@@ -166,18 +167,25 @@ if echo $encryption | grep -iqF y; then
 fi
 
 #### Bootloader ####
-#printf "\n\nConfiguring bootloader...\n"
-#if echo $server | grep -iqF y; then
-#	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-#	if echo $encryption | grep -iqF y; then
-#		cryptdevice=$(lsblk -dno UUID ${disk}2)
-#		echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
-#	fi
-#	grub-mkconfig -o /boot/grub/grub.cfg
-#else
-#
-#fi
-' >> /mnt/nemesis.sh
+printf "\n\nConfiguring bootloader...\n"
+if echo $server | grep -iqF y; then
+	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+	if echo $encryption | grep -iqF y; then
+		cryptdevice=$(lsblk -dno UUID ${disk}2)
+		echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
+	fi
+	grub-mkconfig -o /boot/grub/grub.cfg
+else
+	refind-install
+	if echo $encryption | grep -iqF y; then
+		cryptdevice=$(lsblk -dno UUID ${disk}2)
+		echo "Arch Linux"	"root=/dev/mapper/lvgroup-root"	"cryptdevice=UUID=$cryptdevice:cryptlvm" rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img > /boot/refind_linux.conf
+		echo "Arch Linux Fallback"	"root=/dev/mapper/lvgroup-root"	"cryptdevice=UUID=$cryptdevice:cryptlvm" rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img >> /boot/refind_linux.conf
+	else
+		echo "Arch Linux"	"root=/dev/mapper/lvgroup-root"	rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img > /boot/refind_linux.conf
+		echo "Arch Linux Fallback"	"root=/dev/mapper/lvgroup-root"	rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img >> /boot/refind_linux.conf
+	fi
+fi' >> /mnt/nemesis.sh
 
 # Chroot and run
 #################
