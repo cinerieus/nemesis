@@ -14,7 +14,10 @@ encryption="Y"
 secureboot="N"
 
 echo "Running Arch install script..."
-read -p "Are you sure? [Y/N]"
+read -p "Are you sure? [Y/N]" continue
+if echo $continue | grep -iqF n; then
+	exit 0
+fi
 
 #### Keyboard ####
 loadkeys uk
