@@ -48,7 +48,7 @@ EOF
 if echo $encryption | grep -iqF y; then
 	read -sp 'LUKS Encryption Passphrase: ' encpass
 	echo $encpass | cryptsetup -q luksFormat "${disk}2"
-	echo $encpass | cryptsetup open "${disk}2" cryptlvm -d -
+	echo $encpass | cryptsetup open "${disk}2" cryptlvm -
 	pvcreate /dev/mapper/cryptlvm
 	vgcreate lvgroup /dev/mapper/cryptlvm
 else
