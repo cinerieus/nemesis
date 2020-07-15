@@ -179,11 +179,11 @@ else
 	refind-install
 	if echo $encryption | grep -iqF y; then
 		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo "Arch Linux"	"root=/dev/mapper/lvgroup-root"	"cryptdevice=UUID=$cryptdevice:cryptlvm" rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img > /boot/refind_linux.conf
-		echo "Arch Linux Fallback"	"root=/dev/mapper/lvgroup-root"	"cryptdevice=UUID=$cryptdevice:cryptlvm" rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img >> /boot/refind_linux.conf
+		echo "\"Arch Linux\"	\"root=/dev/mapper/lvgroup-root cryptdevice=UUID=$cryptdevice:cryptlvm rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img\"" > /boot/refind_linux.conf
+		echo "\"Arch Linux Fallback\"	\"root=/dev/mapper/lvgroup-root cryptdevice=UUID=$cryptdevice:cryptlvm rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img\"" >> /boot/refind_linux.conf
 	else
-		echo "Arch Linux"	"root=/dev/mapper/lvgroup-root"	rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img > /boot/refind_linux.conf
-		echo "Arch Linux Fallback"	"root=/dev/mapper/lvgroup-root"	rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img >> /boot/refind_linux.conf
+		echo "\"Arch Linux\"	\"root=/dev/mapper/lvgroup-root rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img\"" > /boot/refind_linux.conf
+		echo "\"Arch Linux Fallback\"	\"root=/dev/mapper/lvgroup-root rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img\"" >> /boot/refind_linux.conf
 	fi
 fi' >> /mnt/nemesis.sh
 
