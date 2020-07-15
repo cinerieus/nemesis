@@ -81,9 +81,9 @@ mount "${disk}1" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
 if echo $server | grep -iqF y; then
-	pacstrap /mnt base linux lvm2 grub efibootmgr
+	pacstrap /mnt base linux lvm2 grub efibootmgr vim
 else
-	pacstrap /mnt base linux linux-firmware lvm2 networkmanager intel-ucode
+	pacstrap /mnt base linux linux-firmware lvm2 refind networkmanager intel-ucode vim
 fi
 
 #### Config ####
@@ -166,15 +166,18 @@ if echo $encryption | grep -iqF y; then
 fi
 
 #### Bootloader ####
-printf "\n\nConfiguring bootloader...\n"
-if echo $server | grep -iqF y; then
-	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-	if echo $encryption | grep -iqF y; then
-		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm root:/dev/lvgroup/root" > /etc/default/grub
-	fi
-	grub-mkconfig -o /boot/grub/grub.cfg
-fi' >> /mnt/nemesis.sh
+#printf "\n\nConfiguring bootloader...\n"
+#if echo $server | grep -iqF y; then
+#	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+#	if echo $encryption | grep -iqF y; then
+#		cryptdevice=$(lsblk -dno UUID ${disk}2)
+#		echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
+#	fi
+#	grub-mkconfig -o /boot/grub/grub.cfg
+#else
+#
+#fi
+' >> /mnt/nemesis.sh
 
 # Chroot and run
 #################
