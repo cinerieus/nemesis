@@ -92,7 +92,7 @@ printf "\n\nGenerating fstab...\n"
 genfstab -U /mnt >> /mnt/etc/fstab
 
 #### Create stage 2 script ####
-printf "\n\nCreating stage 2 script...\n"
+printf "\n\nCreating stage 2 script..."
 echo "
 #!/bin/bash
 hostname=$hostname
@@ -175,14 +175,15 @@ if echo $server | grep -iqF y; then
 		#echo cryptdevice=UUID=$cryptdevice:cryptlvm root=/dev/lvgroup/root > /etc/default/grub
 	fi
 	grub-mkconfig -o /boot/grub/grub.cfg
+	mkinitcpio -P
 fi' >> /mnt/nemesis.sh
 
 # Chroot and run
 #################
-printf "\n\nChrooting and running stage 2...\n"
+printf "\n\nChrooting and running stage 2..."
 chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
-printf "\n\nCleaning up...\n"
+printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting...\n"
 #reboot
