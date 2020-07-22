@@ -30,7 +30,7 @@ if echo $wifi | grep -iqF y; then
 	device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\n' -f 1)
 	printf "\nInstall using WiFi...\n"
 	read -p "SSID: " ssid
-	read -sp "WiFi Password: " wifipass
+	read -rsp "WiFi Password: " wifipass
 	iwctl --passphrase $wifipass station $device connect $ssid
 fi
 if [[ $(ping -W 3 -c 2 archlinux.org) != *" 0%"* ]]; then
@@ -152,7 +152,7 @@ if echo $server | grep -iqF y; then
 		read -p "SSID: " ssid
 		read -sp "WiFi Password: " wifipass
 		# Connect with iwd on reboot...
-		#device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\'\\n\'' -f 1)
+		#device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\''\n'\'' -f 1)
 		#iwctl --passphrase $wifipass station $device connect $ssid
 	fi
 else
@@ -160,11 +160,13 @@ else
 fi
 
 #### Initramfs ####
+printf "n\nSetting up initramfs...\n"
 if echo $encryption | grep -iqF y; then
-	printf "n\nSetting up initramfs for decryption...\n"
 	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
-	mkinitcpio -P
+else
+	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
 fi
+mkinitcpio -P
 
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
