@@ -1,5 +1,4 @@
 #!/bin/bash
-
 printf "Running Arch Nemesis install script...\n"
 read -p "Do you want to continue? [Y/N]" continue
 if echo $continue | grep -iqFv y; then
@@ -152,8 +151,6 @@ if echo $server | grep -iqF y; then
 		read -p "SSID: " ssid
 		read -sp "WiFi Password: " wifipass
 		# Connect with iwd on reboot...
-		#device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\''\n'\'' -f 1)
-		#iwctl --passphrase $wifipass station $device connect $ssid
 	fi
 else
 	systemctl enable NetworkManager
