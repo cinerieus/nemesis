@@ -1,6 +1,6 @@
 #!/bin/bash
 
-printf "Running Nemesis Arch install script...\n"
+printf "Running Arch Nemesis install script...\n"
 read -p "Do you want to continue? [Y/N]" continue
 if echo $continue | grep -iqFv y; then
 	exit 0
@@ -84,7 +84,7 @@ printf "\n\nPackstrap packages...\n"
 if echo $server | grep -iqF y; then
 	pacstrap /mnt base linux lvm2 grub efibootmgr vim
 else
-	pacstrap /mnt base linux linux-firmware lvm2 refind networkmanager intel-ucode vim
+	pacstrap /mnt base linux linux-firmware lvm2 grub networkmanager intel-ucode vim
 fi
 
 #### Config ####
@@ -168,69 +168,12 @@ fi
 
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
-if echo $server | grep -iqF y; then
-	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-	if echo $encryption | grep -iqF y; then
-		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
-	fi
-	grub-mkconfig -o /boot/grub/grub.cfg
-else
-	pacman --noconfirm -S git
-	refind-install
-	git clone https://github.com/bobafetthotmail/refind-theme-regular.git /boot/EFI/refind/refind-theme-regular
-	rm -rf /boot/EFI/refind/refind-theme-regular/{src,.git} /boot/EFI/refind/refind-theme-regular/install.sh
-	echo "
-	icons_dir refind-theme-regular/icons/128-48
-	big_icon_size 128
-	small_icon_size 48
-	banner refind-theme-regular/icons/128-48/bg_dark.png
-	selection_big refind-theme-regular/icons/128-48/selection_dark-big.png
-	selection_small refind-theme-regular/icons/128-48/selection_dark-small.png
-	font refind-theme-regular/fonts/source-code-pro-extralight-14.png" > /boot/EFI/refind/refind-theme-regular/theme.conf
-	if echo $encryption | grep -iqF y; then
-		cryptdevice=$(lsblk -dno UUID ${disk}2)
-		echo "\"Arch Linux\"	\"root=/dev/mapper/lvgroup-root cryptdevice=UUID=$cryptdevice:cryptlvm rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img\"" > /boot/refind_linux.conf
-		echo "\"Arch Linux Fallback\"	\"root=/dev/mapper/lvgroup-root cryptdevice=UUID=$cryptdevice:cryptlvm rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img\"" >> /boot/refind_linux.conf
-		echo "
-		timeout 3
-		menuentry \"Arch Linux\" {
-			icon	/EFI/refind/themes/rEFInd-minimal/icons/os_arch.png
-			volume	\"Arch Linux\"
-			loader	/boot/vmlinuz-Linux
-			initrd	/boot/initramfs-linux.img
-			options	\"root=/dev/mapper/lvgroup-root cryptdevice=UUID=$cryptdevice:cryptlvm rw add_efi_memmap initrd=/intel-ucode.img initrd=/initramfs-linux.img\"
-			submenuentry	\"Boot using fallback initramfs\" {
-				initrd	/boot/initramfs-linux-fallback.img
-				}
-			submenuentry	\"Boot to terminal\" {
-				add_options \"systemd.unit=multi-user.target\"
-				}
-			disabled
-			}
-		include refind-theme-regular/theme.conf" > /boot/EFI/refind/refind.conf
-	else
-		echo "\"Arch Linux\"	\"root=/dev/mapper/lvgroup-root rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img\"" > /boot/refind_linux.conf
-		echo "\"Arch Linux Fallback\"	\"root=/dev/mapper/lvgroup-root rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux-fallback.img\"" >> /boot/refind_linux.conf
-		echo "
-		timeout 3
-		menuentry \"Arch Linux\" {
-			icon	/EFI/refind/themes/rEFInd-minimal/icons/os_arch.png
-			volume	\"Arch Linux\"
-			loader	/boot/vmlinuz-Linux
-			initrd	/boot/initramfs-linux.img
-			options	\"root=/dev/mapper/lvgroup-root rw add_efi_memmap initrd=/intel-ucode.img initrd=/initramfs-linux.img\"
-			submenuentry	\"Boot using fallback initramfs\" {
-				initrd	/boot/initramfs-linux-fallback.img
-				}
-			submenuentry	\"Boot to terminal\" {
-				add_options \"systemd.unit=multi-user.target\"
-				}
-			disabled
-			}
-		include refind-theme-regular/theme.conf" > /boot/EFI/refind/refind.conf
-	fi
-fi' >> /mnt/nemesis.sh
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+if echo $encryption | grep -iqF y; then
+	cryptdevice=$(lsblk -dno UUID ${disk}2)
+	echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
+fi
+grub-mkconfig -o /boot/grub/grub.cfg' >> /mnt/nemesis.sh
 
 # Chroot and run
 #################
