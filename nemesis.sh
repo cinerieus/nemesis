@@ -187,9 +187,9 @@ appendpath () {
     esac
 }
 
-appendpath "/usr/local/sbin"
-appendpath "/usr/local/bin"
-appendpath "/usr/bin"
+appendpath '\''/usr/local/sbin'\''
+appendpath '\''/usr/local/bin'\''
+appendpath '\''/usr/bin'\''
 unset -f appendpath
 
 export PATH
@@ -219,6 +219,7 @@ unset TERMCAP
 unset MANPATH" > /etc/profile
 
 read -sp "$username password: " password
+printf "\n"
 read -sp "root password: " rootpassword
 echo "$password" | passwd --stdin $username
 echo "%wheel	ALL=(ALL) ALL" >> /etc/sudoers
@@ -231,6 +232,7 @@ printf "\n\nInstalling packages...\n"
 if echo "$server" | grep -iqFv y; then
 	pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput xorg-xinput bluez bluez-utils networkmanager
 fi
+printf "\nDone.\n"
 #########################' >> /mnt/nemesis.sh
 
 
