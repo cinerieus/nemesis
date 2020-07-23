@@ -13,7 +13,7 @@ username="cinereus"
 # read -p "Server Install? [Y/N] " server
 server="Y"
 # read -p "Use Encryption? [Y/N] " encryption
-encryption="Y"
+encryption="N"
 #read -p "Secure Boot? [Y/N] " secureboot
 secureboot="N"
 
@@ -223,8 +223,8 @@ read -sp "root password: " rootpassword
 echo "$password" | passwd --stdin $username
 echo "%wheel	ALL=(ALL) ALL" >> /etc/sudoers
 useradd -m -G wheel $username
-echo "$password" | passwd --stdin $username
-echo "$rootpassword" | passwd --stdin root
+echo -e "$password\n$password" | passwd $username
+echo -e "$rootpassword\n$rootpassword" | passwd root
 
 #### Custom Packages ####
 printf "\n\nInstalling packages...\n"
