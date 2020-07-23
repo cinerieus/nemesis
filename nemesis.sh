@@ -1,7 +1,7 @@
 #!/bin/bash
 printf "Running Arch Nemesis install script...\n"
 read -p "Do you want to continue? [Y/N]" continue
-if echo $continue | grep -iqFv y; then
+if echo "$continue" | grep -iqFv y; then
 	exit 0
 fi
 
@@ -12,11 +12,8 @@ hostname="ikaros"
 username="cinereus"
 # read -p "Server Install? [Y/N] " server
 server="Y"
-# read -p "Use WiFi? [Y/N] " wifi
-wifi="N"
 # read -p "Use Encryption? [Y/N] " encryption
 encryption="Y"
-# Non-server only!
 #read -p "Secure Boot? [Y/N] " secureboot
 secureboot="N"
 
@@ -25,12 +22,18 @@ loadkeys uk
 
 #### Internet Check  ####
 printf "\n\nChecking connectivity...\n"
-if echo $wifi | grep -iqF y; then
-	device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\n' -f 1)
-	printf "\nInstall using WiFi...\n"
-	read -p "SSID: " ssid
-	read -rsp "WiFi Password: " wifipass
-	iwctl --passphrase $wifipass station $device connect $ssid
+if [[ $(ping -W 3 -c 2 archlinux.org) != *" 0%"* ]]; then
+	read -p "Network Error, Use WiFi? [Y/N] " wifi
+	if echo "$wifi" | grep -iqF y; then
+		device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\n' -f 1)
+		printf "\nInstall using WiFi...\n"
+		read -p "SSID: " ssid
+		read -rsp "WiFi Password: " wifipass
+		iwctl --passphrase "$wifipass" station "$device" connect "$ssid"
+	else
+		printf "\nNetwork error, Exiting...\n"
+		exit 0
+	fi
 fi
 if [[ $(ping -W 3 -c 2 archlinux.org) != *" 0%"* ]]; then
 	printf "\nNetwork error, Exiting...\n"
@@ -51,7 +54,7 @@ sfdisk --force $disk << EOF
 EOF
 
 #### Encryption ####
-if echo $encryption | grep -iqF y; then
+if echo "$encryption" | grep -iqF y; then
 	printf "\n\nEncrpting primary partition...\n"
 	read -sp 'LUKS Encryption Passphrase: ' encpass
 	echo $encpass | cryptsetup -q luksFormat "${disk}2"
@@ -80,10 +83,10 @@ mount "${disk}1" /mnt/boot
 #### Installation ####
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
-if echo $server | grep -iqF y; then
-	pacstrap /mnt base linux lvm2 grub efibootmgr vim
+if echo "$server" | grep -iqF y; then
+	pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub networkmanager intel-ucode vim
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr intel-ucode vim sudo nmap openssh tcpdump
 fi
 
 #### Config ####
@@ -98,7 +101,6 @@ echo "
 hostname=$hostname
 username=$username
 server=$server
-wifi=$wifi
 encryption=$encryption
 secureboot=$secureboot
 disk=$disk" > /mnt/nemesis.sh
@@ -120,7 +122,7 @@ echo KEYMAP=uk > /etc/vconsole.conf
 printf "\nConfiguring networks...\n"
 echo $hostname > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
-if echo $server | grep -iqF y; then
+if echo "$server" | grep -iqF y; then
 	systemctl enable systemd-networkd
 	systemctl enable systemd-resolved
 	echo "
@@ -134,31 +136,24 @@ if echo $server | grep -iqF y; then
 
 	[DHCP]
 	RouteMetric=10" > /etc/systemd/network/20-wired.network
-	if echo $wifi| grep -iqF y; then
-		pacman --noconfirm -S iwd
-		systemctl enable iwd
-		echo "
-		[Match]
-		Name=wlp*
-		Name=wlan*
+	echo "
+	[Match]
+	Name=wlp*
+	Name=wlan*
 
-		[Network]
-		DHCP=yes
-		IPv6PrivacyExtensions=yes
+	[Network]
+	DHCP=yes
+	IPv6PrivacyExtensions=yes
 
-		[DHCP]
-		RouteMetric=20" > /etc/systemd/network/25-wireless.network
-		read -p "SSID: " ssid
-		read -sp "WiFi Password: " wifipass
-		# Connect with iwd on reboot...
-	fi
+	[DHCP]
+	RouteMetric=20" > /etc/systemd/network/25-wireless.network
 else
 	systemctl enable NetworkManager
 fi
 
 #### Initramfs ####
 printf "n\nSetting up initramfs...\n"
-if echo $encryption | grep -iqF y; then
+if echo "$encryption" | grep -iqF y; then
 	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
 else
 	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
@@ -168,11 +163,76 @@ mkinitcpio -P
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-if echo $encryption | grep -iqF y; then
+if echo "$encryption" | grep -iqF y; then
 	cryptdevice=$(lsblk -dno UUID ${disk}2)
 	echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
 fi
-grub-mkconfig -o /boot/grub/grub.cfg' >> /mnt/nemesis.sh
+grub-mkconfig -o /boot/grub/grub.cfg
+
+#### User Setup ####
+printf "\n\nUser setup...\n"
+echo "
+# /etc/profile
+
+# Set our umask
+umask 002
+
+# Append our default paths
+appendpath () {
+    case ":$PATH:" in
+        *:"$1":*)
+            ;;
+        *)
+            PATH="${PATH:+$PATH:}$1"
+    esac
+}
+
+appendpath "/usr/local/sbin"
+appendpath "/usr/local/bin"
+appendpath "/usr/bin"
+unset -f appendpath
+
+export PATH
+
+# Load profiles from /etc/profile.d
+if test -d /etc/profile.d/; then
+        for profile in /etc/profile.d/*.sh; do
+                test -r "$profile" && . "$profile"
+        done
+        unset profile
+fi
+
+# Source global bash config, when interactive but not posix or sh mode
+if test "$BASH" &&\
+   test "$PS1" &&\
+   test -z "$POSIXLY_CORRECT" &&\
+   test "${0#-}" != sh &&\
+   test -r /etc/bash.bashrc
+then
+        . /etc/bash.bashrc
+fi
+
+# Termcap is outdated, old, and crusty, kill it.
+unset TERMCAP
+
+# Man is much better than us at figuring this out
+unset MANPATH" > /etc/profile
+
+read -sp "$username password: " password
+read -sp "root password: " rootpassword
+echo "$password" | passwd --stdin $username
+echo "%wheel	ALL=(ALL) ALL" >> /etc/sudoers
+useradd -m -G wheel $username
+echo "$password" | passwd --stdin $username
+echo "$rootpassword" | passwd --stdin root
+
+#### Custom Packages ####
+printf "\n\nInstalling packages...\n"
+if echo "$server" | grep -iqFv y; then
+	pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput xorg-xinput bluez bluez-utils networkmanager
+fi
+#########################' >> /mnt/nemesis.sh
+
 
 # Chroot and run
 #################
