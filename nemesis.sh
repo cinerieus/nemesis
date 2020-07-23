@@ -171,57 +171,9 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 #### User Setup ####
 printf "\n\nUser setup...\n"
-echo "
-# /etc/profile
-
-# Set our umask
-umask 002
-
-# Append our default paths
-appendpath () {
-    case ":$PATH:" in
-        *:"$1":*)
-            ;;
-        *)
-            PATH="${PATH:+$PATH:}$1"
-    esac
-}
-
-appendpath '\''/usr/local/sbin'\''
-appendpath '\''/usr/local/bin'\''
-appendpath '\''/usr/bin'\''
-unset -f appendpath
-
-export PATH
-
-# Load profiles from /etc/profile.d
-if test -d /etc/profile.d/; then
-        for profile in /etc/profile.d/*.sh; do
-                test -r "$profile" && . "$profile"
-        done
-        unset profile
-fi
-
-# Source global bash config, when interactive but not posix or sh mode
-if test "$BASH" &&\
-   test "$PS1" &&\
-   test -z "$POSIXLY_CORRECT" &&\
-   test "${0#-}" != sh &&\
-   test -r /etc/bash.bashrc
-then
-        . /etc/bash.bashrc
-fi
-
-# Termcap is outdated, old, and crusty, kill it.
-unset TERMCAP
-
-# Man is much better than us at figuring this out
-unset MANPATH" > /etc/profile
-
 read -sp "$username password: " password
 printf "\n"
 read -sp "root password: " rootpassword
-echo "$password" | passwd --stdin $username
 echo "%wheel	ALL=(ALL) ALL" >> /etc/sudoers
 useradd -m -G wheel $username
 echo -e "$password\n$password" | passwd $username
