@@ -235,7 +235,10 @@ if echo "$server" | grep -iqF y; then
                 HostKey /etc/ssh/ssh_host_ed25519_key
                 PermitRootLogin no
                 PasswordAuthentication no" >> /etc/ssh/sshd_config
-                echo "$sshkey" > /home/$username/.ssh/authorized_keys $$ chown $username:$username /home/$username/.ssh/authorized_keys $$ chmod 600 /home/$username/.ssh/authorized_keys
+		sudo -u $username mkdir ~/.ssh
+		sudo -u $username chmod 750 ~/.ssh
+                sudo -u $username echo "$sshkey" > ~/.ssh/authorized_keys
+		sudo -u $username chmod 600 ~/.ssh/authorized_keys
         else
                 echo "
                 HostKey /etc/ssh/ssh_host_ed25519_key
