@@ -8,7 +8,6 @@ fi
 #### Options ####
 read -p "Hostname: " hostname
 read -p "Username: " username
-#read -sp "$username password: " password
 read -p "Disk Encryption? [Y/N] " encryption
 read -p "Server Install? [Y/N] " server
 if echo "$server" | grep -iqF y; then
@@ -217,21 +216,18 @@ grub-mkconfig -o /boot/grub/grub.cfg
 printf "\n\nUser setup...\n"
 read -sp "$username password: " password
 printf "\n"
-#read -sp "root password: " rootpassword
 echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
 useradd -m -G wheel $username
 echo -e "$password\n$password" | passwd $username
-#echo -e "$rootpassword\n$rootpassword" | passwd root
 
 #### SSH setup ####
 if echo "$server" | grep -iqF y; then
         systemctl enable sshd
-        if [ -z "$sshkey" ]; then
+        if [ -n "$sshkey" ]; then
                 echo "
                 HostKey /etc/ssh/ssh_host_ed25519_key
                 PermitRootLogin no
                 PasswordAuthentication no" >> /etc/ssh/sshd_config
-                mkdir /home/$username/.ssh $$ chown $username:$username /home/$username/.ssh $$ chmod 750 /home/$username/.ssh
                 echo "$sshkey" > /home/$username/.ssh/authorized_keys $$ chown $username:$username /home/$username/.ssh/authorized_keys $$ chmod 600 /home/$username/.ssh/authorized_keys
         else
                 echo "
@@ -244,16 +240,17 @@ fi
 printf "\n\nInstalling packages...\n"
 if echo "$server" | grep -iqFv y; then
         pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput xorg-xinput bluez bluez-utils networkmanager
+else
+        pacman --noconfirm -S open-vm-tools
 fi
 printf "\nDone.\n"
 #########################' >> /mnt/nemesis.sh
-
 
 # Chroot and run
 #################
 printf "\n\nChrooting and running stage 2..."
 chmod +x /mnt/nemesis.sh
-arch-chroot /mnt ./nemesis.sh > /mnt/home/$username/install.log
+arch-chroot /mnt ./nemesis.sh > /mnt/var/log/$username/install.log
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting...\n"
