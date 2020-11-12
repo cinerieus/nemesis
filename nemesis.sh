@@ -257,9 +257,7 @@ pacman --noconfirm -S base-devel gnu-netcat socat netstat-nat git python python-
 
 printf "\n\nInstalling Blackarch repos... \n"
 cd /opt
-curl https://blackarch.org/strap.sh -o blackarch.sh
-chmod +x blackarch.sh
-./blackarch.sh
+curl https://blackarch.org/strap.sh | sh
 pacman --noconfirm -Sy
 
 printf "\n\nInstalling Yay... \n"
