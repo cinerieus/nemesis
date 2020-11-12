@@ -2,20 +2,36 @@
 printf "Running Arch Nemesis install script...\n"
 read -p "Do you want to continue? [Y/N]" continue
 if echo "$continue" | grep -iqFv y; then
-	exit 0
+        exit 0
 fi
 
 #### Options ####
-# read -p "Hostname: " hostname
-hostname="ikaros"
-# read -p "Username: " username
-username="cinereus"
-# read -p "Server Install? [Y/N] " server
-server="Y"
-# read -p "Use Encryption? [Y/N] " encryption
-encryption="N"
-#read -p "Secure Boot? [Y/N] " secureboot
-secureboot="N"
+read -p "Hostname: " hostname
+read -p "Username: " username
+#read -sp "$username password: " password
+read -p "Disk Encryption? [Y/N] " encryption
+read -p "Server Install? [Y/N] " server
+if echo "$server" | grep -iqF y; then
+        read -p "Static IP? [Y/N] " isstatic
+                if echo "$isstatic" | grep -iqF y; then
+                        read -p "IP Address (CIDR): " address
+                        read -p "Gateway: " gateway
+                        read -p "DNS: " dns
+                else
+                        address=""
+                        gateway=""
+                        dns=""
+                fi
+        read -p "SSH key: " sshkey
+        secureboot="N"
+else
+        isstatic="N"
+        address=""
+        gateway=""
+        dns=""
+        sshkey=""
+        read -p "Secure Boot? [Y/N] " secureboot
+fi
 
 #### Keyboard ####
 loadkeys uk
@@ -23,21 +39,21 @@ loadkeys uk
 #### Internet Check  ####
 printf "\n\nChecking connectivity...\n"
 if [[ $(ping -W 3 -c 2 archlinux.org) != *" 0%"* ]]; then
-	read -p "Network Error, Use WiFi? [Y/N] " wifi
-	if echo "$wifi" | grep -iqF y; then
-		device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\n' -f 1)
-		printf "\nInstall using WiFi...\n"
-		read -p "SSID: " ssid
-		read -rsp "WiFi Password: " wifipass
-		iwctl --passphrase "$wifipass" station "$device" connect "$ssid"
-	else
-		printf "\nNetwork error, Exiting...\n"
-		exit 0
-	fi
+        read -p "Network Error, Use WiFi? [Y/N] " wifi
+        if echo "$wifi" | grep -iqF y; then
+                device=$(ip link | grep "wl"* | grep -o -P "(?= ).*(?=:)" | sed -e "s/^[[:space:]]*//" | cut -d$'\n' -f 1)
+                printf "\nInstall using WiFi...\n"
+                read -p "SSID: " ssid
+                read -rsp "WiFi Password: " wifipass
+                iwctl --passphrase "$wifipass" station "$device" connect "$ssid"
+        else
+                printf "\nNetwork error, Exiting...\n"
+                exit 0
+        fi
 fi
 if [[ $(ping -W 3 -c 2 archlinux.org) != *" 0%"* ]]; then
-	printf "\nNetwork error, Exiting...\n"
-	exit 0
+        printf "\nNetwork error, Exiting...\n"
+        exit 0
 fi
 
 #### Time ####
@@ -55,15 +71,15 @@ EOF
 
 #### Encryption ####
 if echo "$encryption" | grep -iqF y; then
-	printf "\n\nEncrpting primary partition...\n"
-	read -sp 'LUKS Encryption Passphrase: ' encpass
-	echo $encpass | cryptsetup -q luksFormat "${disk}2"
-	echo $encpass | cryptsetup open "${disk}2" cryptlvm -
-	pvcreate /dev/mapper/cryptlvm
-	vgcreate lvgroup /dev/mapper/cryptlvm
+        printf "\n\nEncrpting primary partition...\n"
+        read -sp 'LUKS Encryption Passphrase: ' encpass
+        echo $encpass | cryptsetup -q luksFormat "${disk}2"
+        echo $encpass | cryptsetup open "${disk}2" cryptlvm -
+        pvcreate /dev/mapper/cryptlvm
+        vgcreate lvgroup /dev/mapper/cryptlvm
 else
-	pvcreate "${disk}2"
-	vgcreate lvgroup "${disk}2"
+        pvcreate "${disk}2"
+        vgcreate lvgroup "${disk}2"
 fi
 
 #### LVM/Format /root /swap ####
@@ -84,9 +100,9 @@ mount "${disk}1" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
-	pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
+        pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr intel-ucode vim sudo nmap openssh tcpdump
+        pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr intel-ucode vim sudo nmap openssh tcpdump
 fi
 
 #### Config ####
@@ -101,6 +117,11 @@ echo "
 hostname=$hostname
 username=$username
 server=$server
+isstatic=$isstatic
+address=$address
+gateway=$gateway
+dns=$dns
+sshkey=$sshkey
 encryption=$encryption
 secureboot=$secureboot
 disk=$disk" > /mnt/nemesis.sh
@@ -123,40 +144,63 @@ printf "\nConfiguring networks...\n"
 echo $hostname > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
 if echo "$server" | grep -iqF y; then
-	systemctl enable systemd-networkd
-	systemctl enable systemd-resolved
-	echo "
-	[Match]
-	Name=en*
-	Name=eth*
+        systemctl enable systemd-networkd
+        systemctl enable systemd-resolved
+        if echo "$isstatic" | grep -iqF y; then
+                echo "
+                [Match]
+                Name=en*
+                Name=eth*
 
-	[Network]
-	DHCP=yes
-	IPv6PrivacyExtensions=yes
+                [Network]
+                Address=$address
+                Gateway=$gateway
+                DNS=$dns" > /etc/systemd/network/20-wired.network
+                echo "
+                [Match]
+                Name=wlp*
+                Name=wlan*
 
-	[DHCP]
-	RouteMetric=10" > /etc/systemd/network/20-wired.network
-	echo "
-	[Match]
-	Name=wlp*
-	Name=wlan*
+                [Network]
+                DHCP=yes
+                IPv6PrivacyExtensions=yes
 
-	[Network]
-	DHCP=yes
-	IPv6PrivacyExtensions=yes
+                [DHCP]
+                RouteMetric=20" > /etc/systemd/network/25-wireless.network
+        else
+                echo "
+                [Match]
+                Name=en*
+                Name=eth*
 
-	[DHCP]
-	RouteMetric=20" > /etc/systemd/network/25-wireless.network
+                [Network]
+                DHCP=yes
+                IPv6PrivacyExtensions=yes
+
+                [DHCP]
+                RouteMetric=10" > /etc/systemd/network/20-wired.network
+                echo "
+                [Match]
+                Name=wlp*
+                Name=wlan*
+
+                [Network]
+                DHCP=yes
+                IPv6PrivacyExtensions=yes
+
+                [DHCP]
+                RouteMetric=20" > /etc/systemd/network/25-wireless.network
+        fi
 else
-	systemctl enable NetworkManager
+        systemctl enable NetworkManager
 fi
 
 #### Initramfs ####
 printf "n\nSetting up initramfs...\n"
 if echo "$encryption" | grep -iqF y; then
-	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
+        echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
 else
-	echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
+        echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
 fi
 mkinitcpio -P
 
@@ -164,8 +208,8 @@ mkinitcpio -P
 printf "\n\nConfiguring bootloader...\n"
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 if echo "$encryption" | grep -iqF y; then
-	cryptdevice=$(lsblk -dno UUID ${disk}2)
-	echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
+        cryptdevice=$(lsblk -dno UUID ${disk}2)
+        echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -173,16 +217,33 @@ grub-mkconfig -o /boot/grub/grub.cfg
 printf "\n\nUser setup...\n"
 read -sp "$username password: " password
 printf "\n"
-read -sp "root password: " rootpassword
-echo "%wheel	ALL=(ALL) ALL" >> /etc/sudoers
+#read -sp "root password: " rootpassword
+echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
 useradd -m -G wheel $username
 echo -e "$password\n$password" | passwd $username
-echo -e "$rootpassword\n$rootpassword" | passwd root
+#echo -e "$rootpassword\n$rootpassword" | passwd root
+
+#### SSH setup ####
+if echo "$server" | grep -iqF y; then
+        systemctl enable sshd
+        if [ -z "$sshkey" ]; then
+                echo "
+                HostKey /etc/ssh/ssh_host_ed25519_key
+                PermitRootLogin no
+                PasswordAuthentication no" >> /etc/ssh/sshd_config
+                mkdir /home/$username/.ssh $$ chown $username:$username /home/$username/.ssh $$ chmod 750 /home/$username/.ssh
+                echo "$sshkey" > /home/$username/.ssh/authorized_keys $$ chown $username:$username /home/$username/.ssh/authorized_keys $$ chmod 600 /home/$username/.ssh/authorized_keys
+        else
+                echo "
+                HostKey /etc/ssh/ssh_host_ed25519_key
+                PermitRootLogin no" >> /etc/ssh/sshd_config
+        fi
+fi
 
 #### Custom Packages ####
 printf "\n\nInstalling packages...\n"
 if echo "$server" | grep -iqFv y; then
-	pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput xorg-xinput bluez bluez-utils networkmanager
+        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput xorg-xinput bluez bluez-utils networkmanager
 fi
 printf "\nDone.\n"
 #########################' >> /mnt/nemesis.sh
@@ -192,9 +253,9 @@ printf "\nDone.\n"
 #################
 printf "\n\nChrooting and running stage 2..."
 chmod +x /mnt/nemesis.sh
-arch-chroot /mnt ./nemesis.sh
+arch-chroot /mnt ./nemesis.sh > /mnt/home/$username/install.log
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting...\n"
-#reboot
+reboot
 #################
