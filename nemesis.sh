@@ -217,7 +217,7 @@ printf "\n\nUser setup...\n"
 read -sp "$username password: " password
 echo
 read -sp "$username confirm password: " password2
-while ["$password" != "$password2"]; do
+while [ "$password" != "$password2" ]; do
 	printf "\n\bPlease try again\n"
 	read -sp "$username password: " password
 	echo
