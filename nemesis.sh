@@ -236,21 +236,45 @@ if echo "$server" | grep -iqF y; then
         fi
 fi
 
-#### Custom Packages ####
-printf "\n\nInstalling packages...\n"
+#### Customization ####
 if echo "$server" | grep -iqFv y; then
+	printf "\n\nInstalling packages...\n"
         pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput xorg-xinput bluez bluez-utils networkmanager
 else
+	printf "\n\nInstalling packages...\n"
         pacman --noconfirm -S open-vm-tools
 fi
+
+pacman --noconfirm -S gnu-netcat socat netstat-nat git python python-pip unzip p7zip go cifs-utils openvpn
+
+printf"\n\nInstalling Blackarch repos... \n"
+cd /opt
+curl https://blackarch.org/strap.sh -o blackarch.sh
+./blackarch.sh
+pacman -Sy
+
+printf"\n\nInstalling Yay... \n"
+git clone https://aur.archlinux.org/yay.git
+chown -R $username:$username yay
+cd yay
+sudo -u $username makepkg si
+cd /
+
+printf "\n\nFinishing touches... \n"
+curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
+curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
+git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
+sudo -u $username vim +PluginInstall +qall
+pacman --noconfirm -Syu
+
 printf "\nDone.\n"
-#########################' >> /mnt/nemesis.sh
+#######################' >> /mnt/nemesis.sh
 
 # Chroot and run
 #################
 printf "\n\nChrooting and running stage 2..."
 chmod +x /mnt/nemesis.sh
-arch-chroot /mnt ./nemesis.sh > /mnt/var/log/$username/install.log
+arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting...\n"
