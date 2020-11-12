@@ -215,12 +215,12 @@ grub-mkconfig -o /boot/grub/grub.cfg
 #### User Setup ####
 printf "\n\nUser setup...\n"
 read -sp "$username password: " password
-printf "\n"
+echo
 read -sp "$username confirm password: " password2
 while ["$password" != "$password2"]; do
-	printf "\nPlease try again"
+	printf "\n\bPlease try again\n"
 	read -sp "$username password: " password
-	printf "\n"
+	echo
 	read -sp "$username confirm password: " password2
 done
 printf "\n"
