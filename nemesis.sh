@@ -245,15 +245,15 @@ else
         pacman --noconfirm -S open-vm-tools
 fi
 
-pacman --noconfirm -S gnu-netcat socat netstat-nat git python python-pip unzip p7zip go cifs-utils openvpn
+pacman --noconfirm -S base-devel gnu-netcat socat netstat-nat git python python-pip unzip p7zip go cifs-utils openvpn
 
-printf"\n\nInstalling Blackarch repos... \n"
+printf "\n\nInstalling Blackarch repos... \n"
 cd /opt
 curl https://blackarch.org/strap.sh -o blackarch.sh
 ./blackarch.sh
-pacman -Sy
+pacman --noconfirm -Sy
 
-printf"\n\nInstalling Yay... \n"
+printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
 chown -R $username:$username yay
 cd yay
@@ -261,9 +261,9 @@ sudo -u $username makepkg si
 cd /
 
 printf "\n\nFinishing touches... \n"
-curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
-curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
-git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
+sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
+sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
+sudo -u $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
 sudo -u $username vim +PluginInstall +qall
 pacman --noconfirm -Syu
 
@@ -277,6 +277,6 @@ chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
-printf "\n\nDone! - Rebooting...\n"
+printf "\n\nDone! - Rebooting..."
 reboot
 #################
