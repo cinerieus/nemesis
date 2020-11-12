@@ -271,7 +271,7 @@ printf "\n\nFinishing touches... \n"
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
 sudo -u $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
-sudo -u $username vim +PluginInstall +qall
+#sudo -u $username vim +PluginInstall +qall
 pacman --noconfirm -Syu
 
 printf "\nDone.\n"
