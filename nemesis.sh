@@ -223,7 +223,6 @@ while ["$password" != "$password2"]; do
 	echo
 	read -sp "$username confirm password: " password2
 done
-printf "\n"
 echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
 useradd -m -G wheel $username
 echo -e "$password\n$password" | passwd $username
