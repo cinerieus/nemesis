@@ -249,7 +249,7 @@ fi
 #### Customization ####
 if echo "$server" | grep -iqFv y; then
 	printf "\n\nInstalling packages...\n"
-        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput xorg-xinput bluez bluez-utils networkmanager
+        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock
 else
 	printf "\n\nInstalling packages...\n"
         pacman --noconfirm -S open-vm-tools
