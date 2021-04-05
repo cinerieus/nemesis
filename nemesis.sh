@@ -253,7 +253,7 @@ if echo "$server" | grep -iqF n; then
 	[multilib]
 	Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 	pacman -Sy
-        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock
+        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock kitty
 	systemctl enable sddm
 else
 	printf "\n\nInstalling packages...\n"
