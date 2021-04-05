@@ -249,7 +249,7 @@ fi
 #### Customization ####
 if echo "$server" | grep -iqFv y; then
 	printf "\n\nInstalling packages...\n"
-        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock
+        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock > /packages.log
 else
 	printf "\n\nInstalling packages...\n"
         pacman --noconfirm -S open-vm-tools
@@ -287,5 +287,5 @@ arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting..."
-reboot
+#reboot
 #################
