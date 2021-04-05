@@ -101,7 +101,8 @@ printf "\n\nPackstrap packages...\n"
 if echo "$server" | grep -iqF y; then
         pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
 else
-        pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr intel-ucode vim sudo nmap openssh tcpdump
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
+        #pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr intel-ucode vim sudo nmap openssh tcpdump
 fi
 
 #### Config ####
@@ -251,7 +252,8 @@ if echo "$server" | grep -iqF n; then
 	[multilib]
 	Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 	pacman -Sy
-        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock kitty
+        #pacman --noconfirm -S mesa lib32-mesa vulkan-intel 
+	pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview kitty spectacle chromium firefox
 	systemctl enable NetworkManager
 	systemctl enable sddm
 else
