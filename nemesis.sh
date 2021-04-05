@@ -190,8 +190,6 @@ if echo "$server" | grep -iqF y; then
                 [DHCP]
                 RouteMetric=20" > /etc/systemd/network/25-wireless.network
         fi
-else
-        systemctl enable NetworkManager
 fi
 
 #### Initramfs ####
@@ -254,6 +252,7 @@ if echo "$server" | grep -iqF n; then
 	Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 	pacman -Sy
         pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock kitty
+	systemctl enable NetworkManager
 	systemctl enable sddm
 else
 	printf "\n\nInstalling packages...\n"
