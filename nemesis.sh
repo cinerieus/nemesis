@@ -1,7 +1,7 @@
 #!/bin/bash
 printf "Running Arch Nemesis install script...\n"
 read -p "Do you want to continue? [Y/N]" continue
-if echo "$continue" | grep -iqFv y; then
+if echo "$continue" | grep -iqF n; then
         exit 0
 fi
 
@@ -247,9 +247,9 @@ if echo "$server" | grep -iqF y; then
 fi
 
 #### Customization ####
-if echo "$server" | grep -iqFv y; then
+if echo "$server" | grep -iqF n; then
 	printf "\n\nInstalling packages...\n"
-        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock > /packages.log
+        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock
 else
 	printf "\n\nInstalling packages...\n"
         pacman --noconfirm -S open-vm-tools
@@ -287,5 +287,5 @@ arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting..."
-#reboot
+reboot
 #################
