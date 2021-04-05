@@ -249,7 +249,11 @@ fi
 #### Customization ####
 if echo "$server" | grep -iqF n; then
 	printf "\n\nInstalling packages...\n"
-        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils x86-input-libinput bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock
+	echo "
+	[multilib]
+	Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+	pacman --noconfirm -Sy
+        pacman --noconfirm -S mesa lib32-mesa vulkan-intel alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock
 else
 	printf "\n\nInstalling packages...\n"
         pacman --noconfirm -S open-vm-tools
