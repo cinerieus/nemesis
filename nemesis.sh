@@ -8,6 +8,7 @@ fi
 #### Options ####
 read -p "Hostname: " hostname
 read -p "Username: " username
+password="Ch4ngeM3!"
 read -p "Disk Encryption? [Y/N] " encryption
 read -p "Server Install? [Y/N] " server
 if echo "$server" | grep -iqF y; then
@@ -116,6 +117,7 @@ echo "
 #!/bin/bash
 hostname=$hostname
 username=$username
+password=$password
 server=$server
 isstatic=$isstatic
 address=$address
@@ -213,15 +215,15 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 #### User Setup ####
 printf "\n\nUser setup...\n"
-read -sp "$username password: " password
-echo
-read -sp "$username confirm password: " password2
-while [ "$password" != "$password2" ]; do
-	printf "\n\bPlease try again\n"
-	read -sp "$username password: " password
-	echo
-	read -sp "$username confirm password: " password2
-done
+#read -sp "$username password: " password
+#echo
+#read -sp "$username confirm password: " password2
+#while [ "$password" != "$password2" ]; do
+#	printf "\n\bPlease try again\n"
+#	read -sp "$username password: " password
+#	echo
+#	read -sp "$username confirm password: " password2
+#done
 echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
 useradd -m -G wheel $username
 echo -e "$password\n$password" | passwd $username
