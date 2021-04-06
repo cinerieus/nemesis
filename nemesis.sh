@@ -22,14 +22,14 @@ if echo "$server" | grep -iqF y; then
                         gateway=""
                         dns=""
                 fi
-        read -p "SSH key: " sshkey
+        read -p "SSH key url: " sshkeyurl
         secureboot="N"
 else
         isstatic="N"
         address=""
         gateway=""
         dns=""
-        sshkey=""
+        sshkeyurl=""
         read -p "Secure Boot? [Y/N] " secureboot
 fi
 
@@ -123,7 +123,7 @@ isstatic=$isstatic
 address=$address
 gateway=$gateway
 dns=$dns
-sshkey=$sshkey
+sshkeyurl=$sshkeyurl
 encryption=$encryption
 secureboot=$secureboot
 disk=$disk" > /mnt/nemesis.sh
@@ -215,15 +215,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 #### User Setup ####
 printf "\n\nUser setup...\n"
-#read -sp "$username password: " password
-#echo
-#read -sp "$username confirm password: " password2
-#while [ "$password" != "$password2" ]; do
-#	printf "\n\bPlease try again\n"
-#	read -sp "$username password: " password
-#	echo
-#	read -sp "$username confirm password: " password2
-#done
 echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
 useradd -m -G wheel $username
 echo -e "$password\n$password" | passwd $username
@@ -231,14 +222,14 @@ echo -e "$password\n$password" | passwd $username
 #### SSH setup ####
 if echo "$server" | grep -iqF y; then
         systemctl enable sshd
-        if [ -n "$sshkey" ]; then
+        if [ -n "$sshkeyurl" ]; then
                 echo "
                 HostKey /etc/ssh/ssh_host_ed25519_key
                 PermitRootLogin no
                 PasswordAuthentication no" >> /etc/ssh/sshd_config
 		sudo -u $username mkdir ~/.ssh
 		sudo -u $username chmod 750 ~/.ssh
-                sudo -u $username echo "$sshkey" > ~/.ssh/authorized_keys
+                sudo -u $username curl $sshkeyurl > ~/.ssh/authorized_keys
 		sudo -u $username chmod 600 ~/.ssh/authorized_keys
         else
                 echo "
@@ -295,5 +286,8 @@ arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
 printf "\n\nDone! - Rebooting..."
+printf "\n\nDon't forget to change your password!"
+printf "\n\nRebooting..."
+sleep 5
 reboot
 #################
