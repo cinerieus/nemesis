@@ -1,7 +1,7 @@
 #!/bin/bash
 printf "Running Arch Nemesis install script...\n"
 read -p "Do you want to continue? [Y/N]" continue
-if echo "$continue" | grep -iqF n; then
+if echo "$continue" | grep -iqFv y; then
         exit 0
 fi
 
