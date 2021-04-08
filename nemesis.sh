@@ -239,12 +239,12 @@ if echo "$server" | grep -iqF y; then
 fi
 
 #### Customization ####
-if echo "$server" | grep -iqF n; then
+if echo "$server" | grep -iqFv y; then
 	printf "\n\nInstalling packages...\n"
 	echo "
 	[multilib]
 	Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-	pacman -Sy
+	pacman --noconfirm -Sy
         #pacman --noconfirm -S mesa lib32-mesa vulkan-intel 
 	pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview kitty spectacle chromium firefox
 	systemctl enable NetworkManager
