@@ -103,7 +103,6 @@ if echo "$server" | grep -iqF y; then
         pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
 else
 	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
-        #pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr intel-ucode vim sudo nmap openssh tcpdump
 fi
 
 #### Config ####
@@ -248,13 +247,20 @@ Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Sy
 
 if echo "$server" | grep -iqFv y; then
-        #pacman --noconfirm -S mesa lib32-mesa vulkan-intel 
 	pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview kitty spectacle chromium firefox
 	systemctl enable NetworkManager
 	systemctl enable sddm
 else
         pacman --noconfirm -S open-vm-tools
 fi
+
+## intel ##
+#pacman --noconfirm -S intel-ucode mesa lib32-mesa vulkan-intel 
+###########
+
+## amd ##
+#pacman --noconfirm -S amd-ucode
+###########
 
 pacman --noconfirm -S base-devel gnu-netcat socat netstat-nat git python python-pip unzip p7zip go cifs-utils openvpn
 
