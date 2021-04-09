@@ -247,7 +247,7 @@ Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Sy
 
 if echo "$server" | grep -iqFv y; then
-	pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview kitty spectacle chromium firefox
+	pacman --noconfirm -S mesa lib32-mesa alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview kitty spectacle chromium firefox
 	systemctl enable NetworkManager
 	systemctl enable sddm
 else
@@ -255,11 +255,11 @@ else
 fi
 
 ## intel ##
-#pacman --noconfirm -S intel-ucode mesa lib32-mesa vulkan-intel 
+#pacman --noconfirm -S intel-ucode vulkan-intel  
 ###########
 
 ## amd ##
-#pacman --noconfirm -S amd-ucode
+#pacman --noconfirm -S amd-ucode amdvlk lib32-amdvlk
 ###########
 
 pacman --noconfirm -S base-devel gnu-netcat socat netstat-nat git python python-pip unzip p7zip go cifs-utils openvpn
