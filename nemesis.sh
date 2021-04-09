@@ -139,6 +139,7 @@ printf "\nConfiguring locale...\n"
 echo en_GB.UTF-8 UTF-8 > /etc/locale.gen
 locale-gen
 echo LANG=en_GB.UTF-8 > /etc/locale.conf
+export LANG=en_GB.UTF-8
 echo KEYMAP=uk > /etc/vconsole.conf
 
 # Network Config
