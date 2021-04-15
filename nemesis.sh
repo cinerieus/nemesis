@@ -148,6 +148,8 @@ echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
 if echo "$server" | grep -iqF y; then
         systemctl enable systemd-networkd
         systemctl enable systemd-resolved
+	rm /etc/resolv.conf
+	ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
         if echo "$isstatic" | grep -iqF y; then
                 echo "
                 [Match]
@@ -217,7 +219,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 #### User Setup ####
 printf "\n\nUser setup...\n"
 echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
-useradd -m -G wheel $username
+useradd -m -G users,wheel $username
 echo -e "$password\n$password" | passwd $username
 
 #### SSH setup ####
