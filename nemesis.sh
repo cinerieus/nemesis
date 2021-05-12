@@ -305,6 +305,15 @@ if echo "$extra" | grep -iqF y; then
 	echo "
 	## Todo ##
 	- Change your password from Ch4ngeM3!
+	
+	## fun ##
+	- cowsay
+	- fortune
+	- lolcat
+	- toilet
+	- cmatrix 
+	- asciiquarium
+	- neofetch
 
 	## Tools ##
 	- nmap
@@ -339,7 +348,16 @@ if echo "$extra" | grep -iqF y; then
 else
 	echo "
 	## Todo ##
-	- Change your password from Ch4ngeM3!" > /home/$username/readme.txt
+	- Change your password from Ch4ngeM3!
+	
+	## fun ##
+	- cowsay
+	- fortune
+	- lolcat
+	- toilet
+	- cmatrix 
+	- asciiquarium
+	- neofetch" > /home/$username/readme.txt
 fi
 
 printf "\n\nFinishing touches... \n"
