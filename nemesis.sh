@@ -244,7 +244,10 @@ fi
 #### Customization ####
 printf "\n\nInstalling packages...\n"
 
-chmod -R 777 /opt
+## shared folder ##
+chgrp -R users /opt
+chmod -R 775 /opt
+chmod -R g+s /opt
 cd /opt
 
 ## blackarch repos ##
@@ -258,7 +261,6 @@ pacman --noconfirm -Syu
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
-chmod -R 777 /opt/yay
 cd /opt/yay
 sudo -u $username makepkg -si --noconfirm
 cd /opt
@@ -373,7 +375,6 @@ else
 fi
 
 printf "\n\nFinishing touches... \n"
-chmod -R 777 /opt
 
 echo '#\!/bin/bash' > /etc/motd.sh
 echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
