@@ -248,6 +248,7 @@ printf "\n\nInstalling packages...\n"
 echo "
 [multilib]
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+pacman --noconfirm -Sy
 
 chown -R root:users /opt
 chmod -R 775 /opt
@@ -256,15 +257,15 @@ cd /opt
 ## blackarch repos ##
 printf "\n\nInstalling Blackarch repos... \n"
 curl https://blackarch.org/strap.sh | sh
+pacman --noconfirm -Sy
 
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
 cd yay
 sudo -u $username makepkg -si
+yay --noconfirm -Sy
 cd /opt
-
-pacman --noconfirm -Sy
 
 ## build specific packages ##
 if echo "$server" | grep -iqFv y; then
@@ -373,7 +374,7 @@ session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/sy
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
 sudo -u $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
-sudo -u $username vim +PluginInstall +qall
+#sudo -u $username vim +PluginInstall +qall
 pacman --noconfirm -Syu
 
 printf "\nDone.\n"
