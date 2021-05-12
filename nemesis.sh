@@ -9,6 +9,7 @@ fi
 read -p "Hostname: " hostname
 read -p "Username: " username
 password="Ch4ngeM3!"
+read -p "Attack Build? [Y/N] " extra
 read -p "Disk Encryption? [Y/N] " encryption
 read -p "Server Install? [Y/N] " server
 if echo "$server" | grep -iqF y; then
@@ -117,6 +118,7 @@ echo "
 hostname=$hostname
 username=$username
 password=$password
+extra=$extra
 server=$server
 isstatic=$isstatic
 address=$address
@@ -280,22 +282,65 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils wget
+pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn
 
-## tools ##
-pacman --noconfirm openvpn nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum 
+if echo "$extra" | grep -iqF y; then
+	## tools ##
+	pacman --noconfirm nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
+	sudo -u $username yay --noconfirm -S libesedb
+	sudo -u $username pip --no-input --user install as3nt
 
-## extra ##
-mkdir /opt/wordlists /opt/linux /opt/windows
-cd /opt/wordlists
-wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
-bzip2 -d rockyou.txt.bz2
-cd /opt
+	## extra ##
+	mkdir /opt/wordlists /opt/linux /opt/windows
+	cd /opt/wordlists
+	wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
+	bzip2 -d rockyou.txt.bz2
+	cd /opt
 
-git clone https://github.com/SecWiki/linux-kernel-exploits.git /opt/linux/linux-kernel-exploits
+	git clone https://github.com/SecWiki/linux-kernel-exploits.git /opt/linux/linux-kernel-exploits
 
-git clone https://github.com/SecWiki/windows-kernel-exploits.git /opt/windows/windows-kernel-exploits
-git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
+	git clone https://github.com/SecWiki/windows-kernel-exploits.git /opt/windows/windows-kernel-exploits
+	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
+	
+	echo "
+	## Todo ##
+	- Change your password from Ch4ngeM3!
+
+	## Tools ##
+	- nmap
+	- socat
+	- netcat
+	- openvpn
+	- impacket
+	- metasploit
+	- sqlmap
+	- john-the-ripper
+	- medusa
+	- gobuster
+	- nullinux
+	- enum4linux
+	- esedbexport
+	- ntdsxtract
+
+	## Scripts ##
+	- linux-smart-enumeration
+	- ad-ldap-enum
+
+	## exploits ##
+	- linux kernel: /opt/linux/linux-kernel-exploits
+	- windows kernel: /opt/windows/windows-kernel-exploits
+	- windows binaries: /opt/windows/binaries
+
+	## Locations ##
+	- /usr/share and /opt
+	- Tools and scripts are located in /usr/share
+	- SecLists: /usr/share/seclists
+	- rockyou.txt: /opt/wordlists/rockyou.txt" > /home/$username/readme.txt
+else
+	echo "
+	## Todo ##
+	- Change your password from Ch4ngeM3!" > /home/$username/readme.txt
+fi
 
 printf "\n\nFinishing touches... \n"
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
@@ -303,34 +348,6 @@ sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/maste
 sudo -u $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
 sudo -u $username vim +PluginInstall +qall
 pacman --noconfirm -Syu
-
-echo "
-## Todo ##
-- Change your password from Ch4ngeM3!
-
-## Tools ##
-- nmap
-- socat
-- netcat
-- openvpn
-- impacket
-- metasploit
-- sqlmap
-- john-the-ripper
-- medusa
-- gobuster
-- nullinux
-- enum4linux
-
-## Scripts ##
-- linux-smart-enumeration
-- ad-ldap-enum
-
-## Locations ##
-- /usr/share and /opt
-- Tools and scripts are located in /usr/share
-- SecLists: /usr/share/seclists
-- rockyou.txt: /opt/wordlists/rockyou.txt" > /home/$username/readme.txt
 
 printf "\nDone.\n"
 #######################' >> /mnt/nemesis.sh
