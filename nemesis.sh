@@ -193,8 +193,6 @@ if echo "$server" | grep -iqF y; then
                 [DHCP]
                 RouteMetric=20" > /etc/systemd/network/25-wireless.network
         fi
-	rm /etc/resolv.conf
-	ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 	systemctl enable systemd-networkd
         systemctl enable systemd-resolved
 fi
@@ -261,7 +259,9 @@ pacman --noconfirm -Syu
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
-sudo -u $username cd /opt/yay && makepkg -si
+cd /opt/yay
+sudo -u $username makepkg -si
+cd /opt
 yay --noconfirm -Sy
 
 ## build specific packages ##
@@ -303,6 +303,9 @@ if echo "$extra" | grep -iqF y; then
 	echo "
 	## Todo ##
 	- Change your password from Ch4ngeM3!
+	- If on a server:
+	    rm /etc/resolv.conf
+	    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 	
 	## fun ##
 	- cowsay
