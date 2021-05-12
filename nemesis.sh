@@ -349,7 +349,7 @@ echo "
 echo ''
 neofetch
 echo ''
-fortune | cowsay | lolcat -ft
+fortune | cowsay -f stegosaurus | lolcat -ft
 echo ''" > /etc/motd.sh
 chmod +x /etc/motd.sh
 
