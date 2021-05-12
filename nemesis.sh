@@ -280,20 +280,17 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils
+pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils wget
 
 ## tools ##
 pacman --noconfirm openvpn nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum 
 
 ## extra ##
-mkdir /opt/wordlists
+mkdir /opt/wordlists /opt/linux /opt/windows
 cd /opt/wordlists
-curl -O http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
+wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
 bzip2 -d rockyou.txt.bz2
 cd /opt
-
-mkdir /opt/linux
-mkdir /opt/windows
 
 git clone https://github.com/SecWiki/linux-kernel-exploits.git /opt/linux/linux-kernel-exploits
 
@@ -308,6 +305,24 @@ sudo -u $username vim +PluginInstall +qall
 pacman --noconfirm -Syu
 
 echo "
+## Tools ##
+- nmap
+- socat
+- netcat
+- openvpn
+- impacket
+- metasploit
+- sqlmap
+- john-the-ripper
+- medusa
+- gobuster
+- nullinux
+- enum4linux
+
+## Scripts ##
+- linux-smart-enumeration
+- ad-ldap-enum
+
 ## Locations ##
 - /usr/share and /opt
 - Tools and scripts are located in /usr/share
