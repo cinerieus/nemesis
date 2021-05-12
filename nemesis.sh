@@ -260,7 +260,7 @@ pacman --noconfirm -Syu
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
 cd /opt/yay
-sudo -u $username makepkg -si
+sudo -u $username makepkg -si --noconfirm
 cd /opt
 yay --noconfirm -Sy
 
