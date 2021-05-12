@@ -245,9 +245,9 @@ fi
 printf "\n\nInstalling packages...\n"
 
 ## shared folder ##
-chgrp -R users /opt
-chmod -R 775 /opt
-chmod -R g+s /opt
+chgrp users /opt
+chmod 775 /opt
+chmod g+s /opt
 cd /opt
 
 ## blackarch repos ##
