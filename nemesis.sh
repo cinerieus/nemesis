@@ -305,6 +305,9 @@ sudo -u $username vim +PluginInstall +qall
 pacman --noconfirm -Syu
 
 echo "
+## Todo ##
+- Change your password from Ch4ngeM3!
+
 ## Tools ##
 - nmap
 - socat
@@ -327,7 +330,7 @@ echo "
 - /usr/share and /opt
 - Tools and scripts are located in /usr/share
 - SecLists: /usr/share/seclists
-- rockyou.txt: /opt/wordlists/rockyou.txt" >> /home/$username/readme.txt
+- rockyou.txt: /opt/wordlists/rockyou.txt" > /home/$username/readme.txt
 
 printf "\nDone.\n"
 #######################' >> /mnt/nemesis.sh
