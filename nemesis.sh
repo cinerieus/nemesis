@@ -245,10 +245,6 @@ fi
 
 #### Customization ####
 printf "\n\nInstalling packages...\n"
-echo "
-[multilib]
-Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-pacman --noconfirm -Sy
 
 chown -R root:users /opt
 chmod -R 775 /opt
@@ -257,7 +253,10 @@ cd /opt
 ## blackarch repos ##
 printf "\n\nInstalling Blackarch repos... \n"
 curl https://blackarch.org/strap.sh | sh
-pacman --noconfirm -Sy
+echo "
+[multilib]
+Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+pacman --noconfirm -Syu
 
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
