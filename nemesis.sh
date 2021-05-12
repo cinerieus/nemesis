@@ -235,7 +235,7 @@ if echo "$server" | grep -iqF y; then
 		sudo -u $username mkdir /home/$username/.ssh
 		sudo -u $username chmod 750 /home/$username/.ssh
                 sudo -u $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
-		sudo -u $username chmod 600 /home/$username/.ssh/authorized_keys
+		chmod 600 /home/$username/.ssh/authorized_keys
         else
                 echo "
                 HostKey /etc/ssh/ssh_host_ed25519_key
@@ -262,10 +262,8 @@ pacman --noconfirm -Sy
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
-cd yay
-sudo -u $username makepkg -si
+sudo -u $username cd /opt/yay && makepkg -si
 yay --noconfirm -Sy
-cd /opt
 
 ## build specific packages ##
 if echo "$server" | grep -iqFv y; then
