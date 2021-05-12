@@ -282,7 +282,7 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat
+pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat fortune-mod
 
 if echo "$extra" | grep -iqF y; then
 	## tools ##
@@ -343,6 +343,19 @@ else
 fi
 
 printf "\n\nFinishing touches... \n"
+
+echo "
+#!/bin/bash
+echo ''
+neofetch
+echo ''
+fortune | cowsay | lolcat -ft
+echo ''" > /etc/motd.sh
+chmod +x /etc/motd.sh
+
+echo "
+session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
+
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
 sudo -u $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
