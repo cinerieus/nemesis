@@ -346,7 +346,7 @@ printf "\n\nFinishing touches... \n"
 
 echo "
 #!/bin/bash
-toilet -f pagga -w 110 -F border $HOSTNAME | lolcat -ft ; echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f && echo ''" > /etc/motd.sh
+toilet -f pagga -w 110 -F border $hostname | lolcat -ft ; echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f && echo ''" > /etc/motd.sh
 chmod +x /etc/motd.sh
 
 echo "
