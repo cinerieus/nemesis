@@ -259,6 +259,8 @@ pacman --noconfirm -Syu
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
+chown -R root:users /opt/yay
+chmod -R 775 /opt/yay
 cd /opt/yay
 sudo -u $username makepkg -si --noconfirm
 cd /opt
@@ -308,6 +310,8 @@ if echo "$extra" | grep -iqF y; then
 	    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 	- Finish Vundle install:
 	    vim +PluginInstall +qall
+	- Fix motd:
+	    Append shebang line to /etc/motd.sh
 	
 	## fun ##
 	- cowsay
@@ -357,6 +361,8 @@ else
 	    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 	- Finish Vundle install:
 	    vim +PluginInstall +qall
+	- Fix motd:
+	    Append shebang line to /etc/motd.sh
 	
 	## fun ##
 	- cowsay
@@ -369,6 +375,8 @@ else
 fi
 
 printf "\n\nFinishing touches... \n"
+chown -R root:users /opt
+chmod -R 775 /opt
 
 echo '#\!/bin/bash' > /etc/motd.sh
 echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
