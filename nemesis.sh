@@ -371,7 +371,7 @@ fi
 printf "\n\nFinishing touches... \n"
 
 echo '#\!/bin/bash' > /etc/motd.sh
-echo "echo \"$(toilet -f pagga -w 110 -F border crucible.eternia.industries | lolcat -ft)\"" >> /etc/motd.sh
+echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
 echo "echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo ''" >> /etc/motd.sh
 chmod +x /etc/motd.sh
 
