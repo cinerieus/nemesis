@@ -101,9 +101,9 @@ mount "${disk}1" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
-        pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo openssh
+        pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo openssh git
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr vim sudo openssh
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr vim sudo openssh git
 fi
 
 #### Config ####
