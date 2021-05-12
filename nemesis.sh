@@ -282,7 +282,7 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat fortune-mod
+pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat fortune-mod neofetch
 
 if echo "$extra" | grep -iqF y; then
 	## tools ##
