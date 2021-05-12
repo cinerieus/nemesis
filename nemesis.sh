@@ -286,7 +286,7 @@ pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip un
 
 if echo "$extra" | grep -iqF y; then
 	## tools ##
-	pacman --noconfirm nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
+	pacman --noconfirm cmatrix asciiquarium nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
 	sudo -u $username yay --noconfirm -S libesedb
 	sudo -u $username pip --no-input --user install as3nt
 
