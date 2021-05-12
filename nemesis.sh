@@ -100,9 +100,9 @@ mount "${disk}1" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
-        pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
+        pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo openssh
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr vim sudo nmap openssh tcpdump
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr vim sudo openssh
 fi
 
 #### Config ####
@@ -146,10 +146,6 @@ printf "\nConfiguring networks...\n"
 echo $hostname > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
 if echo "$server" | grep -iqF y; then
-        systemctl enable systemd-networkd
-        systemctl enable systemd-resolved
-	rm /etc/resolv.conf
-	ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
         if echo "$isstatic" | grep -iqF y; then
                 echo "
                 [Match]
@@ -195,6 +191,10 @@ if echo "$server" | grep -iqF y; then
                 [DHCP]
                 RouteMetric=20" > /etc/systemd/network/25-wireless.network
         fi
+	systemctl enable systemd-networkd
+        systemctl enable systemd-resolved
+	rm /etc/resolv.conf
+	ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 fi
 
 #### Initramfs ####
@@ -243,12 +243,28 @@ fi
 
 #### Customization ####
 printf "\n\nInstalling packages...\n"
-
 echo "
 [multilib]
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+
+chown -R root:users /opt
+chmod -R 775 /opt
+cd /opt
+
+## blackarch repos ##
+printf "\n\nInstalling Blackarch repos... \n"
+curl https://blackarch.org/strap.sh | sh
+
+## yay installation ##
+printf "\n\nInstalling Yay... \n"
+git clone https://aur.archlinux.org/yay.git
+cd yay
+sudo -u $username makepkg -si
+cd /opt
+
 pacman --noconfirm -Sy
 
+## build specific packages ##
 if echo "$server" | grep -iqFv y; then
 	pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview kitty spectacle chromium firefox
 	systemctl enable NetworkManager
@@ -259,32 +275,44 @@ fi
 
 ## intel ##
 #pacman --noconfirm -S intel-ucode mesa lib32-mesa vulkan-intel  
-###########
 
 ## amd ##
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
-###########
 
-pacman --noconfirm -S base-devel gnu-netcat socat netstat-nat git python python-pip unzip p7zip go cifs-utils openvpn
+## utils ##
+pacman --noconfirm -S base-devel gnu-netcat socat drill git python python-pip unzip p7zip go cifs-utils
 
-printf "\n\nInstalling Blackarch repos... \n"
+## tools ##
+pacman --noconfirm openvpn nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum 
+
+## extra ##
+mkdir /opt/wordlists
+cd /opt/wordlists
+curl -O http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
+bzip2 -d rockyou.txt.bz2
 cd /opt
-curl https://blackarch.org/strap.sh | sh
-pacman --noconfirm -Sy
 
-printf "\n\nInstalling Yay... \n"
-git clone https://aur.archlinux.org/yay.git
-chown -R $username:$username yay
-cd yay
-sudo -u $username makepkg si
-cd /
+mkdir /opt/linux
+mkdir /opt/windows
+
+git clone https://github.com/SecWiki/linux-kernel-exploits.git /opt/linux/linux-kernel-exploits
+
+git clone https://github.com/SecWiki/windows-kernel-exploits.git /opt/windows/windows-kernel-exploits
+git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
 
 printf "\n\nFinishing touches... \n"
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
 sudo -u $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
-#sudo -u $username vim +PluginInstall +qall
+sudo -u $username vim +PluginInstall +qall
 pacman --noconfirm -Syu
+
+echo "
+## Locations ##
+- /usr/share and /opt
+- Tools and scripts are located in /usr/share
+- SecLists: /usr/share/seclists
+- rockyou.txt: /opt/wordlists/rockyou.txt" >> /home/$username/readme.txt
 
 printf "\nDone.\n"
 #######################' >> /mnt/nemesis.sh
