@@ -306,6 +306,8 @@ if echo "$extra" | grep -iqF y; then
 	- If on a server:
 	    rm /etc/resolv.conf
 	    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+	- Finish Vundle install:
+	    vim +PluginInstall +qall
 	
 	## fun ##
 	- cowsay
@@ -350,6 +352,11 @@ else
 	echo "
 	## Todo ##
 	- Change your password from Ch4ngeM3!
+	- If on a server:
+	    rm /etc/resolv.conf
+	    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+	- Finish Vundle install:
+	    vim +PluginInstall +qall
 	
 	## fun ##
 	- cowsay
