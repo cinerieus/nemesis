@@ -262,10 +262,10 @@ pacman --noconfirm -Syu
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
-cd /opt/yay
-sudo -u $username makepkg -si --noconfirm
-cd /opt
-yay --noconfirm -Sy
+#cd /opt/yay
+#sudo -u $username makepkg -si --noconfirm
+#cd /opt
+#yay --noconfirm -Sy
 
 ## build specific packages ##
 if echo "$server" | grep -iqFv y; then
@@ -288,7 +288,7 @@ pacman --noconfirm -S base-devel gnu-netcat socat python python-pip unzip p7zip 
 if echo "$extra" | grep -iqF y; then
 	## tools ##
 	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
-	sudo -Hu $username yay --noconfirm -S libesedb
+	#sudo -Hu $username yay --noconfirm -S libesedb
 	sudo -Hu $username pip install as3nt --no-input --user
 
 	## extra ##
@@ -306,13 +306,7 @@ if echo "$extra" | grep -iqF y; then
 	echo "
 	## Todo ##
 	- Change your password from Ch4ngeM3!
-	- If on a server:
-	    rm /etc/resolv.conf
-	    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
-	- Finish Vundle install:
-	    vim +PluginInstall +qall
-	- Fix motd:
-	    Append shebang line to /etc/motd.sh
+	- Run ~/todo.sh
 	
 	## fun ##
 	- cowsay
@@ -357,13 +351,7 @@ else
 	echo "
 	## Todo ##
 	- Change your password from Ch4ngeM3!
-	- If on a server:
-	    rm /etc/resolv.conf
-	    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
-	- Finish Vundle install:
-	    vim +PluginInstall +qall
-	- Fix motd:
-	    Append shebang line to /etc/motd.sh
+	- Run ~/todo.sh
 	
 	## fun ##
 	- cowsay
@@ -377,7 +365,13 @@ fi
 
 printf "\n\nFinishing touches... \n"
 
-echo '#\!/bin/bash' > /etc/motd.sh
+echo "
+sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+vim +PluginInstall +qall
+cd /opt/yay && makepkg -si && cd ~
+yay -S libesedb" > /home/$username/todo.sh
+
+echo -e "#\x21/bin/bash" > /etc/motd.sh
 echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
 echo "echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo ''" >> /etc/motd.sh
 chmod +x /etc/motd.sh
