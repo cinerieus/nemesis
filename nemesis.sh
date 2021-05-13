@@ -245,6 +245,7 @@ fi
 printf "\n\nInstalling packages...\n"
 
 ## shared folder ##
+umask 002
 chgrp users /opt
 chmod 775 /opt
 chmod g+s /opt
