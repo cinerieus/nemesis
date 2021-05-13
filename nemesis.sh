@@ -285,6 +285,7 @@ fi
 ## utils ##
 pacman --noconfirm -S base-devel gnu-netcat socat python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
 
+## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
 	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
@@ -363,6 +364,7 @@ else
 	- neofetch" > /home/$username/readme.txt
 fi
 
+## finishing touches ##
 printf "\n\nFinishing touches... \n"
 
 echo -e "
