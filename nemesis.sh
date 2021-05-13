@@ -305,63 +305,65 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
 	
 	echo "
-	## Todo ##
-	- Change your password from Ch4ngeM3!
-	- Run finish.sh
-	
-	## fun ##
-	- cowsay
-	- fortune
-	- lolcat
-	- toilet
-	- cmatrix 
-	- asciiquarium
-	- neofetch
+## Todo ##
+- Change your password from Ch4ngeM3!
+- Run finish.sh
 
-	## Tools ##
-	- nmap
-	- socat
-	- netcat
-	- openvpn
-	- impacket
-	- metasploit
-	- sqlmap
-	- john-the-ripper
-	- medusa
-	- gobuster
-	- nullinux
-	- enum4linux
-	- esedbexport
-	- ntdsxtract
+## fun ##
+- cowsay
+- fortune
+- lolcat
+- toilet
+- cmatrix 
+- asciiquarium
+- neofetch
 
-	## Scripts ##
-	- linux-smart-enumeration
-	- ad-ldap-enum
+## Tools ##
+- nmap
+- socat
+- netcat
+- openvpn
+- impacket
+- metasploit
+- sqlmap
+- john-the-ripper
+- medusa
+- gobuster
+- nullinux
+- enum4linux
+- esedbexport
+- ntdsxtract
 
-	## exploits ##
-	- linux kernel: /opt/linux/linux-kernel-exploits
-	- windows kernel: /opt/windows/windows-kernel-exploits
-	- windows binaries: /opt/windows/binaries
+## Scripts ##
+- linux-smart-enumeration
+- ad-ldap-enum
 
-	## Locations ##
-	- /usr/share and /opt
-	- Tools and scripts are located in /usr/share
-	- SecLists: /usr/share/seclists
-	- rockyou.txt: /opt/wordlists/rockyou.txt" > /home/$username/readme.txt
+## exploits ##
+- linux kernel: /opt/linux/linux-kernel-exploits
+- windows kernel: /opt/windows/windows-kernel-exploits
+- windows binaries: /opt/windows/binaries
+
+## Locations ##
+- /usr/share and /opt
+- Tools and scripts are located in /usr/share
+- SecLists: /usr/share/seclists
+- rockyou.txt: /opt/wordlists/rockyou.txt
+	" > /home/$username/readme.txt
 else
 	echo "
-	## Todo ##
-	- Change your password from Ch4ngeM3!
-	- Run finish.sh
-	
-	## fun ##
-	- cowsay
-	- fortune
-	- lolcat
-	- toilet
-	- cmatrix 
-	- asciiquarium
-	- neofetch" > /home/$username/readme.txt
+## Todo ##
+- Change your password from Ch4ngeM3!
+- Run finish.sh
+
+## fun ##
+- cowsay
+- fortune
+- lolcat
+- toilet
+- cmatrix 
+- asciiquarium
+- neofetch
+	" > /home/$username/readme.txt
 fi
 
 ## finishing touches ##
