@@ -230,10 +230,10 @@ if echo "$server" | grep -iqF y; then
                 HostKey /etc/ssh/ssh_host_ed25519_key
                 PermitRootLogin no
                 PasswordAuthentication no" >> /etc/ssh/sshd_config
-		sudo -u $username mkdir /home/$username/.ssh
-		sudo -u $username chmod 750 /home/$username/.ssh
-                sudo -u $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
-		#sudo -u $username chmod 600 /home/$username/.ssh/authorized_keys
+		sudo -Hu $username mkdir /home/$username/.ssh
+		sudo -Hu $username chmod 750 /home/$username/.ssh
+                sudo -Hu $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
+		#sudo -Hu $username chmod 600 /home/$username/.ssh/authorized_keys
         else
                 echo "
                 HostKey /etc/ssh/ssh_host_ed25519_key
@@ -288,8 +288,8 @@ pacman --noconfirm -S base-devel gnu-netcat socat python python-pip unzip p7zip 
 if echo "$extra" | grep -iqF y; then
 	## tools ##
 	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
-	sudo -u $username yay --noconfirm -S libesedb
-	sudo -u $username pip install as3nt --no-input --user
+	sudo -Hu $username yay --noconfirm -S libesedb
+	sudo -Hu $username pip install as3nt --no-input --user
 
 	## extra ##
 	mkdir /opt/wordlists /opt/linux /opt/windows
@@ -385,9 +385,9 @@ chmod +x /etc/motd.sh
 echo "
 session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
 
-sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
-sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
-sudo -u $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
+sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
+sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
+sudo -Hu $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
 pacman --noconfirm -Syu
 
 printf "\nDone.\n"
