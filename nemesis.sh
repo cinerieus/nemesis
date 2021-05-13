@@ -261,7 +261,6 @@ pacman --noconfirm -Syu
 ## yay installation ##
 printf "\n\nInstalling Yay... \n"
 git clone https://aur.archlinux.org/yay.git
-chmod -R 775 /opt/yay
 cd /opt/yay
 sudo -u $username makepkg -si --noconfirm
 cd /opt
@@ -289,7 +288,7 @@ if echo "$extra" | grep -iqF y; then
 	## tools ##
 	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
 	sudo -u $username yay --noconfirm -S libesedb
-	sudo -u $username pip --no-input --user install as3nt
+	sudo -u $username pip install as3nt --no-input --user
 
 	## extra ##
 	mkdir /opt/wordlists /opt/linux /opt/windows
