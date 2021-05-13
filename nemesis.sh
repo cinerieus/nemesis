@@ -306,7 +306,7 @@ if echo "$extra" | grep -iqF y; then
 	echo "
 	## Todo ##
 	- Change your password from Ch4ngeM3!
-	- Run ~/todo.sh
+	- Run finish.sh
 	
 	## fun ##
 	- cowsay
@@ -351,7 +351,7 @@ else
 	echo "
 	## Todo ##
 	- Change your password from Ch4ngeM3!
-	- Run ~/todo.sh
+	- Run finish.sh
 	
 	## fun ##
 	- cowsay
@@ -365,11 +365,13 @@ fi
 
 printf "\n\nFinishing touches... \n"
 
-echo "
+echo -e "
+#\x21/bin/bash
 sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 vim +PluginInstall +qall
 cd /opt/yay && makepkg -si && cd ~
-yay -S libesedb" > /home/$username/todo.sh
+yay -S libesedb" > /home/$username/finish.sh
+chmod +x /home/$username/finish.sh
 
 echo -e "#\x21/bin/bash" > /etc/motd.sh
 echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
