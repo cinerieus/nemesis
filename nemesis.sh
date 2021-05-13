@@ -388,6 +388,11 @@ session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/sy
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
 sudo -Hu $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
+
+cp /home/$username/.bashrc /root/
+cp /home/$username/.vimrc /root/
+cp -r /home/$username/.vim /root/
+
 pacman --noconfirm -Syu
 
 printf "\nDone.\n"
