@@ -371,10 +371,11 @@ printf "\n\nFinishing touches... \n"
 
 echo -e "
 #\x21/bin/bash
-sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
-vim +PluginInstall +qall
-cd /opt/yay && makepkg -si && cd ~
-yay -S libesedb" > /home/$username/finish.sh
+sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
+vim +PluginInstall +qall &&
+cd /opt/yay && makepkg -si && cd ~ &&
+yay -S libesedb &&
+rm finish.sh" > /home/$username/finish.sh
 chmod +x /home/$username/finish.sh
 
 echo -e "#\x21/bin/bash" > /etc/motd.sh
