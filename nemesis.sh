@@ -306,12 +306,6 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/SecWiki/windows-kernel-exploits.git /opt/windows/windows-kernel-exploits
 	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
 	
-	echo -e "#\x21/bin/bash" > /etc/motd.sh
-	echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
-	echo "echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo ''" >> /etc/motd.sh
-	chmod +x /etc/motd.sh
-	echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
-	
 	echo "
 ## Todo ##
 - Change your password from Ch4ngeM3!
@@ -385,6 +379,12 @@ cd /opt/yay && makepkg -si && cd ~ &&
 yay -S libesedb &&
 rm finish.sh" > /home/$username/finish.sh
 chmod +x /home/$username/finish.sh
+
+echo -e "#\x21/bin/bash" > /etc/motd.sh
+echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
+echo "echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo ''" >> /etc/motd.sh
+chmod +x /etc/motd.sh
+echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
 
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
