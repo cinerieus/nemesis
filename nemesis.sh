@@ -9,6 +9,7 @@ fi
 read -p "Hostname: " hostname
 read -p "Username: " username
 password="Ch4ngeM3!"
+tzone="Europe/London"
 read -p "Attack Build? [Y/N] " extra
 read -p "Disk Encryption? [Y/N] " encryption
 read -p "Server Install? [Y/N] " server
@@ -58,6 +59,7 @@ if [[ $(ping -W 3 -c 2 archlinux.org) != *" 0%"* ]]; then
 fi
 
 #### Time ####
+timedatectl set-timezone "$tzone"
 timedatectl set-ntp true
 
 #### Partitioning (LVM on LUKS) ####
