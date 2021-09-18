@@ -103,9 +103,9 @@ mount "${disk}1" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
-        pacstrap /mnt base linux lvm2 grub efibootmgr vim sudo openssh git
+        pacstrap /mnt base linux lvm2 grub efibootmgr neovim sudo openssh git
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr vim sudo openssh git
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr neovim sudo openssh git
 fi
 
 #### Config ####
@@ -374,7 +374,7 @@ printf "\n\nFinishing touches... \n"
 echo -e "
 #\x21/bin/bash
 sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
-vim +PluginInstall +qall &&
+nvim +:PlugInstall +:qa &&
 cd /opt/yay && makepkg -si && cd ~ &&
 yay -S libesedb &&
 rm finish.sh" > /home/$username/finish.sh
@@ -387,12 +387,12 @@ chmod +x /etc/motd.sh
 echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
 
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
-sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/vimrc -o /home/$username/.vimrc
-sudo -Hu $username git clone https://github.com/VundleVim/Vundle.vim.git /home/$username/.vim/bundle/Vundle.vim
+sudo -Hu $username curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -o /home/$username/.local/share/nvim/site/autoload/plug.vim --create-dirs
+sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/init.vim -o /home/$username/.config/nvim/init.vim --create-dirs
 
 cp /home/$username/.bashrc /root/
-cp /home/$username/.vimrc /root/
-cp -r /home/$username/.vim /root/
+mkdir -p /root/.local/share/nvim/site/autoload && cp /home/$username/.local/share/nvim/site/autoload/plug.vim /root/.local/share/nvim/site/autoload/plug.vim
+mkdir -p /root/.config/nvim && cp /home/$username/.config/nvim/init.vim /root/.config/nvim/init.vim
 
 pacman --noconfirm -Syu
 
