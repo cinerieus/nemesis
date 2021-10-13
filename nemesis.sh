@@ -290,7 +290,7 @@ pacman --noconfirm -S base-devel gnu-netcat socat python python-pip unzip p7zip 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
-	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa gobuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
+	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
 	#sudo -Hu $username yay --noconfirm -S libesedb
 	sudo -Hu $username pip install as3nt --no-input --user
 
@@ -330,7 +330,8 @@ if echo "$extra" | grep -iqF y; then
 - sqlmap
 - john-the-ripper
 - medusa
-- gobuster
+- ffuf
+- feroxbuster
 - nullinux
 - enum4linux
 - esedbexport
