@@ -300,11 +300,15 @@ if echo "$extra" | grep -iqF y; then
 	wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
 	bzip2 -d rockyou.txt.bz2
 	cd /opt
-
 	git clone https://github.com/SecWiki/linux-kernel-exploits.git /opt/linux/linux-kernel-exploits
-
+	git clone https://github.com/andrew-d/static-binaries.git /opt/linux/static-binaries
+	
 	git clone https://github.com/SecWiki/windows-kernel-exploits.git /opt/windows/windows-kernel-exploits
 	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
+	git clone https://github.com/r3motecontrol/Ghostpack-CompiledBinaries.git /opt/windows/ghostpack_binaries
+	
+	git clone https://github.com/carlospolop/PEASS-ng.git /opt/peassng
+	git clone https://github.com/dirkjanm/krbrelayx.git /opt/windows/krbrelayx
 	
 	echo "
 ## Todo ##
@@ -340,15 +344,19 @@ if echo "$extra" | grep -iqF y; then
 ## Scripts ##
 - linux-smart-enumeration
 - ad-ldap-enum
+- PEASS-ng
+- krbrelayx
 
 ## exploits ##
 - linux kernel: /opt/linux/linux-kernel-exploits
+- linux static binaries: /opt/linux/static-binaries
 - windows kernel: /opt/windows/windows-kernel-exploits
 - windows binaries: /opt/windows/binaries
+- windows ghostpack binaries: /opt/windows/ghostpack_binaries
 
 ## Locations ##
 - /usr/share and /opt
-- Tools and scripts are located in /usr/share
+- Tools and scripts are located in /usr/share & /opt
 - SecLists: /usr/share/seclists
 - rockyou.txt: /opt/wordlists/rockyou.txt
 	" > /home/$username/readme.txt
