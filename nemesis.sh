@@ -271,7 +271,7 @@ git clone https://aur.archlinux.org/yay.git
 
 ## build specific packages ##
 if echo "$server" | grep -iqFv y; then
-	pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview kitty spectacle chromium firefox
+	pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox
 	systemctl enable NetworkManager
 	systemctl enable sddm
 else
