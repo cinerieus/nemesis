@@ -382,12 +382,13 @@ printf "\n\nFinishing touches... \n"
 
 if echo "$server" | grep -iqF y; then
 	echo -e "
-	#\x21/bin/bash
-	sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
-	nvim +:PlugInstall +:qa &&
-	cd /opt/yay && makepkg -si && cd ~ &&
-	yay -S libesedb &&
-	rm finish.sh" > /home/$username/finish.sh
+#\x21/bin/bash
+sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
+nvim +:PlugInstall +:qa &&
+cd /opt/yay && makepkg -si && cd ~ &&
+yay -S libesedb &&
+rm finish.sh
+	" > /home/$username/finish.sh
 	
 	echo -e "#\x21/bin/bash" > /etc/motd.sh
 	echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
@@ -396,11 +397,12 @@ if echo "$server" | grep -iqF y; then
 	echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
 else
 	echo -e "
-	#\x21/bin/bash
-	nvim +:PlugInstall +:qa &&
-	cd /opt/yay && makepkg -si && cd ~ &&
-	yay -S libesedb &&
-	rm finish.sh" > /home/$username/finish.sh
+#\x21/bin/bash
+nvim +:PlugInstall +:qa &&
+cd /opt/yay && makepkg -si && cd ~ &&
+yay -S libesedb &&
+rm finish.sh
+	" > /home/$username/finish.sh
 fi
 
 chmod +x /home/$username/finish.sh
