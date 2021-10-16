@@ -380,20 +380,30 @@ fi
 ## finishing touches ##
 printf "\n\nFinishing touches... \n"
 
-echo -e "
-#\x21/bin/bash
-sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
-nvim +:PlugInstall +:qa &&
-cd /opt/yay && makepkg -si && cd ~ &&
-yay -S libesedb &&
-rm finish.sh" > /home/$username/finish.sh
-chmod +x /home/$username/finish.sh
+if echo "$server" | grep -iqF y; then
+	echo -e "
+	#\x21/bin/bash
+	sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
+	nvim +:PlugInstall +:qa &&
+	cd /opt/yay && makepkg -si && cd ~ &&
+	yay -S libesedb &&
+	rm finish.sh" > /home/$username/finish.sh
+	
+	echo -e "#\x21/bin/bash" > /etc/motd.sh
+	echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
+	echo "echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo ''" >> /etc/motd.sh
+	chmod +x /etc/motd.sh
+	echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
+else
+	echo -e "
+	#\x21/bin/bash
+	nvim +:PlugInstall +:qa &&
+	cd /opt/yay && makepkg -si && cd ~ &&
+	yay -S libesedb &&
+	rm finish.sh" > /home/$username/finish.sh
+fi
 
-echo -e "#\x21/bin/bash" > /etc/motd.sh
-echo "echo \"$(toilet -f pagga -w 110 -F border $hostname | lolcat -ft)\"" >> /etc/motd.sh
-echo "echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo ''" >> /etc/motd.sh
-chmod +x /etc/motd.sh
-echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
+chmod +x /home/$username/finish.sh
 
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -Hu $username curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -o /home/$username/.local/share/nvim/site/autoload/plug.vim --create-dirs
