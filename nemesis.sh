@@ -273,7 +273,7 @@ git clone https://aur.archlinux.org/yay.git
 if echo "$server" | grep -iqFv y; then
 	#pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox
 	#egl-wayland
-	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session dolphin kwrite gwenview konsole spectacle chromium firefox
+	pacman --noconfirm -S alsa-utils plasma-meta breeze-grub plasma-wayland-session dolphin kwrite gwenview konsole spectacle chromium firefox
 	pacman --noconfirm -S pipewire pipewire-alsa pipewire-pulse pipewire-jack
 	systemctl enable NetworkManager
 	systemctl enable sddm
