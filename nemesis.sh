@@ -262,8 +262,8 @@ Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu
 
 ## yay installation ##
-printf "\n\nInstalling Yay... \n"
-git clone https://aur.archlinux.org/yay.git
+#printf "\n\nInstalling Yay... \n"
+#git clone https://aur.archlinux.org/yay.git
 #cd /opt/yay
 #sudo -u $username makepkg -si --noconfirm
 #cd /opt
@@ -273,7 +273,7 @@ git clone https://aur.archlinux.org/yay.git
 if echo "$server" | grep -iqFv y; then
 	#pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox
 	#egl-wayland
-	pacman --noconfirm -S alsa-utils plasma-meta breeze-grub plasma-wayland-session dolphin kwrite gwenview konsole spectacle chromium firefox
+	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox
 	pacman --noconfirm -S pipewire pipewire-alsa pipewire-pulse pipewire-jack
 	systemctl enable NetworkManager
 	systemctl enable sddm
@@ -288,7 +288,8 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S base-devel gnu-netcat socat python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
+pacman --noconfirm -S yay base-devel gnu-netcat socat python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
+yay --noconfirm -Sy
 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
@@ -388,7 +389,7 @@ if echo "$server" | grep -iqF y; then
 #\x21/bin/bash
 sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
 nvim +:PlugInstall +:qa &&
-cd /opt/yay && makepkg -si && cd ~ &&
+#cd /opt/yay && makepkg -si && cd ~ &&
 yay -S libesedb &&
 rm finish.sh
 	" > /home/$username/finish.sh
