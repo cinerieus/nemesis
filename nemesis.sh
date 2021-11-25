@@ -403,7 +403,7 @@ else
 	echo -e "
 #\x21/bin/bash
 nvim +:PlugInstall +:qa &&
-cd /opt/yay && makepkg -si && cd ~ &&
+#cd /opt/yay && makepkg -si && cd ~ &&
 yay -S libesedb &&
 rm finish.sh
 	" > /home/$username/finish.sh
