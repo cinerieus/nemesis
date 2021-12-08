@@ -291,13 +291,13 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S yay base-devel gnu-netcat socat python python-pip p7zip go cifs-utils wget tcpdump openvpn wireguard-tools systemd-resolvconf cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
+pacman --noconfirm -S yay base-devel gnu-netcat socat python python-pip p7zip go cifs-utils wget tcpdump proxychains openvpn wireguard-tools systemd-resolvconf cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
 yay --noconfirm -Sy
 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
-	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists ad-ldap-enum ntdsxtract
+	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk sleuthkit evil-winrm responder freerdp gowitness acccheck i2c-tools volatility3 cewl gdb strace pspy
 	#sudo -Hu $username yay --noconfirm -S libesedb
 	sudo -Hu $username pip install as3nt --no-input --user
 
@@ -336,6 +336,8 @@ if echo "$extra" | grep -iqF y; then
 - socat
 - netcat
 - openvpn
+- wireguard
+- proxychains
 - impacket
 - metasploit
 - sqlmap
@@ -345,8 +347,22 @@ if echo "$extra" | grep -iqF y; then
 - feroxbuster
 - nullinux
 - enum4linux
+- bloodhound-python
 - esedbexport
 - ntdsxtract
+- binwalk
+- sleuthkit
+- evil-winrm
+- responder
+- freerdp
+- gowitness
+- acccheck
+- i2c-tools
+- volatility3
+- cewl
+- gdb
+- strace
+- pspy
 
 ## Scripts ##
 - linux-smart-enumeration
