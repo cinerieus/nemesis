@@ -71,18 +71,20 @@ sfdisk --force $disk << EOF
 ,260M,U,*
 ;
 EOF
+diskpart1=$(sudo fdisk -l | grep "dev" | sed -n "2p" | cut -d " " -f 1 | cut -d "/" -f3)
+diskpart2=$(sudo fdisk -l | grep "dev" | sed -n "3p" | cut -d " " -f 1 | cut -d "/" -f3)
 
 #### Encryption ####
 if echo "$encryption" | grep -iqF y; then
         printf "\n\nEncrpting primary partition...\n"
         read -sp 'LUKS Encryption Passphrase: ' encpass
-        echo $encpass | cryptsetup -q luksFormat "${disk}2"
-        echo $encpass | cryptsetup open "${disk}2" cryptlvm -
+        echo $encpass | cryptsetup -q luksFormat "${diskpart2}"
+        echo $encpass | cryptsetup open "${diskpart2}" cryptlvm -
         pvcreate /dev/mapper/cryptlvm
         vgcreate lvgroup /dev/mapper/cryptlvm
 else
-        pvcreate "${disk}2"
-        vgcreate lvgroup "${disk}2"
+        pvcreate "${diskpart2}"
+        vgcreate lvgroup "${diskpart2}"
 fi
 
 #### LVM/Format /root /swap ####
@@ -95,9 +97,9 @@ mount /dev/lvgroup/root /mnt
 swapon /dev/lvgroup/swap
 
 #### Format /boot ####
-mkfs.fat -F 32 "${disk}1"
+mkfs.fat -F 32 "${diskpart1}"
 mkdir /mnt/boot
-mount "${disk}1" /mnt/boot
+mount "${diskpart1}" /mnt/boot
 
 #### Installation ####
 printf "\n\nPackstrap packages...\n"
@@ -129,7 +131,8 @@ dns=$dns
 sshkeyurl=$sshkeyurl
 encryption=$encryption
 secureboot=$secureboot
-disk=$disk" > /mnt/nemesis.sh
+disk=$disk 
+diskpart2=$diskpart2" > /mnt/nemesis.sh
 
 echo '
 # Time Zone
@@ -213,7 +216,7 @@ printf "\n\nConfiguring bootloader...\n"
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable
 #grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 if echo "$encryption" | grep -iqF y; then
-        cryptdevice=$(lsblk -dno UUID ${disk}2)
+        cryptdevice=$(lsblk -dno UUID ${diskpart2})
         echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
