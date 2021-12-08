@@ -196,8 +196,8 @@ if echo "$server" | grep -iqF y; then
                 RouteMetric=20" > /etc/systemd/network/25-wireless.network
         fi
 	systemctl enable systemd-networkd
-	systemctl enable systemd-resolved
 fi
+systemctl enable systemd-resolved
 
 #### Initramfs ####
 printf "n\nSetting up initramfs...\n"
@@ -273,9 +273,8 @@ pacman --noconfirm -Syu
 if echo "$server" | grep -iqFv y; then
 	#pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox
 	#egl-wayland
-	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox wireguard-tools systemd-resolvconf
+	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox
 	pacman --noconfirm -S pipewire pipewire-alsa pipewire-pulse pipewire-jack
-	systemctl enable systemd-resolved
 	systemctl enable NetworkManager
 	systemctl enable sddm
 else
@@ -289,7 +288,7 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S yay base-devel gnu-netcat socat python python-pip unzip p7zip go cifs-utils wget tcpdump openvpn cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
+pacman --noconfirm -S yay base-devel gnu-netcat socat python python-pip p7zip go cifs-utils wget tcpdump openvpn wireguard-tools systemd-resolvconf cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
 yay --noconfirm -Sy
 
 ## attack build - extra tools ##
