@@ -196,7 +196,7 @@ if echo "$server" | grep -iqF y; then
                 RouteMetric=20" > /etc/systemd/network/25-wireless.network
         fi
 	systemctl enable systemd-networkd
-        systemctl enable systemd-resolved
+	systemctl enable systemd-resolved
 fi
 
 #### Initramfs ####
@@ -273,8 +273,9 @@ pacman --noconfirm -Syu
 if echo "$server" | grep -iqFv y; then
 	#pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox
 	#egl-wayland
-	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox
+	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox wireguard-tools systemd-resolvconf
 	pacman --noconfirm -S pipewire pipewire-alsa pipewire-pulse pipewire-jack
+	systemctl enable systemd-resolved
 	systemctl enable NetworkManager
 	systemctl enable sddm
 else
