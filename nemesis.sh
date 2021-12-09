@@ -448,9 +448,6 @@ chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
-printf "\n\nDone! - Rebooting..."
-printf "\n\nDon't forget to change your password!"
-printf "\n\nRebooting..."
+printf "\n\nDone! - Don't forget to change your password!."
 sleep 5
-reboot
 #################
