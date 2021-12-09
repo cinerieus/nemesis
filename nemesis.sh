@@ -274,9 +274,9 @@ pacman --noconfirm -Syu
 
 ## build specific packages ##
 if echo "$server" | grep -iqFv y; then
-	#pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox
+	#pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox-developer-edition
 	#egl-wayland
-	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox
+	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition
 	pacman --noconfirm -S pipewire pipewire-alsa pipewire-pulse pipewire-jack
 	systemctl enable NetworkManager
 	systemctl enable sddm
