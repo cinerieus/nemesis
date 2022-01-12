@@ -297,7 +297,7 @@ yay --noconfirm -Sy
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
-	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk sleuthkit evil-winrm responder freerdp gowitness acccheck volatility3 cewl strace pspy gittools pacu
+	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk sleuthkit evil-winrm responder freerdp gowitness miniserve acccheck volatility3 cewl strace pspy gittools pacu
 	#sudo -Hu $username yay --noconfirm -S libesedb
 	sudo -Hu $username pip install as3nt --no-input --user
 
