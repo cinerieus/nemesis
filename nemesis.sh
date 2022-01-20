@@ -132,6 +132,7 @@ username=$username
 password=$password
 extra=$extra
 server=$server
+vm=$vm
 isstatic=$isstatic
 address=$address
 gateway=$gateway
@@ -281,15 +282,17 @@ pacman --noconfirm -Syu
 #yay --noconfirm -Sy
 
 ## build specific packages ##
+if echo "$vm" | grep -iqF y; then
+        pacman --noconfirm -S open-vm-tools gtkmm3
+	mkdir -p /etc/xdg/autostart
+	cp /etc/vmware-tools/vmware-user.desktop /etc/xdg/autostart/vmware-user.desktop
+fi
+
 if echo "$server" | grep -iqFv y; then
-	#pacman --noconfirm -S alsa-utils bluez bluez-utils networkmanager xorg-xinput xorg-server plasma kvantum-qt5 latte-dock dolphin kwrite gwenview konsole spectacle chromium firefox-developer-edition
-	#egl-wayland
-	pacman --noconfirm -S alsa-utils plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition
+	pacman --noconfirm -S alsa-utils xorg-server plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition
 	pacman --noconfirm -S pipewire pipewire-alsa pipewire-pulse pipewire-jack
 	systemctl enable NetworkManager
 	systemctl enable sddm
-else
-        pacman --noconfirm -S open-vm-tools
 fi
 
 ## intel ##
