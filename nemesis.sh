@@ -10,6 +10,7 @@ read -p "Hostname: " hostname
 read -p "Username: " username
 password="Ch4ngeM3!"
 tzone="Europe/London"
+read -p "VM Build? [Y/N] " vm
 read -p "Attack Build? [Y/N] " extra
 read -p "Disk Encryption? [Y/N] " encryption
 read -p "Server Install? [Y/N] " server
@@ -71,8 +72,15 @@ sfdisk --force $disk << EOF
 ,260M,U,*
 ;
 EOF
-diskpart1=$(sudo fdisk -l | grep "dev" | sed -n "2p" | cut -d " " -f 1 | cut -d "/" -f3)
-diskpart2=$(sudo fdisk -l | grep "dev" | sed -n "3p" | cut -d " " -f 1 | cut -d "/" -f3)
+
+if echo "$vm" | grep -iqF y; then
+        diskpart1=${disk}1
+        diskpart2=${disk}2
+else
+        
+	diskpart1=$(sudo fdisk -l | grep "dev" | sed -n "2p" | cut -d " " -f 1 | cut -d "/" -f3)
+        diskpart2=$(sudo fdisk -l | grep "dev" | sed -n "3p" | cut -d " " -f 1 | cut -d "/" -f3)
+fi
 
 #### Encryption ####
 if echo "$encryption" | grep -iqF y; then
