@@ -289,7 +289,7 @@ if echo "$vm" | grep -iqF y; then
 fi
 
 if echo "$server" | grep -iqFv y; then
-	pacman --noconfirm -S alsa-utils xorg-server plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition
+	pacman --noconfirm -S alsa-utils xorg-server plasma-meta plasma-wayland-session kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice
 	pacman --noconfirm -S pipewire pipewire-alsa pipewire-pulse pipewire-jack
 	systemctl enable NetworkManager
 	systemctl enable sddm
