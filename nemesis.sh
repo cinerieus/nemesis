@@ -328,6 +328,9 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/carlospolop/PEASS-ng.git /opt/peassng
 	git clone https://github.com/dirkjanm/krbrelayx.git /opt/windows/krbrelayx
 	
+	## exploits ##
+	wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
+	
 	echo "
 ## Todo ##
 - Change your password from Ch4ngeM3!
