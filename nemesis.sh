@@ -308,7 +308,7 @@ yay --noconfirm -Sy
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
-	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk sleuthkit evil-winrm responder freerdp gowitness miniserve acccheck cewl strace pspy gittools pacu pwncat
+	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk evil-winrm responder freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu
 	#sudo -Hu $username yay --noconfirm -S libesedb
 	sudo -Hu $username pip install as3nt --no-input --user
 
@@ -332,6 +332,7 @@ if echo "$extra" | grep -iqF y; then
 ## Todo ##
 - Change your password from Ch4ngeM3!
 - Run finish.sh
+- (Optional) get merlin & chisel from git.
 
 ## Fun ##
 - cowsay
@@ -346,7 +347,6 @@ if echo "$extra" | grep -iqF y; then
 - nmap
 - socat
 - netcat
-- pwncat
 - openvpn
 - wireguard
 - proxychains
@@ -363,16 +363,15 @@ if echo "$extra" | grep -iqF y; then
 - esedbexport
 - ntdsxtract
 - binwalk
-- sleuthkit
 - evil-winrm
 - responder
 - freerdp
 - gowitness
-- acccheck
 - cewl
 - strace
 - pspy
 - gittools
+- scoutsuite
 - pacu
 
 ## Scripts ##
