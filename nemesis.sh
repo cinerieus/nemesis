@@ -313,7 +313,7 @@ if echo "$extra" | grep -iqF y; then
 	sudo -Hu $username pip install as3nt --no-input --user
 
 	## extra ##
-	mkdir /opt/wordlists /opt/linux /opt/windows
+	mkdir /opt/wordlists /opt/linux /opt/windows /opt/peassng
 	cd /opt/wordlists
 	wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
 	bzip2 -d rockyou.txt.bz2
@@ -328,8 +328,15 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/carlospolop/PEASS-ng.git /opt/peassng
 	git clone https://github.com/dirkjanm/krbrelayx.git /opt/windows/krbrelayx
 	
+	## enum ##
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/linpeas.sh -O /opt/peassng/linpeas.sh
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEAS.bat -O /opt/peassng/winPEAS.bat
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
+	
 	## exploits ##
 	wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
+	
 	
 	echo "
 ## Todo ##
