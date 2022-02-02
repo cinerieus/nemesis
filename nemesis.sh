@@ -307,7 +307,7 @@ if echo "$extra" | grep -iqF y; then
 	sudo -Hu $username pip install as3nt --no-input --user
 
 	## extra ##
-	mkdir /opt/wordlists /opt/linux /opt/windows /opt/peassng
+	mkdir /opt/wordlists /opt/linux /opt/windows /opt/peassng /opt/merlin /opt/chisel
 	cd /opt/wordlists
 	wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
 	bzip2 -d rockyou.txt.bz2
@@ -319,13 +319,29 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
 	git clone https://github.com/r3motecontrol/Ghostpack-CompiledBinaries.git /opt/windows/ghostpack_binaries
 	git clone https://github.com/dirkjanm/krbrelayx.git /opt/windows/krbrelayx
-
+	
+	## peass-ng ##
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/linpeas.sh -O /opt/peassng/linpeas.sh
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEAS.bat -O /opt/peassng/winPEAS.bat
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
-	wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
 	
+	## merlin ##
+	wget https://github.com/Ne0nd0g/merlin/releases/download/v1.2.1/merlinServer-Linux-x64.7z -O /opt/merlin/merlinServer-Linux-x64.7z
+	7z x /opt/merlin/merlinServer-Linux-x64.7z -o/opt/merlin -pmerlin && rm /opt/merlin/merlinServer-Linux-x64.7z
+	ln -s /opt/merlin/merlinServer-Linux-x64.7z /usr/local/bin/merlin
+	
+	## chisel ##
+	wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz
+	wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_amd64.gz
+	wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_386.gz
+	7z x /opt/chisel/chisel_1.7.7_linux_amd64.gz -o/opt/chisel && rm /opt/chisel/chisel_1.7.7_linux_amd64.gz
+	7z x /opt/chisel/chisel_1.7.7_windows_amd64.gz -o/opt/chisel && rm /opt/chisel/chisel_1.7.7_windows_amd64.gz
+	7z x /opt/chisel/chisel_1.7.7_windows_386.gz -o/opt/chisel && rm /opt/chisel/chisel_1.7.7_windows_386.gz
+	ln -s /opt/chisel/chisel /usr/local/bin/chisel
+	
+	## pwnkit (polkit) ##
+	wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
 	echo "
 ## Todo ##
 - Change your password from Ch4ngeM3!
@@ -350,6 +366,7 @@ if echo "$extra" | grep -iqF y; then
 - proxychains
 - impacket
 - metasploit
+- merlin
 - sqlmap
 - john-the-ripper
 - medusa
