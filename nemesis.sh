@@ -325,7 +325,7 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
 	git clone https://github.com/r3motecontrol/Ghostpack-CompiledBinaries.git /opt/windows/ghostpack_binaries
 	
-	git clone https://github.com/carlospolop/PEASS-ng.git /opt/peassng
+	#git clone https://github.com/carlospolop/PEASS-ng.git /opt/peassng
 	git clone https://github.com/dirkjanm/krbrelayx.git /opt/windows/krbrelayx
 	
 	## enum ##
