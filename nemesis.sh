@@ -273,19 +273,13 @@ echo "
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu
 
-## yay installation ##
-#printf "\n\nInstalling Yay... \n"
-#git clone https://aur.archlinux.org/yay.git
-#cd /opt/yay
-#sudo -u $username makepkg -si --noconfirm
-#cd /opt
-#yay --noconfirm -Sy
-
 ## build specific packages ##
 if echo "$vm" | grep -iqF y; then
         pacman --noconfirm -S open-vm-tools gtkmm3
 	mkdir -p /etc/xdg/autostart
 	cp /etc/vmware-tools/vmware-user.desktop /etc/xdg/autostart/vmware-user.desktop
+	systemctl enable vmtoolsd
+	systemctl enable vmware-vmblock-fuse
 fi
 
 if echo "$server" | grep -iqFv y; then
@@ -324,19 +318,13 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/SecWiki/windows-kernel-exploits.git /opt/windows/windows-kernel-exploits
 	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
 	git clone https://github.com/r3motecontrol/Ghostpack-CompiledBinaries.git /opt/windows/ghostpack_binaries
-	
-	#git clone https://github.com/carlospolop/PEASS-ng.git /opt/peassng
 	git clone https://github.com/dirkjanm/krbrelayx.git /opt/windows/krbrelayx
-	
-	## enum ##
+
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/linpeas.sh -O /opt/peassng/linpeas.sh
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEAS.bat -O /opt/peassng/winPEAS.bat
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
-	
-	## exploits ##
 	wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
-	
 	
 	echo "
 ## Todo ##
