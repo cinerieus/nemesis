@@ -297,13 +297,11 @@ fi
 
 ## utils ##
 pacman --noconfirm -S yay base-devel gnu-netcat socat python python-pip p7zip tmux go cifs-utils wget tcpdump proxychains openvpn wireguard-tools systemd-resolvconf cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
-yay --noconfirm -Sy
 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
 	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk evil-winrm responder freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu
-	#sudo -Hu $username yay --noconfirm -S libesedb
 	sudo -Hu $username pip install as3nt --no-input --user
 
 	## extra ##
@@ -433,7 +431,6 @@ if echo "$server" | grep -iqF y; then
 #\x21/bin/bash
 sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
 nvim +:PlugInstall +:qa &&
-#cd /opt/yay && makepkg -si && cd ~ &&
 yay -S libesedb &&
 rm finish.sh
 	" > /home/$username/finish.sh
@@ -447,8 +444,7 @@ else
 	echo -e "
 #\x21/bin/bash
 nvim +:PlugInstall +:qa &&
-#cd /opt/yay && makepkg -si && cd ~ &&
-yay -S libesedb &&
+yay -S libesedb --noconfirm &&
 rm finish.sh
 	" > /home/$username/finish.sh
 fi
@@ -459,11 +455,9 @@ sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/mast
 sudo -Hu $username curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -o /home/$username/.local/share/nvim/site/autoload/plug.vim --create-dirs
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/init.vim -o /home/$username/.config/nvim/init.vim --create-dirs
 
-cp /home/$username/.bashrc /root/
+cp /home/$username/.bashrc /root/.profile
 mkdir -p /root/.local/share/nvim/site/autoload && cp /home/$username/.local/share/nvim/site/autoload/plug.vim /root/.local/share/nvim/site/autoload/plug.vim
 mkdir -p /root/.config/nvim && cp /home/$username/.config/nvim/init.vim /root/.config/nvim/init.vim
-
-pacman --noconfirm -Syu
 
 printf "\nDone.\n"
 #######################' >> /mnt/nemesis.sh
