@@ -296,7 +296,7 @@ fi
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 
 ## utils ##
-pacman --noconfirm -S yay base-devel gnu-netcat socat python python-pip p7zip tmux go cifs-utils wget tcpdump proxychains openvpn wireguard-tools systemd-resolvconf cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
+pacman --noconfirm -S yay base-devel lib32-glibc gnu-netcat socat python python-pip p7zip tmux go cifs-utils wget tcpdump proxychains openvpn wireguard-tools systemd-resolvconf cowsay lolcat fortune-mod neofetch toilet cmatrix asciiquarium
 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
