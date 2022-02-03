@@ -451,14 +451,25 @@ fi
 
 chmod +x /home/$username/finish.sh
 
+## nvim config ##
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -Hu $username curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -o /home/$username/.local/share/nvim/site/autoload/plug.vim --create-dirs
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/init.vim -o /home/$username/.config/nvim/init.vim --create-dirs
-
 cp /home/$username/.bashrc /root/.profile
 mkdir -p /root/.local/share/nvim/site/autoload && cp /home/$username/.local/share/nvim/site/autoload/plug.vim /root/.local/share/nvim/site/autoload/plug.vim
 mkdir -p /root/.config/nvim && cp /home/$username/.config/nvim/init.vim /root/.config/nvim/init.vim
 
+## font config ##
+if echo "$server" | grep -iqFv y; then
+	curl https://raw.githubusercontent.com/cinerieus/nemesis/master/local.conf -o /etc/fonts/local.conf
+	curl https://raw.githubusercontent.com/cinerieus/nemesis/master/Xresources -o /home/$username/.Xresources && cp /home/$username/.Xresources /root/.Xresources
+	sudo -Hu $username xrdb -merge ~/.Xresources && xrdb -merge ~/.Xresources
+	ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
+	ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d/
+	ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/
+	echo "export FREETYPE_PROPERTIES=\"truetype:interpreter-version=38\"" >> /etc/profile.d/freetype2.sh
+	fc-cache -fv
+fi
 printf "\nDone.\n"
 #######################' >> /mnt/nemesis.sh
 
