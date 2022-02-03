@@ -459,8 +459,8 @@ cp /home/$username/.bashrc /root/.profile
 mkdir -p /root/.local/share/nvim/site/autoload && cp /home/$username/.local/share/nvim/site/autoload/plug.vim /root/.local/share/nvim/site/autoload/plug.vim
 mkdir -p /root/.config/nvim && cp /home/$username/.config/nvim/init.vim /root/.config/nvim/init.vim
 
-## font config ##
 if echo "$server" | grep -iqFv y; then
+	## font config ##
 	curl https://raw.githubusercontent.com/cinerieus/nemesis/master/local.conf -o /etc/fonts/local.conf
 	curl https://raw.githubusercontent.com/cinerieus/nemesis/master/Xresources -o /home/$username/.Xresources && cp /home/$username/.Xresources /root/.Xresources
 	sudo -Hu $username xrdb -merge ~/.Xresources && xrdb -merge ~/.Xresources
@@ -469,6 +469,12 @@ if echo "$server" | grep -iqFv y; then
 	ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/
 	echo export FREETYPE_PROPERTIES="truetype:interpreter-version=40" >> /etc/profile.d/freetype2.sh
 	fc-cache -fv
+	
+	## firefox anti-telemetry profile ##
+	mkdir -p /home/$username/.mozilla/firefox /root/.mozilla/firefox
+	curl https://raw.githubusercontent.com/cinerieus/nemesis/master/d2rbzfof.dev-edition-default.7z -o /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
+	7z x /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z -o/home/$username/.mozilla/firefox && rm /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
+	cp -r /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default /root/.mozilla/firefox
 fi
 printf "\nDone.\n"
 #######################' >> /mnt/nemesis.sh
