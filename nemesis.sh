@@ -476,7 +476,7 @@ if echo "$server" | grep -iqFv y; then
 	
 	## firefox anti-telemetry profile ##
 	mkdir -p /home/$username/.mozilla/firefox /root/.mozilla/firefox
-	chown -R $username:$username /home/$username/mozilla
+	chown -R $username:$username /home/$username/.mozilla
 	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/d2rbzfof.dev-edition-default.7z -o /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	sudo -Hu $username 7z x /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z -o/home/$username/.mozilla/firefox && rm /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	cp -r /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default /root/.mozilla/firefox
