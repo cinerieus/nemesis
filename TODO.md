@@ -1,5 +1,5 @@
 ### Todo
 
 - Desktop Automation:
-  - [ ] Thememing  
+  - [ ] Themeing  
   - [ ] Add & change default keyboard layout in KDE
