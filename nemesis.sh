@@ -436,7 +436,7 @@ sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/res
 nvim +:PlugInstall +:qa &&
 sudo nvim +:PlugInstall +:qa &&
 yay -S libesedb &&
-rm finish.sh
+rm -f finish.sh
 	" > /home/$username/finish.sh
 	
 	echo -e "#\x21/bin/bash" > /etc/motd.sh
@@ -450,7 +450,7 @@ else
 nvim +:PlugInstall +:qa &&
 sudo nvim +:PlugInstall +:qa &&
 yay -S libesedb --noconfirm &&
-rm finish.sh
+rm -f finish.sh
 	" > /home/$username/finish.sh
 fi
 
