@@ -310,8 +310,11 @@ if echo "$extra" | grep -iqF y; then
 	wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
 	bzip2 -d rockyou.txt.bz2
 	cd /opt
+	
+	## useful binaries ##
 	git clone https://github.com/SecWiki/linux-kernel-exploits.git /opt/linux/linux-kernel-exploits
 	git clone https://github.com/andrew-d/static-binaries.git /opt/linux/static-binaries
+	git clone https://github.com/hugsy/gdb-static.git /opt/linux/gdb-static
 	
 	git clone https://github.com/SecWiki/windows-kernel-exploits.git /opt/windows/windows-kernel-exploits
 	git clone https://github.com/interference-security/kali-windows-binaries.git /opt/windows/binaries
