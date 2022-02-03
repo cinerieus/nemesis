@@ -488,6 +488,8 @@ chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
 rm /mnt/nemesis.sh
-printf "\n\nDone! - Don't forget to change your password!."
+printf "\n\nDone!"
+printf "\n\nRemove install media and reboot."
+printf "\n\nRead ~/readme.txt and don't forget to change your password!."
 sleep 5
 #################
