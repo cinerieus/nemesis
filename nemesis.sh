@@ -467,7 +467,7 @@ if echo "$server" | grep -iqFv y; then
 	ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
 	ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d/
 	ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/
-	echo export FREETYPE_PROPERTIES="truetype:interpreter-version=38" >> /etc/profile.d/freetype2.sh
+	echo export FREETYPE_PROPERTIES="truetype:interpreter-version=40" >> /etc/profile.d/freetype2.sh
 	fc-cache -fv
 fi
 printf "\nDone.\n"
