@@ -344,7 +344,6 @@ if echo "$extra" | grep -iqF y; then
 ## Todo ##
 - Change your password from Ch4ngeM3!
 - Run finish.sh
-- (Optional) get merlin & chisel from git.
 
 ## Fun ##
 - cowsay
@@ -364,7 +363,6 @@ if echo "$extra" | grep -iqF y; then
 - proxychains
 - impacket
 - metasploit
-- merlin
 - sqlmap
 - john-the-ripper
 - medusa
@@ -386,6 +384,8 @@ if echo "$extra" | grep -iqF y; then
 - gittools
 - scoutsuite
 - pacu
+- merlin
+- chisel
 
 ## Scripts ##
 - linux-smart-enumeration
@@ -431,6 +431,7 @@ if echo "$server" | grep -iqF y; then
 #\x21/bin/bash
 sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
 nvim +:PlugInstall +:qa &&
+sudo nvim +:PlugInstall +:qa &&
 yay -S libesedb &&
 rm finish.sh
 	" > /home/$username/finish.sh
@@ -444,6 +445,7 @@ else
 	echo -e "
 #\x21/bin/bash
 nvim +:PlugInstall +:qa &&
+sudo nvim +:PlugInstall +:qa &&
 yay -S libesedb --noconfirm &&
 rm finish.sh
 	" > /home/$username/finish.sh
