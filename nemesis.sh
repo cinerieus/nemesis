@@ -66,7 +66,7 @@ timedatectl set-ntp true
 #### Partitioning (LVM on LUKS) ####
 printf "\n\nPartitioning disk(s)...\n"
 disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
-mkfs.ext4 $disk
+mkfs.ext4 -F $disk
 #wipefs -af $disk
 echo "label: gpt" | sfdisk --force $disk
 sfdisk --force $disk << EOF
