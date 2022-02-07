@@ -456,6 +456,12 @@ fi
 
 chmod +x /home/$username/finish.sh
 
+## secure boot script ##
+if echo "$encryption" | grep -iqF y; then
+	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/secure_boot.sh -O
+	chmod +x /home/$username/secure_boot.sh
+fi
+
 ## nvim config ##
 sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/bashrc -o /home/$username/.bashrc
 sudo -Hu $username curl https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -o /home/$username/.local/share/nvim/site/autoload/plug.vim --create-dirs
