@@ -26,14 +26,12 @@ if echo "$server" | grep -iqF y; then
                         dns=""
                 fi
         read -p "SSH key url: " sshkeyurl
-        secureboot="N"
 else
         isstatic="N"
         address=""
         gateway=""
         dns=""
         sshkeyurl=""
-        read -p "Secure Boot? [Y/N] " secureboot
 fi
 
 #### Keyboard ####
@@ -140,7 +138,6 @@ gateway=$gateway
 dns=$dns
 sshkeyurl=$sshkeyurl
 encryption=$encryption
-secureboot=$secureboot
 disk=$disk 
 diskpart2=$diskpart2" > /mnt/nemesis.sh
 
@@ -458,7 +455,7 @@ chmod +x /home/$username/finish.sh
 
 ## secure boot script ##
 if echo "$encryption" | grep -iqF y; then
-	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/secure_boot.sh -O
+	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/secure_boot.sh -o /home/$username/secure_boot.sh
 	chmod +x /home/$username/secure_boot.sh
 fi
 
