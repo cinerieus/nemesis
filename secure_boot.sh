@@ -37,8 +37,8 @@ sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 sudo sbsign --key MOK.key --cert MOK.crt --output /boot/EFI/GRUB/grubx64.efi /boot/EFI/GRUB/grubx64.efi
 
 cd ~
-chown root:root /opt/secure_boot 
-chmod -R 600 /opt/secure_boot
+sudo chown root:root /opt/secure_boot 
+sudo chmod -R 600 /opt/secure_boot
 
 echo "Reboot and boot to 'Shim', add MOK.cer to trusted certs in mokmanager."
 echo "Don't forget to remove /boot/EFI/GRUB/mmx64.efi"
