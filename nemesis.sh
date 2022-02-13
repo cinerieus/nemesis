@@ -298,7 +298,7 @@ pacman --noconfirm -S yay base-devel lib32-glibc gnu-netcat socat python python-
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
-	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk evil-winrm responder freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx
+	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf feroxbuster nullinux linux-smart-enumeration enum4linux seclists bloodhound-python ad-ldap-enum ntdsxtract binwalk evil-winrm responder freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx gau
 	sudo -Hu $username pip install as3nt --no-input --user
 
 	## extra ##
@@ -389,6 +389,7 @@ if echo "$extra" | grep -iqF y; then
 - subfinder
 - httpx
 - dnsx
+- gau
 
 ## Scripts ##
 - linux-smart-enumeration
