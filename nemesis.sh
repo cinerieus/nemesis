@@ -433,10 +433,14 @@ printf "\n\nFinishing touches... \n"
 if echo "$server" | grep -iqF y; then
 	echo -e "
 #\x21/bin/bash
-sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf &&
-nvim +:PlugInstall +:qa &&
-sudo nvim +:PlugInstall +:qa &&
-yay -S libesedb &&
+sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+nvim +:PlugInstall +:qa
+sudo nvim +:PlugInstall +:qa
+yay -S --noconfirm libesedb fish oh-my-fish &&
+git clone https://github.com/cinerieus/theme-sushi.git ~/.local/share/omf/themes/sushi
+wget -q https://raw.githubusercontent.com/cinerieus/nemesis/master/config.fish -O ~/.config/fish/config.fish
+fish -c \'omf theme sushi\'
+chsh -s /bin/fish
 rm -f finish.sh
 	" > /home/$username/finish.sh
 	
@@ -450,7 +454,11 @@ else
 #\x21/bin/bash
 nvim +:PlugInstall +:qa &&
 sudo nvim +:PlugInstall +:qa &&
-yay -S libesedb --noconfirm &&
+yay -S --noconfirm libesedb fish oh-my-fish &&
+git clone https://github.com/cinerieus/theme-sushi.git ~/.local/share/omf/themes/sushi
+wget -q https://raw.githubusercontent.com/cinerieus/nemesis/master/config.fish -O ~/.config/fish/config.fish
+fish -c \'omf theme sushi\'
+chsh -s /bin/fish
 rm -f finish.sh
 	" > /home/$username/finish.sh
 fi
