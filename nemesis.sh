@@ -439,7 +439,6 @@ sudo nvim +:PlugInstall +:qa
 yay -S --noconfirm libesedb fish oh-my-fish &&
 git clone https://github.com/cinerieus/theme-sushi.git ~/.local/share/omf/themes/sushi
 wget -q https://raw.githubusercontent.com/cinerieus/nemesis/master/config.fish -O ~/.config/fish/config.fish
-fish -c \'omf theme sushi\'
 chsh -s /bin/fish
 rm -f finish.sh
 	" > /home/$username/finish.sh
@@ -457,7 +456,6 @@ sudo nvim +:PlugInstall +:qa &&
 yay -S --noconfirm libesedb fish oh-my-fish &&
 git clone https://github.com/cinerieus/theme-sushi.git ~/.local/share/omf/themes/sushi
 wget -q https://raw.githubusercontent.com/cinerieus/nemesis/master/config.fish -O ~/.config/fish/config.fish
-fish -c \'omf theme sushi\'
 chsh -s /bin/fish
 rm -f finish.sh
 	" > /home/$username/finish.sh
