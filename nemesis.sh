@@ -437,7 +437,7 @@ sudo rm /etc/resolv.conf && sudo ln -s /run/systemd/resolve/resolv.conf /etc/res
 nvim +:PlugInstall +:qa
 sudo nvim +:PlugInstall +:qa
 yay -S --noconfirm libesedb fish
-curl https://raw.githubusercontent.com/cinerieus/nemesis/master/fish.sh -O
+curl https://raw.githubusercontent.com/cinerieus/nemesis/master/fish.txt -O
 rm -f finish.sh
 	" > /home/$username/finish.sh
 	
@@ -452,7 +452,7 @@ else
 nvim +:PlugInstall +:qa &&
 sudo nvim +:PlugInstall +:qa &&
 yay -S --noconfirm libesedb fish
-curl https://raw.githubusercontent.com/cinerieus/nemesis/master/fish.sh -O
+curl https://raw.githubusercontent.com/cinerieus/nemesis/master/fish.txt -O
 rm -f finish.sh
 	" > /home/$username/finish.sh
 fi
