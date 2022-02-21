@@ -338,6 +338,10 @@ if echo "$extra" | grep -iqF y; then
 	7z x /opt/chisel/chisel_1.7.7_windows_386.gz -o/opt/chisel && rm /opt/chisel/chisel_1.7.7_windows_386.gz
 	ln -s /opt/chisel/chisel /usr/local/bin/chisel
 	
+	## gf ##
+	git clone https://github.com/tomnomnom/gf.git /opt/gf
+	git clone https://github.com/1ndianl33t/Gf-Patterns.git /opt/gf_patterns
+	
 	## pwnkit (polkit) ##
 	wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
 	echo "
@@ -390,6 +394,7 @@ if echo "$extra" | grep -iqF y; then
 - httpx
 - dnsx
 - gau
+- gf
 
 ## Scripts ##
 - linux-smart-enumeration
@@ -409,6 +414,7 @@ if echo "$extra" | grep -iqF y; then
 - Tools and scripts are located in /usr/share & /opt
 - SecLists: /usr/share/seclists
 - rockyou.txt: /opt/wordlists/rockyou.txt
+- gf patterns: ~/.gf
 	" > /home/$username/readme.txt
 else
 	echo "
