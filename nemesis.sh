@@ -330,17 +330,19 @@ if echo "$extra" | grep -iqF y; then
 	ln -s /opt/merlin/merlinServer-Linux-x64.7z /usr/local/bin/merlin
 	
 	## chisel ##
+	cd chisel
 	wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz
 	wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_amd64.gz
 	wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_386.gz
-	7z x /opt/chisel/chisel_1.7.7_linux_amd64.gz -o/opt/chisel && rm /opt/chisel/chisel_1.7.7_linux_amd64.gz
-	7z x /opt/chisel/chisel_1.7.7_windows_amd64.gz -o/opt/chisel && rm /opt/chisel/chisel_1.7.7_windows_amd64.gz
-	7z x /opt/chisel/chisel_1.7.7_windows_386.gz -o/opt/chisel && rm /opt/chisel/chisel_1.7.7_windows_386.gz
-	ln -s /opt/chisel/chisel /usr/local/bin/chisel
+	cd ..
 	
 	## gf ##
 	git clone https://github.com/tomnomnom/gf.git /opt/gf
 	git clone https://github.com/1ndianl33t/Gf-Patterns.git /opt/gf_patterns
+	
+	## 403 bypasses ##
+	git clone https://github.com/iamj0ker/bypass-403.git
+	git clone https://github.com/lobuhi/byp4xx.git
 	
 	## pwnkit (polkit) ##
 	wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
