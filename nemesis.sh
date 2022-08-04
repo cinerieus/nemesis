@@ -319,13 +319,13 @@ if echo "$extra" | grep -iqF y; then
 	git clone https://github.com/dirkjanm/krbrelayx.git /opt/windows/krbrelayx
 	
 	## peass-ng ##
-	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/linpeas.sh -O /opt/peassng/linpeas.sh
-	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEAS.bat -O /opt/peassng/winPEAS.bat
-	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
-	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220201/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220731/linpeas.sh -O /opt/peassng/linpeas.sh
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220731/winPEAS.bat -O /opt/peassng/winPEAS.bat
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220731/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
+	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220731/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
 	
 	## merlin ##
-	wget https://github.com/Ne0nd0g/merlin/releases/download/v1.2.1/merlinServer-Linux-x64.7z -O /opt/merlin/merlinServer-Linux-x64.7z
+	wget https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -O /opt/merlin/merlinServer-Linux-x64.7z
 	7z x /opt/merlin/merlinServer-Linux-x64.7z -o/opt/merlin -pmerlin && rm /opt/merlin/merlinServer-Linux-x64.7z
 	ln -s /opt/merlin/merlinServer-Linux-x64.7z /usr/local/bin/merlin
 	
