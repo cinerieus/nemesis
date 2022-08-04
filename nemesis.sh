@@ -302,7 +302,7 @@ if echo "$extra" | grep -iqF y; then
 	sudo -Hu $username pip install as3nt --no-input --user
 
 	## extra ##
-	mkdir /opt/wordlists /opt/linux /opt/windows /opt/peassng /opt/merlin /opt/chisel
+	mkdir -p /opt/wordlists /opt/linux /opt/windows /opt/peassng /opt/chisel /opt/c2/merlin /opt/c2/sliver
 	cd /opt/wordlists
 	wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
 	bzip2 -d rockyou.txt.bz2
@@ -325,9 +325,13 @@ if echo "$extra" | grep -iqF y; then
 	wget https://github.com/carlospolop/PEASS-ng/releases/download/20220731/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
 	
 	## merlin ##
-	wget https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -O /opt/merlin/merlinServer-Linux-x64.7z
-	7z x /opt/merlin/merlinServer-Linux-x64.7z -o/opt/merlin -pmerlin && rm /opt/merlin/merlinServer-Linux-x64.7z
-	ln -s /opt/merlin/merlinServer-Linux-x64.7z /usr/local/bin/merlin
+	wget https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -O /opt/c2/merlin/merlinServer-Linux-x64.7z
+	7z x /opt/c2/merlin/merlinServer-Linux-x64.7z -o/opt/c2/merlin -pmerlin && rm /opt/c2/merlin/merlinServer-Linux-x64.7z
+	ln -s /opt/c2/merlin/merlinServer-Linux-x64.7z /usr/local/bin/merlin
+	
+	## sliver ##
+	wget https://github.com/BishopFox/sliver/releases/download/v1.5.21/sliver-server_linux -O /opt/c2/sliver/sliver-server
+	wget https://github.com/BishopFox/sliver/releases/download/v1.5.21/sliver-client_linux -O /opt/c2/sliver/sliver-client
 	
 	## chisel ##
 	cd chisel
