@@ -6,6 +6,7 @@
   - [x] Fix VM tools  
   - [ ] Themeing  
   - [ ] Add & change default keyboard layout in KDE  
+  - [ ] Disable V-Sync on VM's  
 
 - Tools:
   - [x] Add merlin & chisel  
