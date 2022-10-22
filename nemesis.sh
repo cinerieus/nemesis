@@ -328,26 +328,26 @@ if echo "$extra" | grep -iqF y; then
 	## extra ##
 	umask 002
 	mkdir -p /opt/wordlists /opt/linux /opt/windows /opt/peassng /opt/chisel /opt/c2/
-        curl http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2 -o /opt/wordlists/rockyou.bz2
-        curl https://github.com/SecWiki/linux-kernel-exploits/archive/refs/heads/master.zip -o /opt/linux/linux-kernel-exploits.zip
-        curl https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -o /opt/linux/CVE-2021-4034.zip
-        curl https://github.com/andrew-d/static-binaries/archive/refs/heads/master.zip -o /opt/linux/static-binaries.zip
-        curl https://github.com/hugsy/gdb-static/archive/refs/heads/master.zip -o /opt/linux/gdb-static.zip
-        curl https://github.com/SecWiki/windows-kernel-exploits/archive/refs/heads/master.zip -o /opt/windows/windows-kernel-exploits.zip
-        curl https://github.com/interference-security/kali-windows-binaries/archive/refs/heads/master.zip -o /opt/windows/binaries.zip
-        curl https://github.com/r3motecontrol/Ghostpack-CompiledBinaries/archive/refs/heads/master.zip -o /opt/windows/ghostpack_binaries.zip
-        curl https://github.com/dirkjanm/krbrelayx/archive/refs/heads/master.zip -o /opt/windows/krbrelayx.zip
-        curl https://github.com/carlospolop/PEASS-ng/releases/download/20220925/linpeas.sh -o /opt/peassng/linpeas.sh
-        curl https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEAS.bat -o /opt/peassng/winPEAS.bat
-        curl https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEASx64.exe -o /opt/peassng/winPEASx64.exe
-        curl https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEASx86.exe -o /opt/peassng/winPEASx86.exe
+        wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2 -O /opt/wordlists/rockyou.bz2
+        wget https://github.com/SecWiki/linux-kernel-exploits/archive/refs/heads/master.zip -O /opt/linux/linux-kernel-exploits.zip
+        wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
+        wget https://github.com/andrew-d/static-binaries/archive/refs/heads/master.zip -O /opt/linux/static-binaries.zip
+        wget https://github.com/hugsy/gdb-static/archive/refs/heads/master.zip -O /opt/linux/gdb-static.zip
+        wget https://github.com/SecWiki/windows-kernel-exploits/archive/refs/heads/master.zip -O /opt/windows/windows-kernel-exploits.zip
+        wget https://github.com/interference-security/kali-windows-binaries/archive/refs/heads/master.zip -O /opt/windows/binaries.zip
+        wget https://github.com/r3motecontrol/Ghostpack-CompiledBinaries/archive/refs/heads/master.zip -O /opt/windows/ghostpack_binaries.zip
+        wget https://github.com/dirkjanm/krbrelayx/archive/refs/heads/master.zip -O /opt/windows/krbrelayx.zip
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/linpeas.sh -O /opt/peassng/linpeas.sh
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEAS.bat -O /opt/peassng/winPEAS.bat
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
         7z a /opt/peassng/peassng.7z /opt/peassng/* && rm -f /opt/peassng/lin* && rm -f /opt/peassng/win*
-        curl https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz -o /opt/chisel/chisel_1.7.7_linux_amd64.gz
-        curl https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_amd64.gz -o /opt/chisel/chisel_1.7.7_windows_amd64.gz
-        curl https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_386.gz -o /opt/chisel/chisel_1.7.7_windows_386.gz
-        curl https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -o /opt/c2/merlin/merlinServer-Linux-x64.7z --create-dirs
-        curl https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-server_linux -o /opt/c2/sliver/sliver-server --create-dirs
-        curl https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-client_linux -o /opt/c2/sliver/sliver-client
+        wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz -O /opt/chisel/chisel_1.7.7_linux_amd64.gz
+        wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_amd64.gz -O /opt/chisel/chisel_1.7.7_windows_amd64.gz
+        wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_386.gz -O /opt/chisel/chisel_1.7.7_windows_386.gz
+        wget https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -O /opt/c2/merlin/merlinServer-Linux-x64.7z --create-dirs
+        wget https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-server_linux -O /opt/c2/sliver/sliver-server --create-dirs
+        wget https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-client_linux -O /opt/c2/sliver/sliver-client
         7z a /opt/c2/sliver/sliver.7z /opt/c2/sliver/* && rm -f /opt/c2/sliver/sliver-*
 	echo "
 ## Todo ##
