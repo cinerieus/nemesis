@@ -467,10 +467,10 @@ fi
 printf "\n\nChrooting and running stage 2..."
 chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
-#printf "\n\nCleaning up..."
-#rm /mnt/nemesis.sh
+printf "\n\nCleaning up..."
+rm /mnt/nemesis.sh
 printf "\n\nDone!"
 printf "\n\nRemove install media and reboot."
 printf "\n\nRead ~/readme.txt and don't forget to change your password!.\n\n"
-#sleep 5
+sleep 5
 #################
