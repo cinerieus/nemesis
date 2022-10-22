@@ -214,7 +214,7 @@ systemctl enable systemd-resolved
 printf "n\nSetting up initramfs...\n"
 if echo "$encryption" | grep -iqF y; then
         echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
-	echo "MODULES=(vfat)" > /etc/mkinitcpio.conf
+	#echo "MODULES=(vfat)" >> /etc/mkinitcpio.conf
 else
         echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
 fi
