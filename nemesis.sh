@@ -112,9 +112,9 @@ mount "${diskpart1}" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
-        pacstrap /mnt base linux lvm2 grub efibootmgr neovim sudo openssh git
+        pacstrap /mnt base linux lvm2 grub efibootmgr sudo which neovim openssh git
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr neovim sudo openssh git
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr sudo which neovim openssh git
 fi
 
 #### Config ####
