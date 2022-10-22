@@ -266,6 +266,7 @@ if echo "$server" | grep -iqF y; then
                 echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
                 sudo -Hu $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
 		chmod 600 /home/$username/.ssh/authorized_keys
+		chown $username:$username /home/$username/.ssh/authorized_keys
         else
                 echo "
                 HostKey /etc/ssh/ssh_host_ed25519_key
