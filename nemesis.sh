@@ -224,7 +224,7 @@ mkinitcpio -P
 printf "\n\nConfiguring bootloader...\n"
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 if echo "$encryption" | grep -iqF y; then
-        cryptdevice=$(lsblk -dno UUID ${diskpart2})
+        cryptdevice=$(lsblk ${diskpart2} -s UUID -o value)
         echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=${cryptdevice}:cryptlvm" > /etc/default/grub
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
