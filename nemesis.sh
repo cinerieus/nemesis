@@ -458,7 +458,6 @@ if echo "$server" | grep -iqFv y; then
 	sudo -Hu $username 7z x /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z -o/home/$username/.mozilla/firefox && rm /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	cp -r /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default /root/.mozilla/firefox
 fi
-printf "\nDone.\n"
 #######################' >> /mnt/nemesis.sh
 
 # Chroot and run
@@ -466,10 +465,10 @@ printf "\nDone.\n"
 printf "\n\nChrooting and running stage 2..."
 chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
-printf "\n\nCleaning up..."
-rm /mnt/nemesis.sh
+#printf "\n\nCleaning up..."
+#rm /mnt/nemesis.sh
 printf "\n\nDone!"
 printf "\n\nRemove install media and reboot."
 printf "\n\nRead ~/readme.txt and don't forget to change your password!.\n\n"
-sleep 5
+#sleep 5
 #################
