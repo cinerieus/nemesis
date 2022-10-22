@@ -283,7 +283,7 @@ sudo -u $username fish /home/$username/install.fish --noninteractive && \
 mv /home/$username/install.fish /root
 sudo -u $username git clone https://github.com/cinerieus/theme-sushi.git /home/$username/.local/share/omf/themes/sushi
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/config.fish -o /home/$username/.config/fish/config.fish
-sudo -u $username fish -c \'omf theme sushi\'
+sudo -u $username fish -c "omf theme sushi"
 cp /home/$username/.bashrc /root/.profile
 mkdir -p /root/.local/share/nvim/site/autoload && cp /home/$username/.local/share/nvim/site/autoload/plug.vim /root/.local/share/nvim/site/autoload/plug.vim
 mkdir -p /root/.config/nvim && cp /home/$username/.config/nvim/init.vim /root/.config/nvim/init.vim
@@ -292,7 +292,7 @@ fish /root/install.fish --noninteractive
 rm /root/install.fish
 cp -r /home/$username/.local/share/omf/themes/sushi /root/.local/share/omf/themes/
 cp -r /home/$username/.config/fish/config.fish /root/.config/fish/config.fish
-fish -c \'omf theme sushi\'
+fish -c "omf theme sushi"
 usermod -s /bin/fish $username
 usermod -s /bin/fish root
 
