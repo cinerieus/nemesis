@@ -244,7 +244,7 @@ if echo "$server" | grep -iqF y; then
 		sudo -Hu $username mkdir /home/$username/.ssh
 		sudo -Hu $username chmod 750 /home/$username/.ssh
                 sudo -Hu $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
-		#sudo -Hu $username chmod 600 /home/$username/.ssh/authorized_keys
+		sudo -Hu $username chmod 600 /home/$username/.ssh/authorized_keys
         else
                 echo "
                 HostKey /etc/ssh/ssh_host_ed25519_key
