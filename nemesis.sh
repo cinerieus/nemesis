@@ -327,7 +327,7 @@ if echo "$extra" | grep -iqF y; then
 	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf nullinux linux-smart-enumeration seclists bloodhound-python ldapdomaindump ntdsxtract binwalk evil-winrm responder freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx gau nuclei interactsh-client
 	## extra ##
 	umask 002
-	mkdir -p /opt/wordlists /opt/linux /opt/windows /opt/peassng /opt/chisel /opt/c2/
+	mkdir -p /opt/wordlists /opt/linux /opt/windows /opt/peassng /opt/chisel /opt/c2/ /opt/c2/merlin /opt/c2/sliver
         wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2 -O /opt/wordlists/rockyou.bz2
         wget https://github.com/SecWiki/linux-kernel-exploits/archive/refs/heads/master.zip -O /opt/linux/linux-kernel-exploits.zip
         wget https://github.com/ryaagard/CVE-2021-4034/archive/refs/heads/main.zip -O /opt/linux/CVE-2021-4034.zip
@@ -345,8 +345,8 @@ if echo "$extra" | grep -iqF y; then
         wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz -O /opt/chisel/chisel_1.7.7_linux_amd64.gz
         wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_amd64.gz -O /opt/chisel/chisel_1.7.7_windows_amd64.gz
         wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_386.gz -O /opt/chisel/chisel_1.7.7_windows_386.gz
-        wget https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -O /opt/c2/merlin/merlinServer-Linux-x64.7z --create-dirs
-        wget https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-server_linux -O /opt/c2/sliver/sliver-server --create-dirs
+        wget https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -O /opt/c2/merlin/merlinServer-Linux-x64.7z
+        wget https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-server_linux -O /opt/c2/sliver/sliver-server
         wget https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-client_linux -O /opt/c2/sliver/sliver-client
         7z a /opt/c2/sliver/sliver.7z /opt/c2/sliver/* && rm -f /opt/c2/sliver/sliver-*
 	echo "
