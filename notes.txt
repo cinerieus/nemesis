@@ -1,0 +1,6 @@
+Stuck in EFI Shell:
+reset -fwui
+
+Remember to disable secure boot.
+
+If KVM try mount the iso read-only file virtio.
