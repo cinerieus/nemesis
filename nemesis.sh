@@ -205,7 +205,7 @@ if echo "$server" | grep -iqF y; then
                 [DHCP]
                 RouteMetric=20" > /etc/systemd/network/25-wireless.network
         fi
-	rm /etc/resolv.conf && ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+	#rm /etc/resolv.conf && ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 	systemctl enable systemd-networkd
 fi
 systemctl enable systemd-resolved
