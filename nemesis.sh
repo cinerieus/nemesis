@@ -260,7 +260,7 @@ if echo "$server" | grep -iqF y; then
                 PasswordAuthentication no" >> /etc/ssh/sshd_config
 		echo -e "#\x21/bin/bash" > /etc/motd.sh && \
                 echo "echo \"$(toilet -f pagga -w 110 -F border Nemesis | lolcat -ft)\"" >> /etc/motd.sh && \
-                echo "echo '' ; neofetch ; echo '' ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo ''" >> /etc/motd.sh && \
+                echo "echo \"\" ; neofetch ; echo \"\" ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo \"\"" >> /etc/motd.sh && \
                 chmod +x /etc/motd.sh && \
                 echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
                 sudo -Hu $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
