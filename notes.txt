@@ -4,3 +4,16 @@ reset -fwui
 Remember to disable secure boot.
 
 If KVM try mount the iso read-only *disk* virtio.
+
+
+For xrdp:
+- yay -S xrdp xorgxrdp
+- echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
+- cp /etc/X11/xinit/xinitrc ~/.xinitrc
+- Remove several lines from "twm" to "xterm
+- echo "exec dbus-run-session -- startplasma-x11" >> ~/.xinitrc
+
+systemctl enable xrdp
+systemctl enable xrdp-sesman
+systemctl start xrdp
+systemctl start xrdp-sesman
