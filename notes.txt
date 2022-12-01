@@ -12,7 +12,9 @@ For xrdp:
 - echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
 - cp /etc/X11/xinit/xinitrc ~/.xinitrc
 - Remove several lines from "twm" to "xterm
+- echo "/usr/bin/pulseaudio &" >> ~/.xinitrc
 - echo "exec dbus-run-session -- startplasma-x11" >> ~/.xinitrc
+- Show virtual devices in audio panel.
 
 systemctl enable xrdp
 systemctl enable xrdp-sesman
