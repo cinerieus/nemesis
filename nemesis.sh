@@ -112,8 +112,12 @@ mount "${diskpart1}" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
+	#To avoid issues with default mirrors breaking keys, pre-install arch-keyring
+	pacman -Sy arch-keyring --noconfirm
         pacstrap /mnt base linux lvm2 grub efibootmgr
 else
+	#To avoid issues with default mirrors breaking keys, pre-install arch-keyring
+	pacman -Sy arch-keyring --noconfirm
 	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr
 fi
 
