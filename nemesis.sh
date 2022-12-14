@@ -33,6 +33,7 @@ else
         dns=""
         sshkeyurl=""
 fi
+read -p "BIOS Mode? [Y/N] " legacyboot
 
 #### Keyboard ####
 loadkeys uk
@@ -67,10 +68,17 @@ disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
 mkfs.ext4 -F $disk
 wipefs -af $disk
 echo "label: gpt" | sfdisk --force $disk
-sfdisk --force $disk << EOF
-,260M,U,*
-;
+if echo "$legacyboot" | grep -iqF y; then
+        sfdisk --force $disk << EOF
+        ,260M,U,*
+        ;
 EOF
+else
+        sfdisk --force $disk << EOF
+        ,1M,21686148-6449-6E6F-744E-656564454649,*
+        ;
+EOF
+fi
 
 if echo "$vm" | grep -iqF y; then
         diskpart1=${disk}1
@@ -104,7 +112,9 @@ mount /dev/lvgroup/root /mnt
 swapon /dev/lvgroup/swap
 
 #### Format /boot ####
-mkfs.fat -F 32 "${diskpart1}"
+if echo "$legacyboot" | grep -iqF n; then
+        mkfs.fat -F 32 "${diskpart1}"
+fi
 mkdir /mnt/boot
 mount "${diskpart1}" /mnt/boot
 
@@ -142,8 +152,9 @@ gateway=$gateway
 dns=$dns
 sshkeyurl=$sshkeyurl
 encryption=$encryption
-disk=$disk 
-diskpart2=$diskpart2" > /mnt/nemesis.sh
+disk=$disk
+diskpart2=$diskpart2
+legacyboot=$legacyboot" > /mnt/nemesis.sh
 
 echo '
 # Time Zone
@@ -226,7 +237,11 @@ mkinitcpio -P
 
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+if echo "$legacyboot" | grep -iqF y; then
+        grub-install --target=target=i386-pc $disk
+else
+        grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+fi
 if echo "$encryption" | grep -iqF y; then
         cryptdevice=$(blkid ${diskpart2} -s UUID -o value)
         echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
