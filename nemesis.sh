@@ -240,7 +240,7 @@ printf "\n\nConfiguring bootloader...\n"
 if echo "$legacyboot" | grep -iqF n; then
 	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 else
-        grub-install --target=target=i386-pc $disk
+        grub-install --target=i386-pc $disk
 fi
 if echo "$encryption" | grep -iqF y; then
         cryptdevice=$(blkid ${diskpart2} -s UUID -o value)
