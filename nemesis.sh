@@ -68,7 +68,7 @@ disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
 mkfs.ext4 -F $disk
 wipefs -af $disk
 echo "label: gpt" | sfdisk --force $disk
-if echo "$legacyboot" | grep -iqF y; then
+if echo "$legacyboot" | grep -iqF n; then
         sfdisk --force $disk << EOF
         ,260M,U,*
         ;
@@ -237,10 +237,10 @@ mkinitcpio -P
 
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
-if echo "$legacyboot" | grep -iqF y; then
-        grub-install --target=target=i386-pc $disk
+if echo "$legacyboot" | grep -iqF n; then
+	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 else
-        grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+        grub-install --target=target=i386-pc $disk
 fi
 if echo "$encryption" | grep -iqF y; then
         cryptdevice=$(blkid ${diskpart2} -s UUID -o value)
