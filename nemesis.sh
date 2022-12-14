@@ -10,6 +10,7 @@ read -p "Hostname: " hostname
 read -p "Username: " username
 password="Ch4ngeM3!"
 tzone="Europe/London"
+read -p "BIOS Mode? [Y/N] " legacyboot
 read -p "VM Build? [Y/N] " vm
 read -p "Attack Build? [Y/N] " extra
 read -p "Disk Encryption? [Y/N] " encryption
@@ -33,7 +34,6 @@ else
         dns=""
         sshkeyurl=""
 fi
-read -p "BIOS Mode? [Y/N] " legacyboot
 
 #### Keyboard ####
 loadkeys uk
