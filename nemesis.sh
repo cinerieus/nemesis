@@ -89,6 +89,7 @@ swapoff /dev/mapper/lvgroup-swap
 vgchange -a n lvgroup
 cryptsetup close cryptlvm
 wipefs --force --all $disk
+mkfs.ext4 -FF $disk
 echo "label: gpt" | sfdisk --no-reread --force $disk
 if echo "$legacyboot" | grep -iqF n; then
         sfdisk --no-reread --force $disk << EOF
@@ -127,7 +128,7 @@ fi
 printf "\n\nConfiguring LVM and formating partitions...\n"
 lvcreate -y -L 4G lvgroup -n swap
 lvcreate -y -l 100%FREE lvgroup -n root
-mkfs.ext4 /dev/lvgroup/root
+mkfs.ext4 -FF /dev/lvgroup/root
 mkswap /dev/lvgroup/swap
 mount /dev/lvgroup/root /mnt
 swapon /dev/lvgroup/swap
