@@ -88,6 +88,7 @@ umount -l $disk
 swapoff /dev/mapper/lvgroup-swap
 vgchange -a n lvgroup
 cryptsetup close cryptlvm
+wipefs --force --all $disk
 echo "label: gpt" | sfdisk --force $disk
 if echo "$legacyboot" | grep -iqF n; then
         sfdisk --force $disk << EOF
