@@ -70,8 +70,10 @@ timedatectl set-ntp true
 #### Partitioning (LVM on LUKS) ####
 printf "\n\nPartitioning disk(s)...\n"
 disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
-mkfs.ext4 -F $disk
-wipefs -af $disk
+umount -l /mnt
+swapoff /dev/mapper/lvgroup-swap
+vgchange -a n lvgroup
+cryptsetup close cryptlvm
 echo "label: gpt" | sfdisk --force $disk
 if echo "$legacyboot" | grep -iqF n; then
         sfdisk --force $disk << EOF
@@ -363,8 +365,6 @@ if echo "$server" | grep -iqFv y; then
 	systemctl enable NetworkManager
 	systemctl enable sddm
 fi
-
-
 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
