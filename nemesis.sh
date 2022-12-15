@@ -131,9 +131,9 @@ pacman -Sy archlinux-keyring --noconfirm
 
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
-        pacstrap /mnt base linux lvm2 grub efibootmgr sudo
+        pacstrap /mnt base linux lvm2 grub efibootmgr
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr sudo
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr
 fi
 
 #### Config ####
@@ -163,12 +163,12 @@ secureboot=$secureboot
 legacyboot=$legacyboot" > /mnt/nemesis.sh
 
 echo '
-# Time Zone
+#### Time Zone ####
 printf "\n\nSetting timezone...\n"
 ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 hwclock --systohc
 
-# Localization
+#### Localization ####
 printf "\nConfiguring locale...\n"
 echo en_GB.UTF-8 UTF-8 > /etc/locale.gen
 locale-gen
@@ -176,7 +176,7 @@ echo LANG=en_GB.UTF-8 > /etc/locale.conf
 export LANG=en_GB.UTF-8
 echo KEYMAP=uk > /etc/vconsole.conf
 
-# Network Config
+#### Network Config ####
 printf "\nConfiguring networks...\n"
 echo $hostname > /etc/hostname
 echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost" >> /etc/hosts
@@ -241,6 +241,16 @@ else
 fi
 mkinitcpio -P
 
+#### Pacman Init ####
+printf "\n\nInitializing Pacman... \n"
+curl https://blackarch.org/strap.sh | sh
+echo "Server = http://mirror.zetup.net/blackarch/blackarch/os/x86_64" > /etc/pacman.d/blackarch-mirrorlist
+echo "
+[multilib]
+Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+pacman --noconfirm -Syu 
+pacman --noconfirm -S sudo which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
+
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
 echo GRUB_DISTRIBUTOR=\"Arch Nemesis\" > /etc/default/grub
@@ -273,16 +283,6 @@ if echo "$encryption" | grep -iqF y; then
         echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" >> /etc/default/grub
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
-
-#### Pacman Init ####
-printf "\n\nInitializing Pacman... \n"
-curl https://blackarch.org/strap.sh | sh
-echo "Server = http://mirror.zetup.net/blackarch/blackarch/os/x86_64" > /etc/pacman.d/blackarch-mirrorlist
-echo "
-[multilib]
-Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
-pacman --noconfirm -Syu 
-pacman --noconfirm -S which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
 
 #### User Setup ####
 printf "\n\nSetting up low priv user...\n"
