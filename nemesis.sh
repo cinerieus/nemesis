@@ -135,7 +135,7 @@ swapon /dev/lvgroup/swap
 
 #### Format /boot ####
 if echo "$legacyboot" | grep -iqF n; then
-        mkfs.fat -F 32 "${diskpart1}"
+        mkfs.fat -I -F 32 "${diskpart1}"
 fi
 mkdir /mnt/boot
 mount "${diskpart1}" /mnt/boot
