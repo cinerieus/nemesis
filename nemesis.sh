@@ -19,7 +19,7 @@ fi
 read -p "VM Build? [Y/N] " vm
 read -p "Attack Build? [Y/N] " extra
 read -p "Disk Encryption? [Y/N] " encryption
-read -p "Server Install? [Y/N] " server
+read -p "Headless Install? [Y/N] " server
 if echo "$server" | grep -iqF y; then
         read -p "Static IP? [Y/N] " isstatic
                 if echo "$isstatic" | grep -iqF y; then
@@ -31,12 +31,15 @@ if echo "$server" | grep -iqF y; then
                         gateway=""
                         dns=""
                 fi
-        read -p "SSH key url: " sshkeyurl
 else
         isstatic="N"
         address=""
         gateway=""
-        dns=""
+        dns="" 
+fi
+if echo "$vm" | grep -iqF y; then
+        read -p "SSH key url: " sshkeyurl
+else
         sshkeyurl=""
 fi
 
@@ -261,25 +264,21 @@ chmod g+s /opt
 
 #### SSH setup ####
 printf "\n\nConfiguring SSH... \n"
-if echo "$server" | grep -iqF y; then
+echo "
+HostKey /etc/ssh/ssh_host_ed25519_key
+PermitRootLogin no
+PasswordAuthentication no" >> /etc/ssh/sshd_config
+echo -e "#\x21/bin/bash" > /etc/motd.sh && \
+echo "echo \"$(toilet -f pagga -w 110 -F border Nemesis | lolcat -ft)\"" >> /etc/motd.sh && \
+echo "echo \"\" ; neofetch ; echo \"\" ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo \"\"" >> /etc/motd.sh && \
+chmod +x /etc/motd.sh && \
+echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
+if echo "$vm" | grep -iqF y; then
         systemctl enable sshd
         if [ -n "$sshkeyurl" ]; then
-                echo "
-                HostKey /etc/ssh/ssh_host_ed25519_key
-                PermitRootLogin no
-                PasswordAuthentication no" >> /etc/ssh/sshd_config
-		echo -e "#\x21/bin/bash" > /etc/motd.sh && \
-                echo "echo \"$(toilet -f pagga -w 110 -F border Nemesis | lolcat -ft)\"" >> /etc/motd.sh && \
-                echo "echo \"\" ; neofetch ; echo \"\" ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo \"\"" >> /etc/motd.sh && \
-                chmod +x /etc/motd.sh && \
-                echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
                 sudo -Hu $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
 		chmod 600 /home/$username/.ssh/authorized_keys
 		chown $username:$username /home/$username/.ssh/authorized_keys
-        else
-                echo "
-                HostKey /etc/ssh/ssh_host_ed25519_key
-                PermitRootLogin no" >> /etc/ssh/sshd_config
         fi
 fi
 
