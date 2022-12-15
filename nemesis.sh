@@ -83,13 +83,13 @@ timedatectl set-ntp true
 #### Partitioning (LVM on LUKS) ####
 printf "\n\nPartitioning disk(s)...\n"
 disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
-umount -l /mnt/*
-umount -l /mnt
-swapoff /dev/mapper/lvgroup-swap
-vgchange -a n lvgroup
-cryptsetup close cryptlvm
-wipefs --force --all $disk
-mkfs.ext4 -FF $disk
+umount -l /mnt/* 2>/deb/null
+umount -l /mnt 2>/dev/null
+swapoff /dev/mapper/lvgroup-swap 2>/deb/null
+vgchange -a n lvgroup 2>/deb/null
+cryptsetup close cryptlvm 2>/deb/null
+#wipefs --force --all $disk
+#mkfs.ext4 -FF $disk
 echo "label: gpt" | sfdisk --no-reread --force $disk
 if echo "$legacyboot" | grep -iqF n; then
         sfdisk --no-reread --force $disk << EOF
