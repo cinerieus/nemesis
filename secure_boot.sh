@@ -8,8 +8,8 @@ sudo grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootlo
 
 yay --noconfirm -S shim-signed sbsigntools
 sudo mv /boot/EFI/BOOT/BOOTx64.EFI /boot/EFI/BOOT/grubx64.efi
-sudo cp /usr/share/shim-signed/shimx64.efi esp/EFI/BOOT/BOOTx64.EFI
-sudo cp /usr/share/shim-signed/mmx64.efi esp/EFI/BOOT/
+sudo cp /usr/share/shim-signed/shimx64.efi /boot/EFI/BOOT/BOOTx64.EFI
+sudo cp /usr/share/shim-signed/mmx64.efi /boot/EFI/BOOT/
 #sudo efibootmgr -c --disk $(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1) --part 1 --loader /boot/EFI/BOOT/BOOTx64.EFI --label "Shim" --unicode
 sudo openssl req -newkey rsa:4096 -nodes -keyout /opt/sb/MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=MOK/" -out /opt/sb/MOK.crt
 sudo openssl x509 -outform DER -in /opt/sb/MOK.crt -out /opt/sb/MOK.cer
