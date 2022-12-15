@@ -29,6 +29,7 @@ if echo "$encryption" | grep -iqF y; then
                 read -sp 'LUKS Encryption Passphrase: ' encpass
 		echo
 		read -sp 'Confirm LUKS Encryption Passphrase: ' encpass2
+		echo
 		[ "$encpass" = "$encpass2" ] && break
 		echo "Passwords didn't match. Try again."
 	done
