@@ -40,4 +40,4 @@ sudo chown root:root /opt/sb
 sudo chmod -R 600 /opt/sb
 
 echo "Reboot and boot to 'Shim', add MOK.cer to trusted certs in mokmanager."
-echo "Don't forget to remove /boot/EFI/BOOT/mmx64.efi"
+echo "Don't forget to remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer"
