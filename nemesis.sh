@@ -80,23 +80,13 @@ fi
 timedatectl set-timezone "$tzone"
 timedatectl set-ntp true
 
-#### Gettings Disks ####
-disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
-if echo "$vm" | grep -iqF y; then
-        diskpart1=${disk}1
-        diskpart2=${disk}2
-else
-        
-	diskpart1=$(sudo fdisk -l | grep "dev" | sed -n "2p" | cut -d " " -f 1)
-        diskpart2=$(sudo fdisk -l | grep "dev" | sed -n "3p" | cut -d " " -f 1)
-fi
-
-#### Partitioning (LVM on LUKS) ####
+#### Partitioning ####
 printf "\n\nPartitioning disk(s)...\n"
 umount -f -l /mnt 2>/dev/null
 swapoff /dev/mapper/lvgroup-swap 2>/dev/null
 vgchange -a n lvgroup 2>/dev/null
 cryptsetup close cryptlvm 2>/dev/null
+disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
 echo "label: gpt" | sfdisk --no-reread --force $disk
 if echo "$legacyboot" | grep -iqF n; then
         sfdisk --no-reread --force $disk << EOF
@@ -109,8 +99,16 @@ else
         ;
 EOF
 fi
+if echo "$vm" | grep -iqF y; then
+        diskpart1=${disk}1
+        diskpart2=${disk}2
+else
+        
+	diskpart1=$(sudo fdisk -l | grep "dev" | sed -n "2p" | cut -d " " -f 1)
+        diskpart2=$(sudo fdisk -l | grep "dev" | sed -n "3p" | cut -d " " -f 1)
+fi
 
-#### Encryption ####
+#### LVM on LUKS ####
 if echo "$encryption" | grep -iqF y; then
         printf "\n\nEncrpting primary partition...\n"
         echo $encpass | cryptsetup -q luksFormat "${diskpart2}"
@@ -122,7 +120,7 @@ else
         vgcreate lvgroup "${diskpart2}"
 fi
 
-#### LVM/Format /root /swap ####
+#### Format /root /swap ####
 printf "\n\nConfiguring LVM and formating partitions...\n"
 lvcreate -y -L 4G lvgroup -n swap
 lvcreate -y -l 100%FREE lvgroup -n root
