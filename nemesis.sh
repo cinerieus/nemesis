@@ -292,6 +292,18 @@ if echo "$vm" | grep -iqF y; then
         fi
 fi
 
+#### RDP Setup ####
+if echo "$server" | grep -iqF n; then
+        if echo "$vm" | grep -iqF y; then
+                printf "\n\nConfiguring RDP... \n"
+                pacman --noconfirm -S sbc
+                sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp pulseaudio-module-xrdp"
+                echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
+                sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xinitrc -o /home/$username/.xinitrc
+                echo "- Enalble <Show Virtual Devices> in the audio panel" >> /home/$username/readme.txt
+	fi
+fi
+
 #### Initramfs ####
 printf "n\nSetting up initramfs...\n"
 if echo "$encryption" | grep -iqF y; then
@@ -308,7 +320,7 @@ echo GRUB_DISTRIBUTOR=\"Arch Nemesis\" > /etc/default/grub
 if echo "$legacyboot" | grep -iqF n; then
         if echo "$secureboot" | grep -iqF y; then
 	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat=/usr/share/grub/sbat.csv --modules="all_video boot btrfs cat chain configfile echo efifwsetup efinet ext2 fat font gettext gfxmenu gfxterm gfxterm_background gzio halt help hfsplus iso9660 jpeg keystatus loadenv loopback linux ls lsefi lsefimmap lsefisystab lssal memdisk minicmd normal ntfs part_apple part_msdos part_gpt password_pbkdf2 png probe reboot regexp search search_fs_uuid search_fs_file search_label sleep smbios test true video xfs zfs zfscrypt zfsinfo play cpuid tpm luks lvm"
-		sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S shim-signed sbsigntools"
+		sudo -u $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S shim-signed sbsigntools"
 		mv /boot/EFI/BOOT/BOOTx64.EFI /boot/EFI/BOOT/grubx64.efi
 		cp /usr/share/shim-signed/shimx64.efi /boot/EFI/BOOT/BOOTx64.EFI
 		cp /usr/share/shim-signed/mmx64.efi /boot/EFI/BOOT/
@@ -322,7 +334,7 @@ if echo "$legacyboot" | grep -iqF n; then
 		cp /opt/sb/MOK.cer /boot
 		chown root:root /opt/sb
 		chmod -R 600 /opt/sb
-		echo "Dont forget to remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer" > /home/$username/readme.txt
+		echo "- Remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer" >> /home/$username/readme.txt
 	else
 	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat /usr/share/grub/sbat.csv
 	fi
@@ -488,12 +500,6 @@ else
 - asciiquarium
 - neofetch
 	" >> /home/$username/readme.txt
-fi
-
-## secure boot script ##
-if echo "$encryption" | grep -iqF y; then
-	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/secure_boot.sh -o /home/$username/secure_boot.sh
-	chmod +x /home/$username/secure_boot.sh
 fi
 
 if echo "$server" | grep -iqFv y; then
