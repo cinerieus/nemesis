@@ -17,23 +17,8 @@ sudo sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/vmlinuz-
 sudo sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/EFI/BOOT/grubx64.efi /boot/EFI/BOOT/grubx64.efi
 sudo cp /opt/sb/MOK.cer /boot
 
-echo "
-[Trigger]
-Operation = Install
-Operation = Upgrade
-Type = Package
-Target = linux
-Target = linux-lts
-Target = linux-hardened
-Target = linux-zen
-
-[Action]
-Description = Signing kernel with Machine Owner Key for Secure Boot
-When = PostTransaction
-Exec = /usr/bin/find /boot/ -maxdepth 1 -name 'vmlinuz-*' -exec /usr/bin/sh -c 'if ! /usr/bin/sbverify --list {} 2>/dev/null | /usr/bin/grep -q \"signature certificates\"; then /usr/bin/sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output {} {}; fi' ;
-Depends = sbsigntools
-Depends = findutils
-Depends = grep" | sudo tee /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
+mikdir -p /etc/pacman.d/hooks
+curl https://raw.githubusercontent.com/cinerieus/nemesis/master/999-sign_kernel_for_secureboot.hook -o /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
 
 cd ~
 sudo chown root:root /opt/sb
