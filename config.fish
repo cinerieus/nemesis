@@ -8,6 +8,10 @@ alias soconn='echo "socat exec:\"bash -li\",pty,stderr,setsid,sigint,sane tcp:[$
 alias nv='nvim'
 alias gostatic="go build --ldflags '-s -w -linkmode external -extldflags "-static"'"
 
+fish_add_path ~/.local/bin
+
+umask 002
+
 if status is-interactive
     set theme_complete_path yes
     set fish_prompt_pwd_dir_length 0
