@@ -84,6 +84,7 @@ timedatectl set-ntp true
 printf "\n\nPartitioning disk(s)...\n"
 disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
 umount -l /mnt
+umount -l $disk
 swapoff /dev/mapper/lvgroup-swap
 vgchange -a n lvgroup
 cryptsetup close cryptlvm
