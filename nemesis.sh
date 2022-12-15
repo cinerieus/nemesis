@@ -238,7 +238,7 @@ mkinitcpio -P
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
 if echo "$legacyboot" | grep -iqF n; then
-	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable
 else
         grub-install --target=i386-pc $disk
 fi
