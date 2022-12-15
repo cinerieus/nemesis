@@ -256,6 +256,7 @@ if echo "$legacyboot" | grep -iqF n; then
 		openssl x509 -outform DER -in /opt/sb/MOK.crt -out /opt/sb/MOK.cer
 		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
 		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/EFI/BOOT/grubx64.efi /boot/EFI/BOOT/grubx64.efi
+		mkdir -p /etc/pacman.d/hooks
 		curl https://raw.githubusercontent.com/cinerieus/nemesis/master/999-sign_kernel_for_secureboot.hook -o /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
 		cp /opt/sb/MOK.cer /boot
 		chown root:root /opt/sb
