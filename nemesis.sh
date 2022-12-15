@@ -256,23 +256,7 @@ if echo "$legacyboot" | grep -iqF n; then
 		openssl x509 -outform DER -in /opt/sb/MOK.crt -out /opt/sb/MOK.cer
 		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
 		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/EFI/BOOT/grubx64.efi /boot/EFI/BOOT/grubx64.efi
-		echo "
-[Trigger]
-Operation = Install
-Operation = Upgrade
-Type = Package
-Target = linux
-Target = linux-lts
-Target = linux-hardened
-Target = linux-zen
-[Action]
-Description = Signing kernel with Machine Owner Key for Secure Boot
-When = PostTransaction
-Exec = /usr/bin/find /boot/ -maxdepth 1 -name \'vmlinuz-*\' -exec /usr/bin/sh -c \'if ! /usr/bin/sbverify --list {} 2>/dev/null | /usr/bin/grep -q \"signature certificates\"; then /usr/bin/sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output {} {}; fi\' ;
-Depends = sbsigntools
-Depends = findutils
-Depends = grep
-                " > /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
+		curl https://raw.githubusercontent.com/cinerieus/nemesis/master/999-sign_kernel_for_secureboot.hook -o /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
 		cp /opt/sb/MOK.cer /boot
 		chown root:root /opt/sb
 		chmod -R 600 /opt/sb
