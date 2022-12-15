@@ -123,8 +123,8 @@ fi
 
 #### LVM/Format /root /swap ####
 printf "\n\nConfiguring LVM and formating partitions...\n"
-lvcreate -L 4G lvgroup -n swap
-lvcreate -l 100%FREE lvgroup -n root
+lvcreate -W y -L 4G lvgroup -n swap
+lvcreate -W y -l 100%FREE lvgroup -n root
 mkfs.ext4 /dev/lvgroup/root
 mkswap /dev/lvgroup/swap
 mount /dev/lvgroup/root /mnt
