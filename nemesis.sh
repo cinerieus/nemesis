@@ -131,9 +131,9 @@ pacman -Sy archlinux-keyring --noconfirm
 
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
-        pacstrap /mnt base linux lvm2 grub efibootmgr
+        pacstrap /mnt base linux lvm2 grub efibootmgr sudo
 else
-	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr
+	pacstrap /mnt base linux linux-firmware lvm2 grub efibootmgr sudo
 fi
 
 #### Config ####
@@ -282,7 +282,7 @@ echo "
 [multilib]
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu 
-pacman --noconfirm -S sudo which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
+pacman --noconfirm -S which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
 
 #### User Setup ####
 printf "\n\nSetting up low priv user...\n"
