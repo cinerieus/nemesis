@@ -27,6 +27,7 @@ read -p "Disk Encryption? [Y/N] " encryption
 if echo "$encryption" | grep -iqF y; then
         while true; do
                 read -sp 'LUKS Encryption Passphrase: ' encpass
+		echo
 		read -sp 'Confirm LUKS Encryption Passphrase: ' encpass2
 		[ "$encpass" = "$encpass2" ] && break
 		echo "Passwords didn't match. Try again."
