@@ -11,6 +11,11 @@ read -p "Username: " username
 password="Ch4ngeM3!"
 tzone="Europe/London"
 read -p "BIOS Boot Mode? [Y/N] " legacyboot
+if echo "$legacyboot" | grep -iqF n; then
+        read -p "Secure Boot? [Y/N]" secureboot
+else
+        secureboot="n"
+fi
 read -p "VM Build? [Y/N] " vm
 read -p "Attack Build? [Y/N] " extra
 read -p "Disk Encryption? [Y/N] " encryption
@@ -154,6 +159,7 @@ sshkeyurl=$sshkeyurl
 encryption=$encryption
 disk=$disk
 diskpart2=$diskpart2
+secureboot=$secureboot
 legacyboot=$legacyboot" > /mnt/nemesis.sh
 
 echo '
@@ -239,7 +245,41 @@ mkinitcpio -P
 printf "\n\nConfiguring bootloader...\n"
 echo GRUB_DISTRIBUTOR=\"Arch Nemesis\" > /etc/default/grub
 if echo "$legacyboot" | grep -iqF n; then
-	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat /usr/share/grub/sbat.csv --removable
+        if echo "$secureboot" | grep -iqF y; then
+	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat=/usr/share/grub/sbat.csv --modules="all_video boot btrfs cat chain configfile echo efifwsetup efinet ext2 fat font gettext gfxmenu gfxterm gfxterm_background gzio halt help hfsplus iso9660 jpeg keystatus loadenv loopback linux ls lsefi lsefimmap lsefisystab lssal memdisk minicmd normal ntfs part_apple part_msdos part_gpt password_pbkdf2 png probe reboot regexp search search_fs_uuid search_fs_file search_label sleep smbios test true video xfs zfs zfscrypt zfsinfo play cpuid tpm luks lvm"
+		sudo -Hu $username yay --noconfirm -S shim-signed sbsigntools
+		mv /boot/EFI/BOOT/BOOTx64.EFI /boot/EFI/BOOT/grubx64.efi
+		cp /usr/share/shim-signed/shimx64.efi /boot/EFI/BOOT/BOOTx64.EFI
+		cp /usr/share/shim-signed/mmx64.efi /boot/EFI/BOOT/
+		mkdir /opt/sb
+		openssl req -newkey rsa:4096 -nodes -keyout /opt/sb/MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=MOK/" -out /opt/sb/MOK.crt
+		openssl x509 -outform DER -in /opt/sb/MOK.crt -out /opt/sb/MOK.cer
+		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
+		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/EFI/BOOT/grubx64.efi /boot/EFI/BOOT/grubx64.efi
+		echo "
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux
+Target = linux-lts
+Target = linux-hardened
+Target = linux-zen
+[Action]
+Description = Signing kernel with Machine Owner Key for Secure Boot
+When = PostTransaction
+Exec = /usr/bin/find /boot/ -maxdepth 1 -name \'vmlinuz-*\' -exec /usr/bin/sh -c \'if ! /usr/bin/sbverify --list {} 2>/dev/null | /usr/bin/grep -q \"signature certificates\"; then /usr/bin/sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output {} {}; fi\' ;
+Depends = sbsigntools
+Depends = findutils
+Depends = grep
+                " > /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
+		cp /opt/sb/MOK.cer /boot
+		chown root:root /opt/sb
+		chmod -R 600 /opt/sb
+		echo "Don\'t forget to remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer" > /home/$username/readme.txt
+	else
+	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat /usr/share/grub/sbat.csv
+	fi
 else
         grub-install --target=i386-pc $disk
 fi
