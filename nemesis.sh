@@ -88,14 +88,14 @@ swapoff /dev/mapper/lvgroup-swap
 vgchange -a n lvgroup
 cryptsetup close cryptlvm
 wipefs --force --all $disk
-echo "label: gpt" | sfdisk --force $disk
+echo "label: gpt" | sfdisk --no-reread --force $disk
 if echo "$legacyboot" | grep -iqF n; then
-        sfdisk --force $disk << EOF
+        sfdisk --no-reread --force $disk << EOF
         ,260M,U,*
         ;
 EOF
 else
-        sfdisk --force $disk << EOF
+        sfdisk --no-reread --force $disk << EOF
         ,1M,21686148-6449-6E6F-744E-656564454649,*
         ;
 EOF
@@ -115,17 +115,17 @@ if echo "$encryption" | grep -iqF y; then
         printf "\n\nEncrpting primary partition...\n"
         echo $encpass | cryptsetup -q luksFormat "${diskpart2}"
         echo $encpass | cryptsetup open "${diskpart2}" cryptlvm -
-        pvcreate -ff /dev/mapper/cryptlvm
+        pvcreate -ffy /dev/mapper/cryptlvm
         vgcreate lvgroup /dev/mapper/cryptlvm
 else
-        pvcreate -ff "${diskpart2}"
+        pvcreate -ffy "${diskpart2}"
         vgcreate lvgroup "${diskpart2}"
 fi
 
 #### LVM/Format /root /swap ####
 printf "\n\nConfiguring LVM and formating partitions...\n"
-lvcreate -L 4G lvgroup -n swap
-lvcreate -l 100%FREE lvgroup -n root
+lvcreate -y -L 4G lvgroup -n swap
+lvcreate -y -l 100%FREE lvgroup -n root
 mkfs.ext4 /dev/lvgroup/root
 mkswap /dev/lvgroup/swap
 mount /dev/lvgroup/root /mnt
