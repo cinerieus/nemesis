@@ -239,7 +239,7 @@ echo "
 [multilib]
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu 
-pacman --noconfirm -S sudo which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
+pacman --noconfirm -S sudo yay which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
 
 #### User Setup ####
 printf "\n\nSetting up low priv user...\n"
@@ -364,7 +364,7 @@ fi
 ## amd ##
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 ## utils ##
-pacman --noconfirm -S base-devel lib32-glibc wget yay socat python python-pip p7zip tmux go cifs-utils tcpdump proxychains-ng openvpn wireguard-tools systemd-resolvconf cmatrix asciiquarium
+pacman --noconfirm -S base-devel lib32-glibc wget socat python python-pip p7zip tmux go cifs-utils tcpdump proxychains-ng openvpn wireguard-tools systemd-resolvconf cmatrix asciiquarium
 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
