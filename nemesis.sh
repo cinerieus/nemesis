@@ -237,6 +237,7 @@ mkinitcpio -P
 
 #### Bootloader ####
 printf "\n\nConfiguring bootloader...\n"
+echo GRUB_DISTRIBUTOR=\"Arch Nemesis\" > /etc/default/grub
 if echo "$legacyboot" | grep -iqF n; then
 	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat /usr/share/grub/sbat.csv --removable
 else
@@ -244,7 +245,7 @@ else
 fi
 if echo "$encryption" | grep -iqF y; then
         cryptdevice=$(blkid ${diskpart2} -s UUID -o value)
-        echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" > /etc/default/grub
+        echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" >> /etc/default/grub
 fi
 grub-mkconfig -o /boot/grub/grub.cfg
 
