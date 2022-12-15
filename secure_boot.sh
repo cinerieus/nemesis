@@ -1,17 +1,21 @@
+#!/bin/bash
 # Optionally add secure boot to prevent against evil maid attacks on FDE.
 
-mkdir /opt/secure_boot
-cd /opt/secure_boot
+mkdir /opt/sb
+cd /opt/sb
+
+sudo grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat=/usr/share/grub/sbat.csv --modules="all_video boot cat chain configfile echo efifwsetup efinet fat font gettext gfxmenu gfxterm gfxterm_background gzio halt help iso9660 jpeg keystatus loadenv loopback linux ls lsefi lsefimmap lsefisystab lssal minicmd normal part_gpt password_pbkdf2 png probe reboot regexp search search_fs_uuid search_fs_file search_label sleep smbios test true video play cpuid tpm luks lvm"
 
 yay --noconfirm -S shim-signed sbsigntools
-sudo cp /usr/share/shim-signed/shimx64.efi /boot/EFI/GRUB/
-sudo cp /usr/share/shim-signed/mmx64.efi /boot/EFI/GRUB/
-sudo efibootmgr --verbose --disk $(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1) --part 1 --create --label "Shim" --loader /EFI/GRUB/shimx64.efi
-
-sudo openssl req -newkey rsa:4096 -nodes -keyout MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=my Machine Owner Key/" -out MOK.crt
+sudo mv /boot/EFI/BOOT/BOOTx64.EFI /boot/EFI/BOOT/grubx64.efi
+sudo cp /usr/share/shim-signed/shimx64.efi esp/EFI/BOOT/BOOTx64.EFI
+sudo cp /usr/share/shim-signed/mmx64.efi esp/EFI/BOOT/
+#sudo efibootmgr -c --disk $(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1) --part 1 --loader /boot/EFI/BOOT/BOOTx64.EFI --label "Shim" --unicode
+sudo openssl req -newkey rsa:4096 -nodes -keyout MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=MOK/" -out MOK.crt
 sudo openssl x509 -outform DER -in MOK.crt -out MOK.cer
 sudo sbsign --key MOK.key --cert MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
 sudo sbsign --key MOK.key --cert MOK.crt --output /boot/EFI/GRUB/grubx64.efi /boot/EFI/GRUB/grubx64.efi
+sudo cp MOK.cer /boot
 
 echo "
 [Trigger]
@@ -30,11 +34,6 @@ Exec = /usr/bin/find /boot/ -maxdepth 1 -name 'vmlinuz-*' -exec /usr/bin/sh -c '
 Depends = sbsigntools
 Depends = findutils
 Depends = grep" | sudo tee /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
-
-sudo cp MOK.cer /boot/
-
-sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --modules="tpm" --sbat /usr/share/grub/sbat.csv
-sudo sbsign --key MOK.key --cert MOK.crt --output /boot/EFI/GRUB/grubx64.efi /boot/EFI/GRUB/grubx64.efi
 
 cd ~
 sudo chown root:root /opt/secure_boot 
