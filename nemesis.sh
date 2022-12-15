@@ -144,7 +144,7 @@ mount "${diskpart1}" /mnt/boot
 printf "\n\nPackstrap packages...\n"
 
 #To avoid issues with default mirrors breaking keys, pre-install archlinux-keyring
-pacman -Sy archlinux-keyring --noconfirm
+pacman --noconfirm -Sy archlinux-keyring
 
 # More packages can be added here
 if echo "$server" | grep -iqF y; then
