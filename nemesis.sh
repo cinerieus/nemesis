@@ -231,16 +231,6 @@ if echo "$server" | grep -iqF y; then
 fi
 systemctl enable systemd-resolved
 
-#### Initramfs ####
-printf "n\nSetting up initramfs...\n"
-if echo "$encryption" | grep -iqF y; then
-        echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
-	#echo "MODULES=(vfat)" >> /etc/mkinitcpio.conf
-else
-        echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
-fi
-mkinitcpio -P
-
 #### Pacman Init ####
 printf "\n\nInitializing Pacman... \n"
 curl https://blackarch.org/strap.sh | sh
@@ -250,39 +240,6 @@ echo "
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu 
 pacman --noconfirm -S sudo which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
-
-#### Bootloader ####
-printf "\n\nConfiguring bootloader...\n"
-echo GRUB_DISTRIBUTOR=\"Arch Nemesis\" > /etc/default/grub
-if echo "$legacyboot" | grep -iqF n; then
-        if echo "$secureboot" | grep -iqF y; then
-	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat=/usr/share/grub/sbat.csv --modules="all_video boot btrfs cat chain configfile echo efifwsetup efinet ext2 fat font gettext gfxmenu gfxterm gfxterm_background gzio halt help hfsplus iso9660 jpeg keystatus loadenv loopback linux ls lsefi lsefimmap lsefisystab lssal memdisk minicmd normal ntfs part_apple part_msdos part_gpt password_pbkdf2 png probe reboot regexp search search_fs_uuid search_fs_file search_label sleep smbios test true video xfs zfs zfscrypt zfsinfo play cpuid tpm luks lvm"
-		sudo -Hu $username yay --noconfirm -S shim-signed sbsigntools
-		mv /boot/EFI/BOOT/BOOTx64.EFI /boot/EFI/BOOT/grubx64.efi
-		cp /usr/share/shim-signed/shimx64.efi /boot/EFI/BOOT/BOOTx64.EFI
-		cp /usr/share/shim-signed/mmx64.efi /boot/EFI/BOOT/
-		mkdir /opt/sb
-		openssl req -newkey rsa:4096 -nodes -keyout /opt/sb/MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=MOK/" -out /opt/sb/MOK.crt
-		openssl x509 -outform DER -in /opt/sb/MOK.crt -out /opt/sb/MOK.cer
-		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
-		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/EFI/BOOT/grubx64.efi /boot/EFI/BOOT/grubx64.efi
-		mkdir -p /etc/pacman.d/hooks
-		curl https://raw.githubusercontent.com/cinerieus/nemesis/master/999-sign_kernel_for_secureboot.hook -o /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
-		cp /opt/sb/MOK.cer /boot
-		chown root:root /opt/sb
-		chmod -R 600 /opt/sb
-		echo "Dont forget to remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer" > /home/$username/readme.txt
-	else
-	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat /usr/share/grub/sbat.csv
-	fi
-else
-        grub-install --target=i386-pc $disk
-fi
-if echo "$encryption" | grep -iqF y; then
-        cryptdevice=$(blkid ${diskpart2} -s UUID -o value)
-        echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" >> /etc/default/grub
-fi
-grub-mkconfig -o /boot/grub/grub.cfg
 
 #### User Setup ####
 printf "\n\nSetting up low priv user...\n"
@@ -318,6 +275,49 @@ if echo "$server" | grep -iqF y; then
                 PermitRootLogin no" >> /etc/ssh/sshd_config
         fi
 fi
+
+#### Initramfs ####
+printf "n\nSetting up initramfs...\n"
+if echo "$encryption" | grep -iqF y; then
+        echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
+	#echo "MODULES=(vfat)" >> /etc/mkinitcpio.conf
+else
+        echo "HOOKS=(base udev autodetect keyboard keymap consolefont modconf block lvm2 filesystems fsck)" > /etc/mkinitcpio.conf
+fi
+mkinitcpio -P
+
+#### Bootloader ####
+printf "\n\nConfiguring bootloader...\n"
+echo GRUB_DISTRIBUTOR=\"Arch Nemesis\" > /etc/default/grub
+if echo "$legacyboot" | grep -iqF n; then
+        if echo "$secureboot" | grep -iqF y; then
+	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat=/usr/share/grub/sbat.csv --modules="all_video boot btrfs cat chain configfile echo efifwsetup efinet ext2 fat font gettext gfxmenu gfxterm gfxterm_background gzio halt help hfsplus iso9660 jpeg keystatus loadenv loopback linux ls lsefi lsefimmap lsefisystab lssal memdisk minicmd normal ntfs part_apple part_msdos part_gpt password_pbkdf2 png probe reboot regexp search search_fs_uuid search_fs_file search_label sleep smbios test true video xfs zfs zfscrypt zfsinfo play cpuid tpm luks lvm"
+		sudo -Hu $username yay --noconfirm -S shim-signed sbsigntools
+		mv /boot/EFI/BOOT/BOOTx64.EFI /boot/EFI/BOOT/grubx64.efi
+		cp /usr/share/shim-signed/shimx64.efi /boot/EFI/BOOT/BOOTx64.EFI
+		cp /usr/share/shim-signed/mmx64.efi /boot/EFI/BOOT/
+		mkdir /opt/sb
+		openssl req -newkey rsa:4096 -nodes -keyout /opt/sb/MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=MOK/" -out /opt/sb/MOK.crt
+		openssl x509 -outform DER -in /opt/sb/MOK.crt -out /opt/sb/MOK.cer
+		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
+		sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/EFI/BOOT/grubx64.efi /boot/EFI/BOOT/grubx64.efi
+		mkdir -p /etc/pacman.d/hooks
+		curl https://raw.githubusercontent.com/cinerieus/nemesis/master/999-sign_kernel_for_secureboot.hook -o /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
+		cp /opt/sb/MOK.cer /boot
+		chown root:root /opt/sb
+		chmod -R 600 /opt/sb
+		echo "Dont forget to remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer" > /home/$username/readme.txt
+	else
+	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat /usr/share/grub/sbat.csv
+	fi
+else
+        grub-install --target=i386-pc $disk
+fi
+if echo "$encryption" | grep -iqF y; then
+        cryptdevice=$(blkid ${diskpart2} -s UUID -o value)
+        echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" >> /etc/default/grub
+fi
+grub-mkconfig -o /boot/grub/grub.cfg
 
 #### Customization ####
 printf "\n\nCustomizing... \n"
@@ -464,7 +464,7 @@ if echo "$extra" | grep -iqF y; then
 - Tools and scripts are located in /usr/share & /opt
 - SecLists: /usr/share/seclists
 - rockyou.txt: /opt/wordlists/rockyou.txt
-	" > /home/$username/readme.txt
+	" >> /home/$username/readme.txt
 else
 	echo "
 ## Todo ##
@@ -478,7 +478,7 @@ else
 - cmatrix 
 - asciiquarium
 - neofetch
-	" > /home/$username/readme.txt
+	" >> /home/$username/readme.txt
 fi
 
 ## secure boot script ##
