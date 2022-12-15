@@ -17,8 +17,21 @@ else
         secureboot="n"
 fi
 read -p "VM Build? [Y/N] " vm
+if echo "$vm" | grep -iqF y; then
+        read -p "SSH key url: " sshkeyurl
+else
+        sshkeyurl=""
+fi
 read -p "Attack Build? [Y/N] " extra
 read -p "Disk Encryption? [Y/N] " encryption
+if echo "$encryption" | grep -iqF y; then
+        while true; do
+                read -sp 'LUKS Encryption Passphrase: ' encpass
+		read -sp 'Confirm LUKS Encryption Passphrase: ' encpass2
+		[ "$encpass" = "$encpass2" ] && break
+		echo "Passwords didn't match. Try again."
+	done
+fi
 read -p "Headless Install? [Y/N] " server
 if echo "$server" | grep -iqF y; then
         read -p "Static IP? [Y/N] " isstatic
@@ -36,11 +49,6 @@ else
         address=""
         gateway=""
         dns="" 
-fi
-if echo "$vm" | grep -iqF y; then
-        read -p "SSH key url: " sshkeyurl
-else
-        sshkeyurl=""
 fi
 
 #### Keyboard ####
@@ -102,7 +110,6 @@ fi
 #### Encryption ####
 if echo "$encryption" | grep -iqF y; then
         printf "\n\nEncrpting primary partition...\n"
-        read -sp 'LUKS Encryption Passphrase: ' encpass
         echo $encpass | cryptsetup -q luksFormat "${diskpart2}"
         echo $encpass | cryptsetup open "${diskpart2}" cryptlvm -
         pvcreate /dev/mapper/cryptlvm
