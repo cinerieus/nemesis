@@ -36,8 +36,8 @@ Depends = findutils
 Depends = grep" | sudo tee /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
 
 cd ~
-sudo chown root:root /opt/secure_boot 
-sudo chmod -R 600 /opt/secure_boot
+sudo chown root:root /opt/sb
+sudo chmod -R 600 /opt/sb
 
 echo "Reboot and boot to 'Shim', add MOK.cer to trusted certs in mokmanager."
 echo "Don't forget to remove /boot/EFI/GRUB/mmx64.efi"
