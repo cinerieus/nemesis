@@ -2,8 +2,6 @@
 # Optionally add secure boot to prevent against evil maid attacks on FDE.
 
 mkdir /opt/sb
-cd /opt/sb
-
 sudo grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat=/usr/share/grub/sbat.csv --modules="all_video boot btrfs cat chain configfile echo efifwsetup efinet ext2 fat font gettext gfxmenu gfxterm gfxterm_background gzio halt help hfsplus iso9660 jpeg keystatus loadenv loopback linux ls lsefi lsefimmap lsefisystab lssal memdisk minicmd normal ntfs part_apple part_msdos part_gpt password_pbkdf2 png probe reboot regexp search search_fs_uuid search_fs_file search_label sleep smbios test true video xfs zfs zfscrypt zfsinfo play cpuid tpm luks lvm"
 
 yay --noconfirm -S shim-signed sbsigntools
@@ -20,7 +18,6 @@ sudo cp /opt/sb/MOK.cer /boot
 mikdir -p /etc/pacman.d/hooks
 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/999-sign_kernel_for_secureboot.hook -o /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
 
-cd ~
 sudo chown root:root /opt/sb
 sudo chmod -R 600 /opt/sb
 
