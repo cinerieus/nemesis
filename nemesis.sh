@@ -83,6 +83,7 @@ timedatectl set-ntp true
 #### Partitioning (LVM on LUKS) ####
 printf "\n\nPartitioning disk(s)...\n"
 disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
+umount -l /mnt/*
 umount -l /mnt
 swapoff /dev/mapper/lvgroup-swap
 vgchange -a n lvgroup
