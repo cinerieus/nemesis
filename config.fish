@@ -9,6 +9,7 @@ alias nv='nvim'
 alias gostatic="go build --ldflags '-s -w -linkmode external -extldflags "-static"'"
 
 fish_add_path ~/.local/bin
+#set -x CC /usr/bin/musl-gcc
 
 umask 002
 
