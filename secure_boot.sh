@@ -30,7 +30,7 @@ Target = linux-zen
 [Action]
 Description = Signing kernel with Machine Owner Key for Secure Boot
 When = PostTransaction
-Exec = /usr/bin/find /boot/ -maxdepth 1 -name 'vmlinuz-*' -exec /usr/bin/sh -c 'if ! /usr/bin/sbverify --list {} 2>/dev/null | /usr/bin/grep -q \"signature certificates\"; then /usr/bin/sbsign --key /opt/secure_boot/MOK.key --cert /opt/secure_boot/MOK.crt --output {} {}; fi' ;
+Exec = /usr/bin/find /boot/ -maxdepth 1 -name 'vmlinuz-*' -exec /usr/bin/sh -c 'if ! /usr/bin/sbverify --list {} 2>/dev/null | /usr/bin/grep -q \"signature certificates\"; then /usr/bin/sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output {} {}; fi' ;
 Depends = sbsigntools
 Depends = findutils
 Depends = grep" | sudo tee /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
