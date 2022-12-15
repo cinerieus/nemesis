@@ -80,9 +80,20 @@ fi
 timedatectl set-timezone "$tzone"
 timedatectl set-ntp true
 
+#### Gettings Disks ####
+disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
+if echo "$vm" | grep -iqF y; then
+        diskpart1=${disk}1
+        diskpart2=${disk}2
+else
+        
+	diskpart1=$(sudo fdisk -l | grep "dev" | sed -n "2p" | cut -d " " -f 1)
+        diskpart2=$(sudo fdisk -l | grep "dev" | sed -n "3p" | cut -d " " -f 1)
+fi
+
 #### Partitioning (LVM on LUKS) ####
 printf "\n\nPartitioning disk(s)...\n"
-disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
+umount -l $diskpart1 2>/dev/null
 umount -l /mnt/* 2>/dev/null
 umount -l /mnt 2>/dev/null
 swapoff /dev/mapper/lvgroup-swap 2>/dev/null
@@ -101,15 +112,6 @@ else
         ,1M,21686148-6449-6E6F-744E-656564454649,*
         ;
 EOF
-fi
-
-if echo "$vm" | grep -iqF y; then
-        diskpart1=${disk}1
-        diskpart2=${disk}2
-else
-        
-	diskpart1=$(sudo fdisk -l | grep "dev" | sed -n "2p" | cut -d " " -f 1)
-        diskpart2=$(sudo fdisk -l | grep "dev" | sed -n "3p" | cut -d " " -f 1)
 fi
 
 #### Encryption ####
