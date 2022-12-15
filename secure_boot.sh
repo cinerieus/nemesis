@@ -11,11 +11,11 @@ sudo mv /boot/EFI/BOOT/BOOTx64.EFI /boot/EFI/BOOT/grubx64.efi
 sudo cp /usr/share/shim-signed/shimx64.efi esp/EFI/BOOT/BOOTx64.EFI
 sudo cp /usr/share/shim-signed/mmx64.efi esp/EFI/BOOT/
 #sudo efibootmgr -c --disk $(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1) --part 1 --loader /boot/EFI/BOOT/BOOTx64.EFI --label "Shim" --unicode
-sudo openssl req -newkey rsa:4096 -nodes -keyout MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=MOK/" -out MOK.crt
-sudo openssl x509 -outform DER -in MOK.crt -out MOK.cer
-sudo sbsign --key MOK.key --cert MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
-sudo sbsign --key MOK.key --cert MOK.crt --output /boot/EFI/GRUB/grubx64.efi /boot/EFI/GRUB/grubx64.efi
-sudo cp MOK.cer /boot
+sudo openssl req -newkey rsa:4096 -nodes -keyout /opt/sb/MOK.key -new -x509 -sha256 -days 3650 -subj "/CN=MOK/" -out /opt/sb/MOK.crt
+sudo openssl x509 -outform DER -in /opt/sb/MOK.crt -out /opt/sb/MOK.cer
+sudo sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/vmlinuz-linux /boot/vmlinuz-linux
+sudo sbsign --key /opt/sb/MOK.key --cert /opt/sb/MOK.crt --output /boot/EFI/BOOT/grubx64.efi /boot/EFI/BOOT/grubx64.efi
+sudo cp /opt/sb/MOK.cer /boot
 
 echo "
 [Trigger]
