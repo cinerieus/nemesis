@@ -114,17 +114,17 @@ if echo "$encryption" | grep -iqF y; then
         printf "\n\nEncrpting primary partition...\n"
         echo $encpass | cryptsetup -q luksFormat "${diskpart2}"
         echo $encpass | cryptsetup open "${diskpart2}" cryptlvm -
-        pvcreate /dev/mapper/cryptlvm
+        pvcreate -y /dev/mapper/cryptlvm
         vgcreate lvgroup /dev/mapper/cryptlvm
 else
-        pvcreate "${diskpart2}"
+        pvcreate -y "${diskpart2}"
         vgcreate lvgroup "${diskpart2}"
 fi
 
 #### LVM/Format /root /swap ####
 printf "\n\nConfiguring LVM and formating partitions...\n"
-lvcreate -W y -L 4G lvgroup -n swap
-lvcreate -W y -l 100%FREE lvgroup -n root
+lvcreate -L 4G lvgroup -n swap
+lvcreate -l 100%FREE lvgroup -n root
 mkfs.ext4 /dev/lvgroup/root
 mkswap /dev/lvgroup/swap
 mount /dev/lvgroup/root /mnt
