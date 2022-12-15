@@ -300,7 +300,8 @@ if echo "$server" | grep -iqF n; then
                 sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp pulseaudio-module-xrdp"
                 echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
                 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xinitrc -o /home/$username/.xinitrc
-                echo "- Enalble <Show Virtual Devices> in the audio panel" >> /home/$username/readme.txt
+                echo "- systemctl enable xrdp && systemctl start xrdp" >> /home/$username/readme.txt
+		echo "- Enable <Show Virtual Devices> in the audio panel, right click -> Configure Audio Volume" >> /home/$username/readme.txt
 	fi
 fi
 
