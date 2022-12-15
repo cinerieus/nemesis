@@ -260,7 +260,7 @@ if echo "$legacyboot" | grep -iqF n; then
 		cp /opt/sb/MOK.cer /boot
 		chown root:root /opt/sb
 		chmod -R 600 /opt/sb
-		echo "Don\'t forget to remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer" > /home/$username/readme.txt
+		echo "Dont forget to remove /boot/EFI/BOOT/mmx64.efi & /boot/MOK.cer" > /home/$username/readme.txt
 	else
 	        grub-install --removable --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --sbat /usr/share/grub/sbat.csv
 	fi
