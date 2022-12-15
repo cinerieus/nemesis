@@ -84,7 +84,6 @@ timedatectl set-ntp true
 printf "\n\nPartitioning disk(s)...\n"
 disk=$(sudo fdisk -l | grep "dev" | grep -o -P "(?=/).*(?=:)" | cut -d$'\n' -f1)
 umount -l /mnt
-umount -l $disk
 swapoff /dev/mapper/lvgroup-swap
 vgchange -a n lvgroup
 cryptsetup close cryptlvm
@@ -116,10 +115,10 @@ if echo "$encryption" | grep -iqF y; then
         printf "\n\nEncrpting primary partition...\n"
         echo $encpass | cryptsetup -q luksFormat "${diskpart2}"
         echo $encpass | cryptsetup open "${diskpart2}" cryptlvm -
-        pvcreate -y /dev/mapper/cryptlvm
+        pvcreate -ff /dev/mapper/cryptlvm
         vgcreate lvgroup /dev/mapper/cryptlvm
 else
-        pvcreate -y "${diskpart2}"
+        pvcreate -ff "${diskpart2}"
         vgcreate lvgroup "${diskpart2}"
 fi
 
