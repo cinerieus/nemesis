@@ -239,7 +239,12 @@ echo "
 [multilib]
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu 
-pacman --noconfirm -S sudo yay which neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay
+## intel ##
+#pacman --noconfirm -S intel-ucode mesa lib32-mesa vulkan-intel  
+## amd ##
+#pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
+## utils ##
+pacman --noconfirm -S base-devel yay neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay lib32-glibc wget socat python python-pip p7zip tmux go cifs-utils tcpdump proxychains-ng openvpn wireguard-tools systemd-resolvconf cmatrix asciiquarium
 
 #### User Setup ####
 printf "\n\nSetting up low priv user...\n"
@@ -359,12 +364,7 @@ if echo "$server" | grep -iqFv y; then
 	systemctl enable sddm
 fi
 
-## intel ##
-#pacman --noconfirm -S intel-ucode mesa lib32-mesa vulkan-intel  
-## amd ##
-#pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
-## utils ##
-pacman --noconfirm -S base-devel lib32-glibc wget socat python python-pip p7zip tmux go cifs-utils tcpdump proxychains-ng openvpn wireguard-tools systemd-resolvconf cmatrix asciiquarium
+
 
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
