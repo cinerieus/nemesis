@@ -303,7 +303,7 @@ if echo "$server" | grep -iqF n; then
 		echo "- Enable <Show Virtual Devices> in the audio panel, right click -> Configure Audio Volume" >> /home/$username/readme.txt
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp.ini -o /etc/xrdp/xrdp.ini
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp_logo.bmp -o /usr/share/xrdp/xrdp_logo.bmp
-                curl https://github.com/cinerieus/nemesis/blob/master/xrdp_bg.bmp -o /usr/share/xrdp/xrdp_bg.bmp
+                curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp_bg.bmp -o /usr/share/xrdp/xrdp_bg.bmp
 		systemctl enable xrdp
 	fi
 fi
