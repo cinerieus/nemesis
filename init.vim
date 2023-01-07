@@ -24,3 +24,6 @@ endif
 syntax enable
 filetype plugin indent on
 let g:rainbow_active=1
+set tabstop=4
+set shiftwidth=4
+set expandtab
