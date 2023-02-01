@@ -374,6 +374,8 @@ cp -r /home/$username/.config/fish/config.fish /root/.config/fish/config.fish
 fish -c "omf theme sushi"
 usermod -s /bin/fish $username
 usermod -s /bin/fish root
+sudo -u $username echo "set -g mouse on" > /home/$username/.tmux.conf
+echo "set -g mouse on" > /root/.tmux.conf
 
 ## build specific setup ##
 if echo "$vm" | grep -iqF y; then
