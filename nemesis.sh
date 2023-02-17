@@ -296,11 +296,12 @@ fi
 if echo "$server" | grep -iqF n; then
         if echo "$vm" | grep -iqF y; then
                 printf "\n\nConfiguring RDP... \n"
-                pacman --noconfirm -S sbc
-                sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp pulseaudio-module-xrdp"
+                #pacman --noconfirm -S sbc
+                #sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp pulseaudio-module-xrdp"
+		sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp"
                 echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
                 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xinitrc -o /home/$username/.xinitrc
-		echo "- Enable <Show Virtual Devices> in the audio panel, right click -> Configure Audio Volume" >> /home/$username/readme.txt
+		#echo "- Enable <Show Virtual Devices> in the audio panel, right click -> Configure Audio Volume" >> /home/$username/readme.txt
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp.ini -o /etc/xrdp/xrdp.ini
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp_logo.bmp -o /usr/share/xrdp/xrdp_logo.bmp
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp_bg.bmp -o /usr/share/xrdp/xrdp_bg.bmp
