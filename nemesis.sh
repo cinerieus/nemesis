@@ -388,7 +388,8 @@ if echo "$vm" | grep -iqF y; then
 fi
 
 if echo "$server" | grep -iqFv y; then
-	pacman --noconfirm -S xorg-server plasma-meta plasma-wayland-session kwalletmanager kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice remmina
+	#pacman --noconfirm -S xorg-server plasma-meta plasma-wayland-session kwalletmanager kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice remmina
+	pacman --noconfirm -S xorg-server plasma-meta kwalletmanager kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice remmina
 	pacman --noconfirm -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack
 	## Temp workaround for sddm-kcm bug
 	echo "DisplayServer=x11" >> /etc/sddm.conf
@@ -412,17 +413,17 @@ if echo "$extra" | grep -iqF y; then
         wget https://github.com/interference-security/kali-windows-binaries/archive/refs/heads/master.zip -O /opt/windows/binaries.zip
         wget https://github.com/r3motecontrol/Ghostpack-CompiledBinaries/archive/refs/heads/master.zip -O /opt/windows/ghostpack_binaries.zip
         wget https://github.com/dirkjanm/krbrelayx/archive/refs/heads/master.zip -O /opt/windows/krbrelayx.zip
-        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/linpeas.sh -O /opt/peassng/linpeas.sh
-        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEAS.bat -O /opt/peassng/winPEAS.bat
-        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
-        wget https://github.com/carlospolop/PEASS-ng/releases/download/20220925/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20230219/linpeas.sh -O /opt/peassng/linpeas.sh
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20230219/winPEAS.bat -O /opt/peassng/winPEAS.bat
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20230219/winPEASx64.exe -O /opt/peassng/winPEASx64.exe
+        wget https://github.com/carlospolop/PEASS-ng/releases/download/20230219/winPEASx86.exe -O /opt/peassng/winPEASx86.exe
         7z a /opt/peassng/peassng.7z /opt/peassng/* && rm -f /opt/peassng/lin* && rm -f /opt/peassng/win*
-        wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_linux_amd64.gz -O /opt/chisel/chisel_1.7.7_linux_amd64.gz
-        wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_amd64.gz -O /opt/chisel/chisel_1.7.7_windows_amd64.gz
-        wget https://github.com/jpillora/chisel/releases/download/v1.7.7/chisel_1.7.7_windows_386.gz -O /opt/chisel/chisel_1.7.7_windows_386.gz
+        wget https://github.com/jpillora/chisel/releases/download/v1.8.1/chisel_1.8.1_linux_amd64.gz -O /opt/chisel/chisel_1.8.1_linux_amd64.gz
+        wget https://github.com/jpillora/chisel/releases/download/v1.8.1/chisel_1.8.1_windows_amd64.gz -O /opt/chisel/chisel_1.8.1_windows_amd64.gz
+        wget https://github.com/jpillora/chisel/releases/download/v1.8.1/chisel_1.8.1_windows_386.gz -O /opt/chisel/chisel_1.8.1_windows_386.gz
         wget https://github.com/Ne0nd0g/merlin/releases/download/v1.5.0/merlinServer-Linux-x64.7z -O /opt/c2/merlin/merlinServer-Linux-x64.7z
-        wget https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-server_linux -O /opt/c2/sliver/sliver-server
-        wget https://github.com/BishopFox/sliver/releases/download/v1.5.28/sliver-client_linux -O /opt/c2/sliver/sliver-client
+        wget https://github.com/BishopFox/sliver/releases/download/v1.5.34/sliver-server_linux -O /opt/c2/sliver/sliver-server
+        wget https://github.com/BishopFox/sliver/releases/download/v1.5.34/sliver-client_linux -O /opt/c2/sliver/sliver-client
         7z a /opt/c2/sliver/sliver.7z /opt/c2/sliver/* && rm -f /opt/c2/sliver/sliver-*
 	echo "
 ## Todo ##
