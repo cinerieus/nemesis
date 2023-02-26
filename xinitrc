@@ -29,5 +29,4 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-#/usr/bin/pulseaudio --start
 exec /usr/lib/plasma-dbus-run-session-if-needed startplasma-x11
