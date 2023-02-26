@@ -296,9 +296,7 @@ fi
 if echo "$server" | grep -iqF n; then
         if echo "$vm" | grep -iqF y; then
                 printf "\n\nConfiguring RDP... \n"
-                #pacman --noconfirm -S sbc
-                #sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp pulseaudio-module-xrdp"
-		sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp"
+                sudo -Hu $username /bin/sh -c "echo $password | yay --sudoflags \"-S\" --noconfirm -S xrdp xorgxrdp pulseaudio-module-xrdp"
                 echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
                 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xinitrc -o /home/$username/.xinitrc
 		#echo "- Enable <Show Virtual Devices> in the audio panel, right click -> Configure Audio Volume" >> /home/$username/readme.txt
@@ -526,6 +524,8 @@ if echo "$server" | grep -iqFv y; then
 	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/d2rbzfof.dev-edition-default.7z -o /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	sudo -Hu $username 7z x /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z -o/home/$username/.mozilla/firefox && rm /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	cp -r /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default /root/.mozilla/firefox
+	
+	## Theming ##
 fi
 #######################' >> /mnt/nemesis.sh
 
