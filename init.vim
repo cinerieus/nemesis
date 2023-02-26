@@ -1,13 +1,14 @@
 call plug#begin('~/.vim/plugged')
-Plug 'drewtempelmeyer/palenight.vim'
+"Plug 'drewtempelmeyer/palenight.vim'
+Plug 'dracula/vim'
 Plug 'itchyny/lightline.vim'
 Plug 'frazrepo/vim-rainbow'
 call plug#end()
 
 ""Look
 set background=dark
-colorscheme palenight
-let g:lightline={ 'colorscheme': 'palenight' }
+colorscheme dracula
+let g:lightline={ 'colorscheme': 'dracula' }
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
 let g:palenight_terminal_italics=1
