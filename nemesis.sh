@@ -388,11 +388,8 @@ if echo "$vm" | grep -iqF y; then
 fi
 
 if echo "$server" | grep -iqFv y; then
-	#pacman --noconfirm -S xorg-server plasma-meta plasma-wayland-session kwalletmanager kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice remmina
 	pacman --noconfirm -S xorg-server plasma-meta kwalletmanager kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice remmina
 	pacman --noconfirm -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack
-	## Temp workaround for sddm-kcm bug
-	echo "DisplayServer=x11" >> /etc/sddm.conf
 	systemctl enable NetworkManager
 	systemctl enable sddm
 fi
