@@ -386,7 +386,7 @@ if echo "$vm" | grep -iqF y; then
 fi
 
 if echo "$server" | grep -iqFv y; then
-	pacman --noconfirm -S xorg-server plasma-meta kwalletmanager kvantum-qt5 dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice remmina
+	pacman --noconfirm -S xorg-server plasma-meta kwalletmanager kvantum dolphin kwrite kate gwenview konsole spectacle chromium firefox-developer-edition libreoffice remmina
 	pacman --noconfirm -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack
 	systemctl enable NetworkManager
 	systemctl enable sddm
@@ -525,7 +525,10 @@ if echo "$server" | grep -iqFv y; then
 	sudo -Hu $username 7z x /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z -o/home/$username/.mozilla/firefox && rm /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	cp -r /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default /root/.mozilla/firefox
 	
-	## Theming ##
+	## Desktop Theming ##
+	sudo -u $username yay --noconfirm -S dracula-kde-theme-git konsole-dracula-git
+	sudo -u $username lookandfeeltool -a Dracula	
+	lookandfeeltool -a Dracula
 fi
 #######################' >> /mnt/nemesis.sh
 
