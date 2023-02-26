@@ -50,4 +50,5 @@ Manual Steps:
 - Application Style GTK Theme
 - Application launcher icon
 - Konsole Profile
+- KWrite
 EOM
