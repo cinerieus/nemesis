@@ -426,7 +426,6 @@ if echo "$extra" | grep -iqF y; then
 	echo "
 ## Todo ##
 - Change your password from Ch4ngeM3!
-- Theming (yay -S dracula-kde-theme-git konsole-dracula-git)
 
 ## Fun ##
 - cowsay
@@ -499,7 +498,6 @@ else
 	echo "
 ## Todo ##
 - Change your password from Ch4ngeM3!
-- Theming (yay -S dracula-kde-theme-git konsole-dracula-git)
 
 ## Fun ##
 - cowsay
@@ -529,6 +527,10 @@ if echo "$server" | grep -iqFv y; then
 	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/d2rbzfof.dev-edition-default.7z -o /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	sudo -Hu $username 7z x /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z -o/home/$username/.mozilla/firefox && rm /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default.7z
 	cp -r /home/$username/.mozilla/firefox/d2rbzfof.dev-edition-default /root/.mozilla/firefox
+	
+	## theming script ##
+	sudo -Hu $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/theme.sh -o /home/$username/theme.sh
+	curl https://raw.githubusercontent.com/cinerieus/nemesis/master/theme.sh -o /root/theme.sh
 fi
 #######################' >> /mnt/nemesis.sh
 
