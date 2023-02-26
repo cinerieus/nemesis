@@ -377,6 +377,7 @@ fish -c "omf theme sushi"
 usermod -s /bin/fish $username
 usermod -s /bin/fish root
 sudo -u git clone https://github.com/tmux-plugins/tpm /home/$username/.tmux/plugins/tpm
+mkdir -p /root/.tmux/plugins/tpm
 cp -r /home/$username/.tmux/plugins/tpm /root.tmux/plugins/tpm
 sudo -u $username curl https://raw.githubusercontent.com/cinerieus/nemesis/master/tmux.conf -o /home/$username/.tmux.conf
 cp /home/$username/.tmux.conf /root/.tmux.conf
