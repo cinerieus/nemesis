@@ -348,6 +348,9 @@ if echo "$encryption" | grep -iqF y; then
         cryptdevice=$(blkid ${diskpart2} -s UUID -o value)
         echo GRUB_CMDLINE_LINUX="cryptdevice=UUID=$cryptdevice:cryptlvm" >> /etc/default/grub
 fi
+curl https://raw.githubusercontent.com/cinerieus/nemesis/master/dracula.7z -o /boot/grub/themes/dracula.7z
+7z x /boot/grub/themes/dracula.7z -o/boot/grub/themes && rm /boot/grub/themes/dracula.7z
+echo GRUB_THEME=/boot/grub/themes/dracula/theme.txt >> /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
 #### Customization ####
