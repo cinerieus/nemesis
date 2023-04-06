@@ -403,6 +403,7 @@ fi
 if echo "$extra" | grep -iqF y; then
 	## tools ##
 	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf nullinux linux-smart-enumeration seclists bloodhound-python ldapdomaindump ntdsxtract binwalk evil-winrm responder freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx gau nuclei interactsh-client asnmap
+	#pip install coercer
 	## extra ##
 	umask 002
 	mkdir -p /opt/wordlists /opt/linux /opt/windows /opt/peassng /opt/chisel /opt/c2/ /opt/c2/merlin /opt/c2/sliver
