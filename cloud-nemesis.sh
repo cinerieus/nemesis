@@ -1,11 +1,11 @@
-hostname=$HOSTNAME
+hostname="nemesis"
 username="user"
 password="Ch4ngeM3!"
 tzone="Europe/London"
 legacyboot="y"
 secureboot="n"
 vm="y"
-sshkeyurl=$SSHKEYURL
+sshkeyurl="https://github.com/cinerieus.keys"
 extra="y"
 encryption="n"
 server="y"
