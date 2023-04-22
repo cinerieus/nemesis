@@ -20,9 +20,9 @@ echo KEYMAP=uk > /etc/vconsole.conf
 printf "\n\nInitializing Pacman... \n"
 curl https://blackarch.org/strap.sh | sh
 echo "Server = http://mirror.zetup.net/blackarch/blackarch/os/x86_64" > /etc/pacman.d/blackarch-mirrorlist
-echo "
-[multilib]
-Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+#echo "
+#[multilib]
+#Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu 
 ## intel ##
 #pacman --noconfirm -S intel-ucode mesa lib32-mesa vulkan-intel  
