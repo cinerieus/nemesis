@@ -1,11 +1,7 @@
 #!/bin/bash
-hostname=$HOSTNAME
 username=$USERNAME
 password=$PASSWORD
 sshkeyurl=$SSHKEYURL
-
-#### Hostname ####
-hostnamectl hostname $hostname
 
 #### Time Zone ####
 printf "\n\nSetting timezone...\n"
@@ -62,11 +58,11 @@ echo "echo \"$(toilet -f pagga -w 110 -F border Nemesis | lolcat -ft)\"" >> /etc
 echo "echo \"\" ; neofetch ; echo \"\" ; fortune | cowsay -f head-in -W 110 | lolcat -f ; echo \"\"" >> /etc/motd.sh && \
 chmod +x /etc/motd.sh && \
 echo "session    optional   pam_exec.so          stdout /etc/motd.sh" >> /etc/pam.d/system-login
-
-sudo -Hu $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
-chmod 600 /home/$username/.ssh/authorized_keys
-chown $username:$username /home/$username/.ssh/authorized_keys
-
+if [ -n "$sshkeyurl" ]; then
+  sudo -Hu $username curl $sshkeyurl > /home/$username/.ssh/authorized_keys
+  chmod 600 /home/$username/.ssh/authorized_keys
+  chown $username:$username /home/$username/.ssh/authorized_keys
+fi
 
 #### Customization ####
 printf "\n\nCustomizing... \n"
