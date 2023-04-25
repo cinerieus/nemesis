@@ -24,10 +24,6 @@ echo "Server = http://mirror.zetup.net/blackarch/blackarch/os/x86_64" > /etc/pac
 #[multilib]
 #Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman --noconfirm -Syu 
-## intel ##
-#pacman --noconfirm -S intel-ucode mesa lib32-mesa vulkan-intel  
-## amd ##
-#pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 ## utils ##
 pacman --noconfirm -S base-devel yay neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay lib32-glibc wget socat python python-pip p7zip tmux go cifs-utils tcpdump proxychains-ng openvpn wireguard-tools systemd-resolvconf cmatrix asciiquarium
 
@@ -51,7 +47,6 @@ UsePAM yes
 PrintMotd no
 Subsystem       sftp    /usr/lib/ssh/sftp-server
 HostKey /etc/ssh/ssh_host_ed25519_key
-PermitRootLogin no
 PasswordAuthentication no" > /etc/ssh/sshd_config
 echo -e "#\x21/bin/bash" > /etc/motd.sh && \
 echo "echo \"$(toilet -f pagga -w 110 -F border Nemesis | lolcat -ft)\"" >> /etc/motd.sh && \
@@ -202,5 +197,3 @@ echo "
 - SecLists: /usr/share/seclists
 - rockyou.txt: /opt/wordlists/rockyou.txt
 " >> /home/$username/readme.txt
-
-passwd -l root
