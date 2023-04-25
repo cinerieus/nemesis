@@ -204,4 +204,3 @@ echo "
 " >> /home/$username/readme.txt
 
 passwd -l root
-passwd -l user
