@@ -2,7 +2,7 @@
 
 # Packages
 sudo apt update && sudo apt full-upgrade -y
-sudo apt install -y build-essential clang flex bison g++ gawk gcc-multilib g++-multilib musl-tools gettext libncurses5-dev libssl-dev python3-distutils python3-venv rsync unzip zlib1g-dev file fish neovim tmux git curl wget socat python3 python3-pip p7zip tmux cifs-utils
+sudo apt install -y build-essential clang flex bison g++ gawk gcc-multilib g++-multilib musl-tools mingw-w64 gettext libncurses5-dev libssl-dev python3-distutils python3-venv rsync unzip zlib1g-dev file fish neovim tmux git curl wget socat python3 python3-pip p7zip tmux cifs-utils
 
 # Customization
 sudo usermod -aG users $USER
