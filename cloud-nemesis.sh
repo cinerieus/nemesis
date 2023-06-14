@@ -98,7 +98,7 @@ systemctl enable vmware-vmblock-fuse
 
 ## tools ##
 pip uninstall -y six markupsafe jinja2 pyyaml netifaces urllib3 idna requests certifi
-pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf enum4linux-ng linux-smart-enumeration seclists bloodhound-python ldapdomaindump ntdsxtract binwalk evil-winrm responder certipy freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx gau nuclei interactsh-client asnmap
+pacman --noconfirm -S nmap masscan impacket metasploit sqlmap john medusa ffuf enum4linux-ng linux-smart-enumeration seclists bloodhound-python ldapdomaindump ntdsxtract binwalk evil-winrm responder certipy freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx gau nuclei interactsh-client asnmap
 #pip install coercer
 
 ## extra ##
