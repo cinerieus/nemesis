@@ -402,7 +402,7 @@ fi
 ## attack build - extra tools ##
 if echo "$extra" | grep -iqF y; then
 	## tools ##
-	pacman --noconfirm -S nmap impacket metasploit sqlmap john medusa ffuf enum4linux-ng linux-smart-enumeration seclists bloodhound-python ldapdomaindump ntdsxtract binwalk detect-it-easy evil-winrm responder certipy freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx gau nuclei interactsh-client asnmap
+	pacman --noconfirm -S nmap masscan impacket metasploit sqlmap john medusa ffuf enum4linux-ng linux-smart-enumeration seclists bloodhound-python ldapdomaindump ntdsxtract binwalk detect-it-easy evil-winrm responder certipy freerdp gowitness miniserve cewl strace pspy gittools scoutsuite pacu subfinder httpx dnsx gau nuclei interactsh-client asnmap
 	#pip install coercer
 	## extra ##
 	umask 002
