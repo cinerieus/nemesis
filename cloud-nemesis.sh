@@ -30,7 +30,7 @@ pacman --noconfirm -S base-devel yay neovim openssh git fish toilet lolcat neofe
 #### User Setup ####
 printf "\n\nSetting up low priv user...\n"
 echo "%wheel    ALL=(ALL) ALL" >> /etc/sudoers
-useradd -m -G users,wheelnpw $username
+useradd -m -G users,wheel $username
 echo -e "$password\n$password" | passwd $username
 sudo -Hu $username mkdir /home/$username/.ssh
 sudo -Hu $username chmod 750 /home/$username/.ssh
