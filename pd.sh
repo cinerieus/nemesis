@@ -5,3 +5,4 @@ GOBIN=/usr/local/bin/ go install github.com/projectdiscovery/httpx/cmd/httpx@lat
 GOBIN=/usr/local/bin/ go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 GOBIN=/usr/local/bin/ go install github.com/projectdiscovery/asnmap/cmd/asnmap@latest
 GOBIN=/usr/local/bin/ go install github.com/projectdiscovery/tlsx/cmd/tlsx@latest
+GOBIN=/usr/local/bin/ go install github.com/projectdiscovery/katana/cmd/katana@latest
