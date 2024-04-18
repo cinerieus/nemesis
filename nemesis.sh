@@ -303,6 +303,14 @@ if echo "$server" | grep -iqF n; then
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp.ini -o /etc/xrdp/xrdp.ini
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp_logo.bmp -o /usr/share/xrdp/xrdp_logo.bmp
                 curl https://raw.githubusercontent.com/cinerieus/nemesis/master/xrdp_bg.bmp -o /usr/share/xrdp/xrdp_bg.bmp
+		mkdir -p /etc/polkit-1/localauthority/50-local.d/
+  		echo "
+    		[Allow Network Control all Users]
+		Identity=unix-user:*
+		Action=org.freedesktop.NetworkManager.network-control
+		ResultAny=no
+		ResultInactive=no
+		ResultActive=yes" > /etc/polkit-1/localauthority/50-local.d/47-allow-networkd.pkla
 		systemctl enable xrdp
 	fi
 fi
