@@ -244,6 +244,7 @@ if echo "$server" | grep -iqF y; then
 	#rm /etc/resolv.conf && ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 	systemctl enable systemd-networkd
 fi
+ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 systemctl enable systemd-resolved
 
 #### Pacman Init ####
