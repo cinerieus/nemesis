@@ -16,9 +16,6 @@ kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum-dark
 # Download wallpapers
 sudo git clone https://github.com/dracula/wallpaper.git /usr/share/wallpapers/dracula
 
-# Set lockscreen bg
-kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///usr/share/wallpapers/dracula/first-collection/arch.png"
-
 # Set desktop bg
 qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'var allDesktops = desktops();print (allDesktops);for (i=0;i<allDesktops.length;i++) {d = allDesktops[i];d.wallpaperPlugin = "org.kde.image";d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");d.writeConfig("Image", "file:///usr/share/wallpapers/dracula/first-collection/arch.png")}'
 
@@ -34,13 +31,16 @@ HaltCommand=/usr/bin/systemctl poweroff
 RebootCommand=/usr/bin/systemctl reboot
 
 [Theme]
-Current=Dracula
+Current=breeze
 CursorTheme=Dracula-cursors
 Font=Noto Sans,10,-1,0,50,0,0,0,0,0
 
 [Users]
 MaximumUid=60513
 MinimumUid=1000" | sudo tee /etc/sddm.conf.d/kde_settings.conf
+
+# Set SDDM bg
+kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///usr/share/wallpapers/dracula/first-collection/arch.png"
 
 # Restart plasma
 plasmashell --replace &>/dev/null &
