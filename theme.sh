@@ -8,7 +8,7 @@ kvantummanager --set Dracula
 lookandfeeltool -a Dracula
 
 # Set application style
-kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle kvantum-dark
+kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum-dark
 
 # Set icon theme
 /usr/lib/plasma-changeicons Dracula
