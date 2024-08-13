@@ -5,7 +5,7 @@ yay --noconfirm -S full-dracula-theme-git konsole-dracula-git dracula-icons-git
 kvantummanager --set Dracula
 
 # Set global theme
-lookandfeeltool -a Dracula
+lookandfeeltool -a /usr/share/plasma/look-and-feel/Plasma6/Dracula
 
 # Set application style
 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum-dark
