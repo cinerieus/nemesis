@@ -311,6 +311,23 @@ if echo "$server" | grep -iqF n; then
         			return polkit.Result.YES;
     			}
 		});" > /etc/polkit-1/rules.d/47-allow-networkd.rules
+  		echo "
+    		[Unit]
+		Description=xrdp daemon
+		Documentation=man:xrdp(8) man:xrdp.ini(5)
+		Requires=network-online.target xrdp-sesman.service
+		After=network-online.target xrdp-sesman.service
+		
+		[Service]
+		Type=exec
+		EnvironmentFile=-/etc/sysconfig/xrdp
+		EnvironmentFile=-/etc/default/xrdp
+		ExecStart=/usr/bin/xrdp $XRDP_OPTIONS --nodaemon
+		SystemCallArchitectures=native
+		SystemCallFilter=@system-service
+		
+		[Install]
+		WantedBy=multi-user.target" > /lib/systemd/system/xrdp.service
 		systemctl enable xrdp
 	fi
 fi
