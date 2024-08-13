@@ -11,7 +11,7 @@ lookandfeeltool -a /usr/share/plasma/look-and-feel/Plasma6/Dracula
 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum-dark
 
 # Set icon theme
-/usr/lib/plasma-changeicons Dracula
+#/usr/lib/plasma-changeicons Dracula
 
 # Download wallpapers
 sudo git clone https://github.com/dracula/wallpaper.git /usr/share/wallpapers/dracula
