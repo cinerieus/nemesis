@@ -1,6 +1,6 @@
 call plug#begin('~/.vim/plugged')
 "Plug 'drewtempelmeyer/palenight.vim'
-Plug 'dracula/vim'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'itchyny/lightline.vim'
 Plug 'frazrepo/vim-rainbow'
 call plug#end()
