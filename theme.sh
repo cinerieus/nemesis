@@ -1,5 +1,5 @@
 # Get themes
-yay --noconfirm -S dracula-kde-theme-git konsole-dracula-git dracula-gtk-theme-git dracula-icons-git
+yay --noconfirm -S full-dracula-theme-git konsole-dracula-git dracula-icons-git
 
 # Set Kvantum theme
 kvantummanager --set Dracula
@@ -17,7 +17,7 @@ kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum-dark
 sudo git clone https://github.com/dracula/wallpaper.git /usr/share/wallpapers/dracula
 
 # Set lockscreen bg
-kwriteconfig5 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///usr/share/wallpapers/dracula/first-collection/arch.png"
+kwriteconfig6 --file kscreenlockerrc --group Greeter --group Wallpaper --group org.kde.image --group General --key Image "file:///usr/share/wallpapers/dracula/first-collection/arch.png"
 
 # Set desktop bg
 qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'var allDesktops = desktops();print (allDesktops);for (i=0;i<allDesktops.length;i++) {d = allDesktops[i];d.wallpaperPlugin = "org.kde.image";d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");d.writeConfig("Image", "file:///usr/share/wallpapers/dracula/first-collection/arch.png")}'
