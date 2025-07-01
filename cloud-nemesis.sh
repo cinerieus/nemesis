@@ -19,7 +19,7 @@ echo KEYMAP=uk > /etc/vconsole.conf
 #### Pacman Init ####
 printf "\n\nInitializing Pacman... \n"
 curl https://blackarch.org/strap.sh | sh
-echo "Server = http://mirror.zetup.net/blackarch/blackarch/os/x86_64" > /etc/pacman.d/blackarch-mirrorlist
+echo "Server = https://blackarch.org/blackarch/blackarch/os/x86_64" > /etc/pacman.d/blackarch-mirrorlist
 #echo "
 #[multilib]
 #Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
