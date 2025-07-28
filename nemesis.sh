@@ -260,7 +260,7 @@ pacman --noconfirm -Syu
 ## amd ##
 #pacman --noconfirm -S amd-ucode mesa lib32-mesa amdvlk lib32-amdvlk
 ## utils ##
-pacman --noconfirm -S base-devel yay neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay lib32-glibc wget socat python python-pip p7zip tmux go cifs-utils tcpdump proxychains-ng openvpn wireguard-tools systemd-resolvconf cmatrix asciiquarium
+pacman --noconfirm -S sudo base-devel yay neovim openssh git fish toilet lolcat neofetch fortune-mod cowsay lib32-glibc wget socat python python-pip p7zip tmux go cifs-utils tcpdump proxychains-ng openvpn wireguard-tools systemd-resolvconf cmatrix asciiquarium
 
 #### User Setup ####
 printf "\n\nSetting up low priv user...\n"
