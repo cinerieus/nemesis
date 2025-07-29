@@ -570,7 +570,7 @@ fi
 # Chroot and run
 #################
 printf "\n\nChrooting and running stage 2..."
-cp /etc/resolv.conf /mnt/etc/resolv.conf
+cp -f /etc/resolv.conf /mnt/etc/resolv.conf
 chmod +x /mnt/nemesis.sh
 arch-chroot /mnt ./nemesis.sh
 printf "\n\nCleaning up..."
