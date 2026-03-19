@@ -1,0 +1,8 @@
+all:
+  children:
+    vps:
+      hosts:
+        ${hostname}:
+          ansible_host: ${ip_address}
+          ansible_user: ${username}
+          ansible_ssh_common_args: '-o StrictHostKeyChecking=no'

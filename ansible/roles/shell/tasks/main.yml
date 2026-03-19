@@ -1,0 +1,221 @@
+---
+# ==============================================================================
+# Shell role - fish, starship, neovim, tmux, fonts, dotfiles
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Package installation
+# ------------------------------------------------------------------------------
+
+- name: Install shell packages (fish, starship, neovim, tmux)
+  community.general.pacman:
+    name: "{{ shell_packages }}"
+    state: present
+
+- name: Install font packages
+  community.general.pacman:
+    name: "{{ font_packages }}"
+    state: present
+
+# ------------------------------------------------------------------------------
+# Fish shell - set as default shell
+# ------------------------------------------------------------------------------
+
+- name: Set fish as default shell for {{ username }}
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: "{{ fish_shell_path }}"
+
+- name: Set fish as default shell for root
+  ansible.builtin.user:
+    name: root
+    shell: "{{ fish_shell_path }}"
+
+# ------------------------------------------------------------------------------
+# Config directories
+# ------------------------------------------------------------------------------
+
+- name: Ensure fish config directory exists for {{ username }}
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/fish"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Ensure fish config directory exists for root
+  ansible.builtin.file:
+    path: "{{ root_home }}/.config/fish"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Ensure neovim config directory exists for {{ username }}
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/nvim"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Ensure neovim config directory exists for root
+  ansible.builtin.file:
+    path: "{{ root_home }}/.config/nvim"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Ensure tmux config directory exists for {{ username }}
+  ansible.builtin.file:
+    path: "{{ user_home }}/.config/tmux"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Ensure tmux config directory exists for root
+  ansible.builtin.file:
+    path: "{{ root_home }}/.config/tmux"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+# ------------------------------------------------------------------------------
+# Fish config
+# ------------------------------------------------------------------------------
+
+- name: Deploy config.fish for {{ username }}
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/config.fish"
+    dest: "{{ user_home }}/.config/fish/config.fish"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+- name: Deploy config.fish for root
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/config.fish"
+    dest: "{{ root_home }}/.config/fish/config.fish"
+    owner: root
+    group: root
+    mode: "0644"
+
+# ------------------------------------------------------------------------------
+# Starship prompt config
+# ------------------------------------------------------------------------------
+
+- name: Deploy starship.toml for {{ username }}
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/starship.toml"
+    dest: "{{ user_home }}/.config/starship.toml"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+- name: Deploy starship.toml for root
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/starship.toml"
+    dest: "{{ root_home }}/.config/starship.toml"
+    owner: root
+    group: root
+    mode: "0644"
+
+# ------------------------------------------------------------------------------
+# Neovim + lazy.nvim
+# ------------------------------------------------------------------------------
+
+- name: Clone lazy.nvim for {{ username }}
+  ansible.builtin.git:
+    repo: "{{ lazyvim_repo }}"
+    dest: "{{ lazyvim_data_dir_user }}"
+    version: "{{ lazyvim_version }}"
+    depth: 1
+  become: true
+  become_user: "{{ username }}"
+
+- name: Clone lazy.nvim for root
+  ansible.builtin.git:
+    repo: "{{ lazyvim_repo }}"
+    dest: "{{ lazyvim_data_dir_root }}"
+    version: "{{ lazyvim_version }}"
+    depth: 1
+
+- name: Deploy init.lua for {{ username }}
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/init.lua"
+    dest: "{{ user_home }}/.config/nvim/init.lua"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+- name: Deploy init.lua for root
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/init.lua"
+    dest: "{{ root_home }}/.config/nvim/init.lua"
+    owner: root
+    group: root
+    mode: "0644"
+
+# ------------------------------------------------------------------------------
+# Tmux + TPM
+# ------------------------------------------------------------------------------
+
+- name: Clone TPM for {{ username }}
+  ansible.builtin.git:
+    repo: "{{ tpm_repo }}"
+    dest: "{{ tpm_dir_user }}"
+    version: master
+    depth: 1
+  become: true
+  become_user: "{{ username }}"
+
+- name: Clone TPM for root
+  ansible.builtin.git:
+    repo: "{{ tpm_repo }}"
+    dest: "{{ tpm_dir_root }}"
+    version: master
+    depth: 1
+
+- name: Deploy tmux.conf for {{ username }}
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/tmux.conf"
+    dest: "{{ user_home }}/.config/tmux/tmux.conf"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+- name: Deploy tmux.conf for root
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/tmux.conf"
+    dest: "{{ root_home }}/.config/tmux/tmux.conf"
+    owner: root
+    group: root
+    mode: "0644"
+
+# ------------------------------------------------------------------------------
+# Fonts and fontconfig
+# ------------------------------------------------------------------------------
+
+- name: Deploy fontconfig local.conf
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/local.conf"
+    dest: /etc/fonts/local.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Deploy Xresources for {{ username }}
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/dotfiles/Xresources"
+    dest: "{{ user_home }}/.Xresources"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+
+- name: Rebuild font cache
+  ansible.builtin.command:
+    cmd: fc-cache -f
+  changed_when: false

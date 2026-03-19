@@ -1,0 +1,16 @@
+---
+- name: Restart NetworkManager
+  ansible.builtin.systemd:
+    name: NetworkManager
+    state: restarted
+    enabled: true
+
+- name: Restart systemd-resolved
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: restarted
+    enabled: true
+
+- name: Regenerate locales
+  ansible.builtin.command:
+    cmd: locale-gen

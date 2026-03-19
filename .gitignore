@@ -1,0 +1,29 @@
+# Secrets
+.vault-pass
+secrets.yml
+
+# Terraform
+terraform/**/.terraform/
+terraform/**/.terraform.lock.hcl
+terraform/**/terraform.tfstate
+terraform/**/terraform.tfstate.backup
+terraform/**/terraform.tfvars
+
+# Packer
+packer/packer_cache/
+
+# Ansible (generated inventories)
+ansible/inventory/vps.yml
+ansible/inventory/vm.yml
+*.retry
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Theme zips (large binaries - add your own)
+# config/themes/*.zip

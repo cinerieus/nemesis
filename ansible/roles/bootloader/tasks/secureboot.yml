@@ -1,0 +1,53 @@
+---
+- name: Install Secure Boot packages
+  ansible.builtin.pacman:
+    name:
+      - shim-signed
+      - sbsigntools
+      - mokutil
+    state: present
+
+- name: Create MOK key directory
+  ansible.builtin.file:
+    path: /etc/secureboot/keys
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Generate MOK certificate
+  ansible.builtin.command:
+    cmd: >
+      openssl req -newkey rsa:4096 -nodes
+      -keyout /etc/secureboot/keys/MOK.key
+      -new -x509 -sha256 -days 3650
+      -subj "/CN=Nemesis Secure Boot/"
+      -out /etc/secureboot/keys/MOK.cer
+    creates: /etc/secureboot/keys/MOK.key
+
+- name: Convert MOK certificate to DER format
+  ansible.builtin.command:
+    cmd: >
+      openssl x509 -outform DER
+      -in /etc/secureboot/keys/MOK.cer
+      -out /etc/secureboot/keys/MOK.der
+    creates: /etc/secureboot/keys/MOK.der
+
+- name: Deploy kernel signing pacman hook
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/hooks/999-sign_kernel_for_secureboot.hook"
+    dest: /etc/pacman.d/hooks/999-sign_kernel_for_secureboot.hook
+    owner: root
+    group: root
+    mode: "0644"
+  when: lookup('file', config_dir + '/hooks/999-sign_kernel_for_secureboot.hook', errors='ignore')
+  ignore_errors: true
+
+- name: Sign current kernel
+  ansible.builtin.command:
+    cmd: >
+      sbsign --key /etc/secureboot/keys/MOK.key
+      --cert /etc/secureboot/keys/MOK.cer
+      --output /boot/vmlinuz-linux /boot/vmlinuz-linux
+  changed_when: false
+  ignore_errors: true

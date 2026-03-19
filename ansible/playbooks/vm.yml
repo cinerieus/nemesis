@@ -1,0 +1,20 @@
+---
+- name: Configure Nemesis VM
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: base
+    - role: shell
+    - role: desktop
+    - role: ssh
+    - role: bootloader
+    - role: virtualization
+    - role: rdp
+    - role: security_tools
+    - role: firewall
+    - role: hardening
+    - role: vpn
+      when: zerotier_network_id | default('') | length > 0
+    - role: updates

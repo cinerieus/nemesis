@@ -1,0 +1,12 @@
+---
+- name: Install security packages
+  ansible.builtin.include_tasks: packages.yml
+
+- name: Download wordlists
+  ansible.builtin.include_tasks: wordlists.yml
+
+- name: Download and stage binaries
+  ansible.builtin.include_tasks: binaries.yml
+
+- name: Install extra security packages
+  ansible.builtin.include_tasks: extra.yml

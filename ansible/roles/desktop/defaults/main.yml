@@ -1,0 +1,27 @@
+---
+# Package lists — overridden by nemesis.yml
+gnome_packages: []
+gnome_extensions_pacman: []
+gnome_extensions_aur: []
+catppuccin_aur_packages: []
+catppuccin_pacman_packages: []
+catppuccin_folders_aur: []
+desktop_apps: []
+
+# GNOME shell theme zip (relative to config_dir)
+gnome_shell_theme_zip: "{{ config_dir }}/themes/catppuccin-gnomeshell.zip"
+gnome_shell_theme_name: "catppuccin-gnomeshell"
+
+# Dotfile sources (relative to config_dir)
+kitty_config_src: "{{ config_dir }}/dotfiles/kitty.conf"
+wofi_style_src: "{{ config_dir }}/dotfiles/wofi/style.css"
+
+# dconf dump file
+dconf_dump_file: "{{ config_dir }}/dconf/gnome.dconf"
+
+# Wallpaper destination
+wallpaper_dir: /opt/workspace/backgrounds
+
+# GDM theming
+gdm_cursor_theme: "catppuccin-mocha-dark-cursors"
+gdm_icon_theme: "Papirus-Dark"

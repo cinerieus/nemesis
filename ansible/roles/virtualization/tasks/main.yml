@@ -1,0 +1,63 @@
+---
+- name: Detect hypervisor if not set
+  ansible.builtin.command:
+    cmd: systemd-detect-virt
+  register: detected_virt
+  changed_when: false
+  failed_when: false
+  when: hypervisor is not defined or hypervisor == ""
+
+- name: Set hypervisor fact from detection
+  ansible.builtin.set_fact:
+    hypervisor: >-
+      {% if detected_virt.stdout | default('') in ['qemu', 'kvm'] %}qemu{% elif detected_virt.stdout | default('') == 'vmware' %}vmware{% else %}{{ hypervisor | default('qemu') }}{% endif %}
+  when: detected_virt is defined and detected_virt.stdout is defined
+
+- name: Install QEMU guest agent
+  ansible.builtin.pacman:
+    name:
+      - qemu-guest-agent
+      - spice-vdagent
+    state: present
+  when: hypervisor in ['qemu', 'proxmox']
+
+- name: Enable QEMU guest agent
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop:
+    - qemu-guest-agent
+    - spice-vdagentd
+  when: hypervisor in ['qemu', 'proxmox']
+  ignore_errors: true
+
+- name: Install VMware tools
+  ansible.builtin.pacman:
+    name:
+      - open-vm-tools
+      - gtkmm3
+    state: present
+  when: hypervisor == 'vmware'
+
+- name: Enable VMware services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  loop:
+    - vmtoolsd
+    - vmware-vmblock-fuse
+  when: hypervisor == 'vmware'
+
+- name: Disable idle screen dimming (GNOME)
+  ansible.builtin.command:
+    cmd: "su - {{ username }} -c \"dbus-launch dconf write /org/gnome/settings-daemon/plugins/power/idle-dim false\""
+  changed_when: false
+  ignore_errors: true
+
+- name: Disable automatic screen lock
+  ansible.builtin.command:
+    cmd: "su - {{ username }} -c \"dbus-launch dconf write /org/gnome/desktop/screensaver/lock-enabled false\""
+  changed_when: false
+  ignore_errors: true

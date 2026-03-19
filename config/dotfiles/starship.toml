@@ -1,0 +1,102 @@
+# Nemesis starship prompt - Catppuccin Mocha theme
+
+palette = "catppuccin_mocha"
+
+format = """
+[](surface0)\
+$os\
+$username\
+[](bg:surface1 fg:surface0)\
+$directory\
+[](fg:surface1 bg:surface2)\
+$git_branch\
+$git_status\
+[](fg:surface2 bg:overlay0)\
+$python\
+$rust\
+$golang\
+[](fg:overlay0 bg:overlay1)\
+$cmd_duration\
+[ ](fg:overlay1)\
+$character"""
+
+[os]
+disabled = false
+style = "bg:surface0 fg:text"
+
+[os.symbols]
+Arch = "󰣇 "
+Linux = "󰌽 "
+
+[username]
+show_always = true
+style_user = "bg:surface0 fg:text"
+style_root = "bg:surface0 fg:red"
+format = '[ $user ]($style)'
+
+[directory]
+style = "bg:surface1 fg:text"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = ".../"
+
+[git_branch]
+symbol = ""
+style = "bg:surface2 fg:text"
+format = '[ $symbol $branch ]($style)'
+
+[git_status]
+style = "bg:surface2 fg:text"
+format = '[$all_status$ahead_behind ]($style)'
+
+[python]
+symbol = ""
+style = "bg:overlay0 fg:text"
+format = '[ $symbol $version ]($style)'
+
+[rust]
+symbol = "🦀"
+style = "bg:overlay0 fg:text"
+format = '[ $symbol $version ]($style)'
+
+[golang]
+symbol = ""
+style = "bg:overlay0 fg:text"
+format = '[ $symbol $version ]($style)'
+
+[cmd_duration]
+min_time = 2000
+style = "bg:overlay1 fg:text"
+format = '[ 󱎫 $duration ]($style)'
+
+[character]
+success_symbol = '[❯](green)'
+error_symbol = '[❯](red)'
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"

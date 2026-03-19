@@ -1,0 +1,28 @@
+---
+- name: Check if dconf dump file exists
+  ansible.builtin.stat:
+    path: "{{ dconf_dump_file }}"
+  register: dconf_file_stat
+  delegate_to: localhost
+  become: false
+
+- name: Copy dconf dump file to remote host
+  ansible.builtin.copy:
+    src: "{{ dconf_dump_file }}"
+    dest: "/tmp/gnome.dconf"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+  when: dconf_file_stat.stat.exists
+
+- name: Load dconf settings from dump file
+  ansible.builtin.command:
+    cmd: "su - {{ username }} -c 'dconf load / < /tmp/gnome.dconf'"
+  when: dconf_file_stat.stat.exists
+  changed_when: true
+
+- name: Remove temporary dconf dump file
+  ansible.builtin.file:
+    path: /tmp/gnome.dconf
+    state: absent
+  when: dconf_file_stat.stat.exists

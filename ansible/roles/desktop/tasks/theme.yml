@@ -1,0 +1,144 @@
+---
+# --- Catppuccin cursor theme (AUR) ---
+
+- name: Check if catppuccin cursor packages are installed
+  ansible.builtin.command:
+    cmd: "pacman -Q {{ item }}"
+  loop: "{{ catppuccin_aur_packages }}"
+  register: catppuccin_cursor_check
+  changed_when: false
+  failed_when: false
+
+- name: Install Catppuccin cursor theme from AUR
+  ansible.builtin.command:
+    cmd: "su - {{ username }} -c 'paru -S --noconfirm --needed {{ item.item }}'"
+  loop: "{{ catppuccin_cursor_check.results }}"
+  when: item.rc != 0
+  changed_when: true
+
+# --- Papirus icon theme (official repos) ---
+
+- name: Install Papirus icon theme
+  ansible.builtin.pacman:
+    name: "{{ catppuccin_pacman_packages }}"
+    state: present
+
+# --- Papirus folders Catppuccin (AUR) ---
+
+- name: Check if papirus-folders-catppuccin-git is installed
+  ansible.builtin.command:
+    cmd: "pacman -Q {{ item }}"
+  loop: "{{ catppuccin_folders_aur }}"
+  register: catppuccin_folders_check
+  changed_when: false
+  failed_when: false
+
+- name: Install papirus-folders-catppuccin from AUR
+  ansible.builtin.command:
+    cmd: "su - {{ username }} -c 'paru -S --noconfirm --needed {{ item.item }}'"
+  loop: "{{ catppuccin_folders_check.results }}"
+  when: item.rc != 0
+  changed_when: true
+
+# --- GNOME Shell theme from zip ---
+
+- name: Ensure .themes directory exists for user
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.themes"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Check if GNOME shell theme zip exists
+  ansible.builtin.stat:
+    path: "{{ gnome_shell_theme_zip }}"
+  register: shell_theme_zip
+  delegate_to: localhost
+  become: false
+
+- name: Deploy GNOME shell theme from zip
+  ansible.builtin.unarchive:
+    src: "{{ gnome_shell_theme_zip }}"
+    dest: "/home/{{ username }}/.themes/"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  when: shell_theme_zip.stat.exists
+
+# --- Catppuccin GTK theme via Flatpak Gradience ---
+
+- name: Check if flatpak is available
+  ansible.builtin.command:
+    cmd: "which flatpak"
+  register: flatpak_check
+  changed_when: false
+  failed_when: false
+
+- name: Install Gradience via flatpak for GTK theming
+  ansible.builtin.command:
+    cmd: "flatpak install -y flathub com.github.GradienceTeam.Gradience"
+  when: flatpak_check.rc == 0
+  register: gradience_install
+  changed_when: "'already installed' not in gradience_install.stderr | default('')"
+  failed_when: false
+
+# --- Wallpaper ---
+
+- name: Ensure wallpaper directory exists
+  ansible.builtin.file:
+    path: "{{ wallpaper_dir }}"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Download wallpaper
+  ansible.builtin.get_url:
+    url: "{{ wallpaper_url }}"
+    dest: "{{ wallpaper_dir }}/{{ wallpaper_url | basename }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+  when: wallpaper_url | default('') | length > 0
+
+# --- GDM theming (cursor and icon theme for gdm user) ---
+
+- name: Ensure GDM dconf profile directory exists
+  ansible.builtin.file:
+    path: /etc/dconf/profile
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Deploy GDM dconf profile
+  ansible.builtin.copy:
+    dest: /etc/dconf/profile/gdm
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      user-db:user
+      system-db:gdm
+      file-db:/usr/share/gdm/greeter-dconf-defaults
+  notify: Update dconf
+
+- name: Ensure GDM dconf database directory exists
+  ansible.builtin.file:
+    path: /etc/dconf/db/gdm.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Set GDM cursor and icon theme
+  ansible.builtin.copy:
+    dest: /etc/dconf/db/gdm.d/10-cursor-icon-theme
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      [org/gnome/desktop/interface]
+      cursor-theme='{{ gdm_cursor_theme }}'
+      icon-theme='{{ gdm_icon_theme }}'
+  notify: Update dconf

@@ -1,0 +1,44 @@
+---
+- name: Install ZeroTier
+  ansible.builtin.pacman:
+    name: zerotier-one
+    state: present
+
+- name: Enable and start ZeroTier service
+  ansible.builtin.systemd:
+    name: zerotier-one
+    enabled: true
+    state: started
+
+- name: Join ZeroTier network
+  ansible.builtin.command:
+    cmd: "zerotier-cli join {{ zerotier_network_id }}"
+  register: zt_join
+  changed_when: "'200 join OK' in zt_join.stdout"
+  when: zerotier_network_id | length > 0
+
+- name: Get ZeroTier node ID
+  ansible.builtin.command:
+    cmd: zerotier-cli info
+  register: zt_info
+  changed_when: false
+  when: zerotier_api_token | default('') | length > 0
+
+- name: Parse ZeroTier node ID
+  ansible.builtin.set_fact:
+    zt_node_id: "{{ zt_info.stdout.split()[2] }}"
+  when: zerotier_api_token | default('') | length > 0
+
+- name: Auto-authorize node via ZeroTier API
+  ansible.builtin.uri:
+    url: "https://api.zerotier.com/api/v1/network/{{ zerotier_network_id }}/member/{{ zt_node_id }}"
+    method: POST
+    headers:
+      Authorization: "token {{ zerotier_api_token }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      config:
+        authorized: true
+    status_code: [200]
+  when: zerotier_api_token | default('') | length > 0

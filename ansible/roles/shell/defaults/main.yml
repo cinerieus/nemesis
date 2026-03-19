@@ -1,0 +1,30 @@
+---
+# Shell role defaults
+
+# Fish shell binary path
+fish_shell_path: /usr/bin/fish
+
+# User home directory
+user_home: "/home/{{ username }}"
+
+# Root home directory
+root_home: /root
+
+# Neovim data directory for lazy.nvim
+lazyvim_data_dir_user: "{{ user_home }}/.local/share/nvim/lazy/lazy.nvim"
+lazyvim_data_dir_root: "{{ root_home }}/.local/share/nvim/lazy/lazy.nvim"
+
+# Lazy.nvim repository
+lazyvim_repo: https://github.com/folke/lazy.nvim.git
+lazyvim_version: stable
+
+# TPM (Tmux Plugin Manager) paths
+tpm_dir_user: "{{ user_home }}/.tmux/plugins/tpm"
+tpm_dir_root: "{{ root_home }}/.tmux/plugins/tpm"
+
+# TPM repository
+tpm_repo: https://github.com/tmux-plugins/tpm.git
+
+# Package lists — overridden by nemesis.yml
+shell_packages: []
+font_packages: []

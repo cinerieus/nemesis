@@ -1,0 +1,13 @@
+# Managed by Ansible - Nemesis
+[DEFAULT]
+bantime = {{ fail2ban_bantime }}
+findtime = 10m
+maxretry = {{ fail2ban_maxretry }}
+banaction = ufw
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+backend = systemd

@@ -1,0 +1,4 @@
+---
+luks_enabled: false
+secureboot_enabled: true
+grub_cmdline_default: "loglevel=3 quiet"

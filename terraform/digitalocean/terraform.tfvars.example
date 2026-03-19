@@ -1,0 +1,5 @@
+digitalocean_token = "your-digitalocean-token"
+vps_region        = "nyc1"
+vps_plan          = "s-1vcpu-1gb"
+hostname          = "nemesis-vps"
+ssh_public_key    = "ssh-ed25519 AAAA..."

@@ -1,0 +1,8 @@
+---
+- name: Regenerate GRUB config
+  ansible.builtin.command:
+    cmd: grub-mkconfig -o /boot/grub/grub.cfg
+
+- name: Regenerate initramfs
+  ansible.builtin.command:
+    cmd: mkinitcpio -P

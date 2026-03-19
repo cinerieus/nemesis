@@ -1,0 +1,7 @@
+---
+workspace_dir: "/opt/workspace"
+
+# Package lists — overridden by nemesis.yml
+security_packages: []
+security_packages_aur: []
+extra_security_packages: []

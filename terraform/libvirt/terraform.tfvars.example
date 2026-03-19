@@ -1,0 +1,9 @@
+libvirt_uri    = "qemu+ssh://user@192.168.1.100/system"
+hostname       = "nemesis-vm"
+vm_memory      = 4096
+vm_cpus        = 2
+disk_size_bytes = 53687091200  # 50GB
+storage_pool   = "default"
+network_name   = "default"
+ssh_public_key = "ssh-ed25519 AAAA..."
+root_password  = "changeme"

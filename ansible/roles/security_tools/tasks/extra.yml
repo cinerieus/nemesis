@@ -1,0 +1,7 @@
+---
+- name: Install extra security packages via pacman
+  ansible.builtin.pacman:
+    name: "{{ extra_security_packages }}"
+    state: present
+  become: true
+  when: extra_security_packages is defined and extra_security_packages | length > 0

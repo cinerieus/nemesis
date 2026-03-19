@@ -1,0 +1,23 @@
+# Default values for all hosts
+# These are overridden by nemesis.yml passed via -e @nemesis.yml
+
+hostname: ""
+username: "user"
+
+ssh_public_keys: []
+
+vpn_provider: "zerotier"
+zerotier_network_id: ""
+zerotier_api_token: ""
+
+extra_packages: []
+extra_security_packages: []
+
+dns_over_tls_server: "1.1.1.1"
+fail2ban_bantime: "1h"
+fail2ban_maxretry: 3
+auto_updates: true
+ipv6_enabled: false
+
+# Internal variables
+config_dir: "{{ playbook_dir }}/../../config"

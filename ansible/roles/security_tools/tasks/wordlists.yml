@@ -1,0 +1,20 @@
+---
+- name: Create wordlists directory
+  ansible.builtin.file:
+    path: "{{ workspace_dir }}/wordlists"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Check if rockyou.txt exists
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/wordlists/rockyou.txt"
+  register: rockyou_check
+
+- name: Download rockyou.txt
+  ansible.builtin.get_url:
+    url: "{{ rockyou_url }}"
+    dest: "{{ workspace_dir }}/wordlists/rockyou.txt"
+    mode: "0644"
+  become: true
+  when: not rockyou_check.stat.exists

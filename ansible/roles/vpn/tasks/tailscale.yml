@@ -1,0 +1,15 @@
+---
+- name: Install Tailscale
+  ansible.builtin.pacman:
+    name: tailscale
+    state: present
+
+- name: Enable and start Tailscale service
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: true
+    state: started
+
+- name: Display Tailscale auth instructions
+  ansible.builtin.debug:
+    msg: "Run 'tailscale up' on the target host to authenticate with your Tailscale account."

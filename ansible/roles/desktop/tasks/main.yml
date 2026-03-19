@@ -1,0 +1,15 @@
+---
+- name: Include GNOME and GDM installation
+  ansible.builtin.include_tasks: gnome.yml
+
+- name: Include GNOME extensions installation
+  ansible.builtin.include_tasks: extensions.yml
+
+- name: Include Catppuccin theming
+  ansible.builtin.include_tasks: theme.yml
+
+- name: Include desktop application installation
+  ansible.builtin.include_tasks: apps.yml
+
+- name: Include dconf settings
+  ansible.builtin.include_tasks: dconf.yml

@@ -1,0 +1,8 @@
+version: 2
+ethernets:
+  eth0:
+%{ if use_dhcp }
+    dhcp4: true
+%{ else }
+    dhcp4: false
+%{ endif }

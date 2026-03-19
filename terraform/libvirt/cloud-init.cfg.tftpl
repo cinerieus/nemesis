@@ -1,0 +1,23 @@
+#cloud-config
+hostname: ${hostname}
+fqdn: ${hostname}
+
+# Set root password and enable SSH
+ssh_pwauth: true
+chpasswd:
+  expire: false
+  users:
+    - name: root
+      password: ${root_password}
+      type: text
+
+# Add SSH key
+ssh_authorized_keys:
+  - ${ssh_public_key}
+
+# Enable root SSH login (Ansible needs this initially)
+runcmd:
+  - sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+  - sed -i 's/^PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - pacman -Sy --noconfirm python

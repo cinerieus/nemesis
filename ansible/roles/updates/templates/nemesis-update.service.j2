@@ -1,0 +1,11 @@
+# Managed by Ansible - Nemesis
+[Unit]
+Description=Nemesis automatic system update
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman -Syu --noconfirm
+StandardOutput=journal
+StandardError=journal

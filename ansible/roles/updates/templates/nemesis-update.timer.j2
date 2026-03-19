@@ -1,0 +1,17 @@
+# Managed by Ansible - Nemesis
+[Unit]
+Description=Nemesis automatic update timer
+
+[Timer]
+{% if auto_updates_schedule == "daily" %}
+OnCalendar=daily
+{% elif auto_updates_schedule == "weekly" %}
+OnCalendar=weekly
+{% else %}
+OnCalendar={{ auto_updates_schedule }}
+{% endif %}
+RandomizedDelaySec=3600
+Persistent=true
+
+[Install]
+WantedBy=timers.target

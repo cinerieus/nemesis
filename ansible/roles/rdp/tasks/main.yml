@@ -1,0 +1,56 @@
+---
+- name: Install GNOME Remote Desktop
+  ansible.builtin.pacman:
+    name:
+      - gnome-remote-desktop
+    state: present
+
+- name: Create TLS certificate directory
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.local/share/gnome-remote-desktop/certificates"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0700"
+
+- name: Generate TLS certificate for RDP
+  ansible.builtin.command:
+    cmd: >
+      openssl req -newkey rsa:2048 -nodes
+      -keyout /home/{{ username }}/.local/share/gnome-remote-desktop/certificates/rdp-tls.key
+      -new -x509 -sha256 -days 3650
+      -subj "/CN=Nemesis RDP/"
+      -out /home/{{ username }}/.local/share/gnome-remote-desktop/certificates/rdp-tls.crt
+    creates: "/home/{{ username }}/.local/share/gnome-remote-desktop/certificates/rdp-tls.key"
+  become_user: "{{ username }}"
+
+- name: Set RDP TLS certificate path via dconf
+  ansible.builtin.command:
+    cmd: >
+      su - {{ username }} -c "dbus-launch dconf write /org/gnome/desktop/remote-desktop/rdp/tls-cert \"'/home/{{ username }}/.local/share/gnome-remote-desktop/certificates/rdp-tls.crt'\""
+  changed_when: false
+
+- name: Set RDP TLS key path via dconf
+  ansible.builtin.command:
+    cmd: >
+      su - {{ username }} -c "dbus-launch dconf write /org/gnome/desktop/remote-desktop/rdp/tls-key \"'/home/{{ username }}/.local/share/gnome-remote-desktop/certificates/rdp-tls.key'\""
+  changed_when: false
+
+- name: Enable RDP via dconf
+  ansible.builtin.command:
+    cmd: >
+      su - {{ username }} -c "dbus-launch dconf write /org/gnome/desktop/remote-desktop/rdp/enable true"
+  changed_when: false
+
+- name: Set RDP credentials
+  ansible.builtin.command:
+    cmd: >
+      su - {{ username }} -c "dbus-launch grdctl rdp set-credentials {{ username }} '{{ rdp_password }}'"
+  changed_when: false
+  no_log: true
+
+- name: Enable GNOME Remote Desktop service (user)
+  ansible.builtin.command:
+    cmd: "su - {{ username }} -c 'systemctl --user enable gnome-remote-desktop.service'"
+  changed_when: false
+  ignore_errors: true

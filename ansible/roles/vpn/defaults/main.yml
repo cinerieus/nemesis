@@ -1,0 +1,4 @@
+---
+vpn_provider: "zerotier"
+zerotier_network_id: ""
+zerotier_api_token: ""

@@ -1,0 +1,57 @@
+---
+- name: Deploy kernel sysctl hardening
+  ansible.builtin.template:
+    src: 99-nemesis-hardening.conf.j2
+    dest: /etc/sysctl.d/99-nemesis-hardening.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload sysctl
+
+- name: Install fail2ban
+  ansible.builtin.pacman:
+    name: fail2ban
+    state: present
+
+- name: Deploy fail2ban jail configuration
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart fail2ban
+
+- name: Enable and start fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    enabled: true
+    state: started
+
+- name: Ensure resolved.conf.d directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Configure DNS-over-TLS in systemd-resolved
+  ansible.builtin.template:
+    src: resolved-dot.conf.j2
+    dest: /etc/systemd/resolved.conf.d/dns-over-tls.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart resolved
+
+- name: Install auditd
+  ansible.builtin.pacman:
+    name: audit
+    state: present
+
+- name: Enable and start auditd
+  ansible.builtin.systemd:
+    name: auditd
+    enabled: true
+    state: started

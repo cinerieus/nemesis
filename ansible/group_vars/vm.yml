@@ -1,0 +1,5 @@
+# VM-specific defaults
+luks_enabled: false
+secureboot_enabled: true
+hypervisor: "qemu"
+wallpaper_url: "https://w.wallhaven.cc/full/rr/wallhaven-rr9kyw.png"

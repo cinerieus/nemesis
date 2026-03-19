@@ -1,0 +1,38 @@
+# Managed by Ansible - Nemesis kernel hardening
+
+# Hide kernel pointers from unprivileged users
+kernel.kptr_restrict = 2
+
+# Restrict dmesg access
+kernel.dmesg_restrict = 1
+
+# Enable reverse path filtering (anti-spoofing)
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+
+# Disable ICMP redirects (send)
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+
+# Disable ICMP redirects (accept)
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+
+# Disable source routing
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv6.conf.all.accept_source_route = 0
+
+# Enable SYN flood protection
+net.ipv4.tcp_syncookies = 1
+
+# Log martian packets
+net.ipv4.conf.all.log_martians = 1
+
+{% if not ipv6_enabled %}
+# Disable IPv6
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+{% endif %}

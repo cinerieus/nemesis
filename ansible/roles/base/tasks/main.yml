@@ -1,0 +1,250 @@
+---
+# =============================================================================
+# Timezone & NTP
+# =============================================================================
+- name: Set timezone to {{ timezone }}
+  ansible.builtin.timezone:
+    name: "{{ timezone }}"
+
+- name: Enable and start systemd-timesyncd (NTP)
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    enabled: true
+    state: started
+
+# =============================================================================
+# Locales
+# =============================================================================
+- name: Deploy locale.gen
+  ansible.builtin.template:
+    src: locale.gen.j2
+    dest: /etc/locale.gen
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Regenerate locales
+
+- name: Deploy locale.conf
+  ansible.builtin.template:
+    src: locale.conf.j2
+    dest: /etc/locale.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Ensure locales are generated
+  ansible.builtin.command:
+    cmd: locale-gen
+    creates: /usr/lib/locale/locale-archive
+
+# =============================================================================
+# Virtual console
+# =============================================================================
+- name: Deploy vconsole.conf
+  ansible.builtin.template:
+    src: vconsole.conf.j2
+    dest: /etc/vconsole.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+# =============================================================================
+# Pacman configuration - enable multilib
+# =============================================================================
+- name: Enable multilib repository in pacman.conf
+  ansible.builtin.blockinfile:
+    path: /etc/pacman.conf
+    block: |
+      [multilib]
+      Include = /etc/pacman.d/mirrorlist
+    marker: "# {mark} ANSIBLE MANAGED - multilib"
+    insertafter: EOF
+    state: present
+
+- name: Synchronise pacman databases
+  ansible.builtin.pacman:
+    update_cache: true
+
+# =============================================================================
+# BlackArch repository
+# =============================================================================
+- name: Download BlackArch strap.sh
+  ansible.builtin.get_url:
+    url: https://blackarch.org/strap.sh
+    dest: /tmp/strap.sh
+    mode: "0755"
+  when: not ansible_check_mode
+
+- name: Run BlackArch strap.sh
+  ansible.builtin.command:
+    cmd: /tmp/strap.sh
+    creates: /etc/pacman.d/blackarch-mirrorlist
+  when: not ansible_check_mode
+
+- name: Remove strap.sh after execution
+  ansible.builtin.file:
+    path: /tmp/strap.sh
+    state: absent
+
+- name: Synchronise pacman databases after BlackArch
+  ansible.builtin.pacman:
+    update_cache: true
+
+# =============================================================================
+# Packages
+# =============================================================================
+- name: Install required system packages
+  ansible.builtin.pacman:
+    name: "{{ required_packages }}"
+    state: present
+
+- name: Install base packages
+  ansible.builtin.pacman:
+    name: "{{ base_packages }}"
+    state: present
+  when: base_packages | length > 0
+
+- name: Install extra packages
+  ansible.builtin.pacman:
+    name: "{{ extra_packages }}"
+    state: present
+  when: extra_packages | length > 0
+
+# =============================================================================
+# Paru (AUR helper)
+# =============================================================================
+- name: Check if paru is already installed
+  ansible.builtin.stat:
+    path: /usr/bin/paru
+  register: paru_installed
+
+- name: Install paru build dependencies
+  ansible.builtin.pacman:
+    name:
+      - base-devel
+      - git
+      - rust
+    state: present
+  when: not paru_installed.stat.exists
+
+- name: Clone paru repository
+  ansible.builtin.git:
+    repo: https://aur.archlinux.org/paru.git
+    dest: /tmp/paru-build
+    version: master
+  become: true
+  become_user: "{{ username }}"
+  when: not paru_installed.stat.exists
+
+- name: Build and install paru
+  ansible.builtin.command:
+    cmd: makepkg -si --noconfirm
+    chdir: /tmp/paru-build
+    creates: /usr/bin/paru
+  become: true
+  become_user: "{{ username }}"
+
+- name: Clean up paru build directory
+  ansible.builtin.file:
+    path: /tmp/paru-build
+    state: absent
+
+# =============================================================================
+# User account
+# =============================================================================
+- name: Create user {{ username }}
+  ansible.builtin.user:
+    name: "{{ username }}"
+    groups: wheel
+    append: true
+    shell: /bin/bash
+    create_home: true
+    password: "{{ user_password | password_hash('sha512') }}"
+    state: present
+  when: user_password | length > 0
+
+- name: Create user {{ username }} without password
+  ansible.builtin.user:
+    name: "{{ username }}"
+    groups: wheel
+    append: true
+    shell: /bin/bash
+    create_home: true
+    state: present
+  when: user_password | length == 0
+
+- name: Grant wheel group passwordless sudo
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/wheel
+    line: "%wheel ALL=(ALL:ALL) NOPASSWD: ALL"
+    create: true
+    owner: root
+    group: root
+    mode: "0440"
+    validate: /usr/sbin/visudo -cf %s
+
+# =============================================================================
+# Workspace directory
+# =============================================================================
+- name: Create /opt/workspace directory
+  ansible.builtin.file:
+    path: /opt/workspace
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+# =============================================================================
+# Hostname
+# =============================================================================
+- name: Auto-generate hostname when not provided
+  ansible.builtin.set_fact:
+    hostname: "DESKTOP-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=7') | upper }}"
+  when: hostname | length == 0
+
+- name: Set system hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+
+- name: Update /etc/hosts with hostname
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1\t{{ hostname }}"
+    state: present
+
+# =============================================================================
+# NetworkManager & systemd-resolved
+# =============================================================================
+- name: Install NetworkManager
+  ansible.builtin.pacman:
+    name: networkmanager
+    state: present
+
+- name: Deploy systemd-resolved configuration
+  ansible.builtin.template:
+    src: resolved.conf.j2
+    dest: /etc/systemd/resolved.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart systemd-resolved
+
+- name: Enable and start NetworkManager
+  ansible.builtin.systemd:
+    name: NetworkManager
+    enabled: true
+    state: started
+
+- name: Enable and start systemd-resolved
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    enabled: true
+    state: started
+
+- name: Symlink resolv.conf to systemd-resolved stub
+  ansible.builtin.file:
+    src: /run/systemd/resolve/stub-resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: true

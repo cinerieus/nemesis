@@ -1,0 +1,9 @@
+---
+# Download URLs for staged tools (not user-configurable — update versions here)
+rockyou_url: "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
+chisel_linux_url: "https://github.com/jpillora/chisel/releases/download/v1.10.1/chisel_1.10.1_linux_amd64.gz"
+chisel_windows_url: "https://github.com/jpillora/chisel/releases/download/v1.10.1/chisel_1.10.1_windows_amd64.gz"
+peass_url: "https://github.com/peass-ng/PEASS-ng/releases/latest/download"
+sliver_server_url: "https://github.com/BishopFox/sliver/releases/latest/download/sliver-server_linux"
+sliver_client_url: "https://github.com/BishopFox/sliver/releases/latest/download/sliver-client_linux"
+ghostpack_url: "https://github.com/r3motecontrol/Ghostpack-CompiledBinaries/archive/refs/heads/master.zip"

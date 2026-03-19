@@ -1,0 +1,57 @@
+---
+- name: Install desktop applications
+  ansible.builtin.pacman:
+    name: "{{ desktop_apps }}"
+    state: present
+
+# --- Kitty configuration ---
+
+- name: Ensure kitty config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.config/kitty"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Check if kitty.conf source exists
+  ansible.builtin.stat:
+    path: "{{ kitty_config_src }}"
+  register: kitty_conf_stat
+  delegate_to: localhost
+  become: false
+
+- name: Deploy kitty.conf
+  ansible.builtin.copy:
+    src: "{{ kitty_config_src }}"
+    dest: "/home/{{ username }}/.config/kitty/kitty.conf"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+  when: kitty_conf_stat.stat.exists
+
+# --- Wofi configuration ---
+
+- name: Ensure wofi config directory exists
+  ansible.builtin.file:
+    path: "/home/{{ username }}/.config/wofi"
+    state: directory
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0755"
+
+- name: Check if wofi style.css source exists
+  ansible.builtin.stat:
+    path: "{{ wofi_style_src }}"
+  register: wofi_style_stat
+  delegate_to: localhost
+  become: false
+
+- name: Deploy wofi style.css
+  ansible.builtin.copy:
+    src: "{{ wofi_style_src }}"
+    dest: "/home/{{ username }}/.config/wofi/style.css"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: "0644"
+  when: wofi_style_stat.stat.exists

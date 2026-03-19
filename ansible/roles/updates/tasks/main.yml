@@ -1,0 +1,32 @@
+---
+- name: Deploy auto-update service
+  ansible.builtin.template:
+    src: nemesis-update.service.j2
+    dest: /etc/systemd/system/nemesis-update.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd daemon
+
+- name: Deploy auto-update timer
+  ansible.builtin.template:
+    src: nemesis-update.timer.j2
+    dest: /etc/systemd/system/nemesis-update.timer
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd daemon
+
+- name: Enable and start auto-update timer
+  ansible.builtin.systemd:
+    name: nemesis-update.timer
+    enabled: true
+    state: started
+  when: auto_updates | bool
+
+- name: Disable auto-update timer
+  ansible.builtin.systemd:
+    name: nemesis-update.timer
+    enabled: false
+    state: stopped
+  when: not (auto_updates | bool)

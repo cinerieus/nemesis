@@ -1,0 +1,16 @@
+# Managed by Ansible - Nemesis
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="Arch"
+{% if luks_enabled | bool %}
+GRUB_CMDLINE_LINUX="cryptdevice=/dev/sda2:cryptlvm root=/dev/vg0/root {{ grub_cmdline_default }}"
+{% else %}
+GRUB_CMDLINE_LINUX="{{ grub_cmdline_default }}"
+{% endif %}
+GRUB_CMDLINE_LINUX_DEFAULT="{{ grub_cmdline_default }}"
+GRUB_PRELOAD_MODULES="part_gpt part_msdos"
+GRUB_ENABLE_CRYPTODISK={% if luks_enabled | bool %}y{% else %}n{% endif %}
+
+{% if lookup('file', '/boot/grub/themes/catppuccin-mocha-grub-theme/theme.txt', errors='ignore') %}
+GRUB_THEME="/boot/grub/themes/catppuccin-mocha-grub-theme/theme.txt"
+{% endif %}

@@ -1,0 +1,3 @@
+# VPS-specific defaults
+vps_region: "ewr"
+vps_plan: "vc2-1c-1gb"

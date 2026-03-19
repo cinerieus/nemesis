@@ -1,0 +1,45 @@
+---
+- name: Install GRUB and EFI packages
+  ansible.builtin.pacman:
+    name:
+      - grub
+      - efibootmgr
+      - os-prober
+    state: present
+
+- name: Install LUKS/LVM packages
+  ansible.builtin.pacman:
+    name:
+      - cryptsetup
+      - lvm2
+    state: present
+  when: luks_enabled | bool
+
+- name: Configure GRUB defaults
+  ansible.builtin.template:
+    src: grub_default.j2
+    dest: /etc/default/grub
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Regenerate GRUB config
+
+- name: Configure mkinitcpio for LUKS
+  ansible.builtin.lineinfile:
+    path: /etc/mkinitcpio.conf
+    regexp: '^HOOKS='
+    line: 'HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block encrypt lvm2 filesystems fsck)'
+  when: luks_enabled | bool
+  notify: Regenerate initramfs
+
+- name: Deploy Catppuccin GRUB theme
+  ansible.builtin.unarchive:
+    src: "{{ config_dir }}/themes/catppuccin-grub.zip"
+    dest: /boot/grub/themes/
+    creates: /boot/grub/themes/catppuccin-mocha-grub-theme
+  when: lookup('file', config_dir + '/themes/catppuccin-grub.zip', errors='ignore')
+  ignore_errors: true
+
+- name: Include Secure Boot tasks
+  ansible.builtin.include_tasks: secureboot.yml
+  when: secureboot_enabled | bool

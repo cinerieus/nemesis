@@ -1,0 +1,166 @@
+# === Identity ===
+hostname: ""                    # Leave empty -> auto-generates DESKTOP-XXXXXXX
+username: "user"
+
+# === SSH ===
+ssh_public_keys: []             # Additional keys (or leave empty to use config/ssh/authorized_keys file only)
+
+# === VPN ===
+vpn_provider: "zerotier"        # "zerotier" or "tailscale"
+zerotier_network_id: ""
+zerotier_api_token: ""          # Optional: auto-authorize node
+
+# === Cloud API Keys (for Terraform VPS provisioning) ===
+vultr_api_key: ""
+digitalocean_token: ""
+
+# === VPS Settings ===
+vps_region: "ewr"
+vps_plan: "vc2-1c-1gb"
+
+# === VM Settings ===
+luks_enabled: false
+secureboot_enabled: true
+disk_size: "50G"
+vm_memory: 4096
+vm_cpus: 2
+hypervisor: "qemu"              # "qemu", "proxmox", "vmware"
+
+# === KVM Host (remote QEMU/libvirt server) ===
+libvirt_uri: ""                 # e.g. "qemu+ssh://user@192.168.1.100/system"
+libvirt_storage_pool: "default"
+libvirt_network: "default"
+
+# === Proxmox (when hypervisor=proxmox) ===
+proxmox_url: ""
+proxmox_token: ""
+proxmox_node: ""
+proxmox_storage: "local-lvm"
+
+# === Desktop ===
+wallpaper_url: "https://w.wallhaven.cc/full/rr/wallhaven-rr9kyw.png"
+
+# === Hardening ===
+dns_over_tls_server: "1.1.1.1"
+fail2ban_bantime: "1h"
+fail2ban_maxretry: 3
+auto_updates: true
+ipv6_enabled: false
+
+# =============================================================================
+# Packages
+# =============================================================================
+# Everything below is what gets installed on the system. Add, remove, or
+# comment out lines to customise your build. Only packages required for the
+# system to function (sudo, base-devel, git, python, networkmanager) are
+# hardcoded in the roles — everything else is here.
+
+# === Base Utilities ===
+base_packages:
+  - wget
+  - curl
+  - p7zip
+  - ldns
+  - bind
+  - net-tools
+  - unzip
+  - zip
+  - jq
+  - yq
+  - htop
+  - tree
+  - rsync
+  - python-pip
+  - bat
+  - ripgrep
+  - fd
+  - less
+
+# === Shell ===
+shell_packages:
+  - fish
+  - starship
+  - neovim
+  - tmux
+
+# === Fonts ===
+font_packages:
+  - noto-fonts
+  - ttf-noto-nerd
+  - otf-firamono-nerd
+
+# === Desktop (VM only) ===
+gnome_packages:
+  - gnome
+  - gdm
+  - gnome-tweaks
+  - gnome-shell-extensions
+  - dconf-editor
+
+gnome_extensions_pacman:
+  - gnome-shell-extension-blur-my-shell
+  - gnome-shell-extension-user-theme
+
+gnome_extensions_aur:
+  - gnome-shell-extension-tiling-shell
+  - gnome-shell-extension-no-overview
+  - gnome-shell-extension-rounded-window-corners-reborn
+  - gnome-shell-extension-system-monitor
+
+desktop_apps:
+  - kitty
+  - thunar
+  - wofi
+  - firefox
+  - libreoffice-fresh
+
+# === Catppuccin Theme (VM only) ===
+catppuccin_aur_packages:
+  - catppuccin-cursors-mocha
+
+catppuccin_pacman_packages:
+  - papirus-icon-theme
+
+catppuccin_folders_aur:
+  - papirus-folders-catppuccin-git
+
+# === Security Tools ===
+security_packages:
+  - nmap
+  - masscan
+  - metasploit
+  - impacket
+  - netexec
+  - sqlmap
+  - john
+  - hashcat
+  - medusa
+  - hydra
+  - ffuf
+  - gobuster
+  - responder
+  - certipy
+  - bloodyad
+  - httpx
+  - dnsx
+  - nuclei
+  - subfinder
+  - whatweb
+  - wpscan
+  - seclists
+  - evil-winrm
+  - bloodhound
+  - enum4linux-ng
+  - feroxbuster
+  - rustscan
+
+security_packages_aur:
+  - ligolo-ng
+
+# === Extra Packages (anything else you want) ===
+extra_packages:
+  - neofetch
+
+# === Extra Security Packages (additional pentesting tools) ===
+extra_security_packages: []
+  # - burpsuite

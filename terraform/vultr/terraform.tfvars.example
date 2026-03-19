@@ -1,0 +1,5 @@
+vultr_api_key  = "your-vultr-api-key"
+vps_region     = "ewr"
+vps_plan       = "vc2-1c-1gb"
+hostname       = "nemesis-vps"
+ssh_public_key = "ssh-ed25519 AAAA..."

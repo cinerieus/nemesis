@@ -1,0 +1,21 @@
+---
+- name: Install GNOME extensions from official repos
+  ansible.builtin.pacman:
+    name: "{{ gnome_extensions_pacman }}"
+    state: present
+  when: gnome_extensions_pacman | length > 0
+
+- name: Check which AUR GNOME extensions are already installed
+  ansible.builtin.command:
+    cmd: "pacman -Q {{ item }}"
+  loop: "{{ gnome_extensions_aur }}"
+  register: aur_ext_check
+  changed_when: false
+  failed_when: false
+
+- name: Install GNOME extensions from AUR via paru
+  ansible.builtin.command:
+    cmd: "su - {{ username }} -c 'paru -S --noconfirm --needed {{ item.item }}'"
+  loop: "{{ aur_ext_check.results }}"
+  when: item.rc != 0
+  changed_when: true

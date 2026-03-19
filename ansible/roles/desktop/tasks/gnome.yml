@@ -1,0 +1,11 @@
+---
+- name: Install GNOME and GDM packages
+  ansible.builtin.pacman:
+    name: "{{ gnome_packages }}"
+    state: present
+
+- name: Enable and start GDM
+  ansible.builtin.systemd:
+    name: gdm.service
+    enabled: true
+    state: started

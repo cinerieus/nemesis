@@ -1,0 +1,5 @@
+---
+dns_over_tls_server: "1.1.1.1"
+fail2ban_bantime: "1h"
+fail2ban_maxretry: 3
+ipv6_enabled: false

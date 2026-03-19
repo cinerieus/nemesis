@@ -1,0 +1,8 @@
+---
+- name: Include ZeroTier tasks
+  ansible.builtin.include_tasks: zerotier.yml
+  when: vpn_provider == "zerotier"
+
+- name: Include Tailscale tasks
+  ansible.builtin.include_tasks: tailscale.yml
+  when: vpn_provider == "tailscale"

@@ -1,0 +1,171 @@
+---
+# --- Chisel ---
+- name: Create chisel directory
+  ansible.builtin.file:
+    path: "{{ workspace_dir }}/tools/chisel"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Check if chisel linux binary exists
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/tools/chisel/chisel_linux_amd64"
+  register: chisel_linux_check
+  become: true
+
+- name: Download chisel linux binary (compressed)
+  ansible.builtin.get_url:
+    url: "{{ chisel_linux_url }}"
+    dest: "{{ workspace_dir }}/tools/chisel/chisel_linux_amd64.gz"
+    mode: "0644"
+  become: true
+  when: not chisel_linux_check.stat.exists
+
+- name: Decompress chisel linux binary
+  ansible.builtin.shell: "gunzip -f {{ workspace_dir }}/tools/chisel/chisel_linux_amd64.gz"
+  become: true
+  when: not chisel_linux_check.stat.exists
+  changed_when: true
+
+- name: Set chisel linux binary permissions
+  ansible.builtin.file:
+    path: "{{ workspace_dir }}/tools/chisel/chisel_linux_amd64"
+    mode: "0755"
+  become: true
+  when: not chisel_linux_check.stat.exists
+
+- name: Check if chisel windows binary exists
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/tools/chisel/chisel_windows_amd64.exe"
+  register: chisel_windows_check
+  become: true
+
+- name: Download chisel windows binary (compressed)
+  ansible.builtin.get_url:
+    url: "{{ chisel_windows_url }}"
+    dest: "{{ workspace_dir }}/tools/chisel/chisel_windows_amd64.gz"
+    mode: "0644"
+  become: true
+  when: not chisel_windows_check.stat.exists
+
+- name: Decompress chisel windows binary
+  ansible.builtin.shell: "gunzip -f {{ workspace_dir }}/tools/chisel/chisel_windows_amd64.gz"
+  become: true
+  when: not chisel_windows_check.stat.exists
+  changed_when: true
+
+- name: Rename chisel windows binary
+  ansible.builtin.command: >
+    mv {{ workspace_dir }}/tools/chisel/chisel_windows_amd64
+    {{ workspace_dir }}/tools/chisel/chisel_windows_amd64.exe
+  become: true
+  when: not chisel_windows_check.stat.exists
+  changed_when: true
+
+# --- PEASS ---
+- name: Create peass directory
+  ansible.builtin.file:
+    path: "{{ workspace_dir }}/tools/peass"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Check if linpeas.sh exists
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/tools/peass/linpeas.sh"
+  register: linpeas_check
+  become: true
+
+- name: Download linpeas.sh
+  ansible.builtin.get_url:
+    url: "{{ peass_url }}/linpeas.sh"
+    dest: "{{ workspace_dir }}/tools/peass/linpeas.sh"
+    mode: "0755"
+  become: true
+  when: not linpeas_check.stat.exists
+
+- name: Check if winPEASx64.exe exists
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/tools/peass/winPEASx64.exe"
+  register: winpeas_check
+  become: true
+
+- name: Download winPEASx64.exe
+  ansible.builtin.get_url:
+    url: "{{ peass_url }}/winPEASx64.exe"
+    dest: "{{ workspace_dir }}/tools/peass/winPEASx64.exe"
+    mode: "0755"
+  become: true
+  when: not winpeas_check.stat.exists
+
+# --- Ghostpack ---
+- name: Create ghostpack directory
+  ansible.builtin.file:
+    path: "{{ workspace_dir }}/tools/ghostpack"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Check if ghostpack binaries exist
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/tools/ghostpack/Ghostpack-CompiledBinaries-master"
+  register: ghostpack_check
+  become: true
+
+- name: Download Ghostpack compiled binaries
+  ansible.builtin.get_url:
+    url: "{{ ghostpack_url }}"
+    dest: "{{ workspace_dir }}/tools/ghostpack/ghostpack.zip"
+    mode: "0644"
+  become: true
+  when: not ghostpack_check.stat.exists
+
+- name: Extract Ghostpack binaries
+  ansible.builtin.unarchive:
+    src: "{{ workspace_dir }}/tools/ghostpack/ghostpack.zip"
+    dest: "{{ workspace_dir }}/tools/ghostpack/"
+    remote_src: true
+  become: true
+  when: not ghostpack_check.stat.exists
+
+- name: Remove Ghostpack zip file
+  ansible.builtin.file:
+    path: "{{ workspace_dir }}/tools/ghostpack/ghostpack.zip"
+    state: absent
+  become: true
+
+# --- Sliver ---
+- name: Create sliver directory
+  ansible.builtin.file:
+    path: "{{ workspace_dir }}/tools/sliver"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Check if sliver-server exists
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/tools/sliver/sliver-server"
+  register: sliver_server_check
+  become: true
+
+- name: Download sliver-server
+  ansible.builtin.get_url:
+    url: "{{ sliver_server_url }}"
+    dest: "{{ workspace_dir }}/tools/sliver/sliver-server"
+    mode: "0755"
+  become: true
+  when: not sliver_server_check.stat.exists
+
+- name: Check if sliver-client exists
+  ansible.builtin.stat:
+    path: "{{ workspace_dir }}/tools/sliver/sliver-client"
+  register: sliver_client_check
+  become: true
+
+- name: Download sliver-client
+  ansible.builtin.get_url:
+    url: "{{ sliver_client_url }}"
+    dest: "{{ workspace_dir }}/tools/sliver/sliver-client"
+    mode: "0755"
+  become: true
+  when: not sliver_client_check.stat.exists

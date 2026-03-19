@@ -1,0 +1,6 @@
+{{ ansible_managed | comment }}
+[Resolve]
+DNS={{ dns_servers | join(' ') }}
+FallbackDNS={{ dns_fallback_servers | join(' ') }}
+DNSSEC=allow-downgrade
+Cache=yes

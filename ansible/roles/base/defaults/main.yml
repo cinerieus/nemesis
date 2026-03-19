@@ -1,0 +1,35 @@
+---
+username: "user"
+user_password: ""
+hostname: ""
+timezone: "UTC"
+
+# Required system packages — the system won't function without these.
+# User-facing packages (wget, curl, jq, etc.) live in nemesis.yml as base_packages.
+required_packages:
+  - sudo
+  - base-devel
+  - git
+  - python
+  - networkmanager
+
+# Defaults for user-facing lists (overridden by nemesis.yml)
+base_packages: []
+extra_packages: []
+
+locales:
+  - "en_GB.UTF-8 UTF-8"
+  - "en_US.UTF-8 UTF-8"
+  - "C.UTF-8 UTF-8"
+
+default_locale: "en_GB.UTF-8"
+
+vconsole_keymap: "uk"
+vconsole_font: "Goha-16"
+
+dns_servers:
+  - "1.1.1.1"
+  - "9.9.9.9"
+dns_fallback_servers:
+  - "8.8.8.8"
+  - "149.112.112.112"
